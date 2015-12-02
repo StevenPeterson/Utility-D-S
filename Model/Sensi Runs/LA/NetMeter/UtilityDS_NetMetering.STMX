@@ -45,16 +45,16 @@
         </units>
     </model_units>
     <data>
-        <export frequency="on_demand" interval="1" orientation="horizontal" url="C:\Users\Steve Peterson\GitHub\Utility-D-S\Model\Sensi Runs\LA\NetMeter\1_RetailPrice.csv">
+        <export frequency="on_demand" interval="1" orientation="horizontal" url="D:\github\Utility-D-S\Model\Sensi Runs\LA\NetMeter\1_RetailPrice.csv">
             <table name="Comparative: p1" use_settings="true" />
         </export>
-        <export frequency="on_demand" interval="1" orientation="horizontal" url="C:\Users\Steve Peterson\GitHub\Utility-D-S\Model\Sensi Runs\LA\NetMeter\2_RegularCust.csv">
+        <export frequency="on_demand" interval="1" orientation="horizontal" url="D:\github\Utility-D-S\Model\Sensi Runs\LA\NetMeter\2_RegularCust.csv">
             <table name="Comparative: p2" use_settings="true" />
         </export>
-        <export frequency="on_demand" interval="1" orientation="horizontal" url="C:\Users\Steve Peterson\GitHub\Utility-D-S\Model\Sensi Runs\LA\NetMeter\3_Cust_With_PV.csv">
+        <export frequency="on_demand" interval="1" orientation="horizontal" url="D:\github\Utility-D-S\Model\Sensi Runs\LA\NetMeter\3_Cust_With_PV.csv">
             <table name="Comparative: p3" use_settings="true" />
         </export>
-        <export frequency="on_demand" interval="1" orientation="horizontal" url="C:\Users\Steve Peterson\GitHub\Utility-D-S\Model\Sensi Runs\LA\NetMeter\4_Defector.csv">
+        <export frequency="on_demand" interval="1" orientation="horizontal" url="D:\github\Utility-D-S\Model\Sensi Runs\LA\NetMeter\4_Defector.csv">
             <table name="Comparative: p4" use_settings="true" />
         </export>
     </data>
@@ -73,7 +73,7 @@
     <isee:prefs last_model="true" layer="model" grid_width="20" grid_height="50" divide_by_zero_alert="true" hide_taskbar="true" show_module_prefix="true">
         <isee:window width="958" height="500" />
         <isee:security />
-        <isee:print_setup width="588" height="768" />
+        <isee:print_setup width="612" height="792" />
     </isee:prefs>
     <isee:equation_prefs order_by="module" />
     <model>
@@ -1273,7 +1273,7 @@
                 <item uid="166" />
             </display>
         </group>
-        <display page_width="588" page_height="768" page_cols="5" page_rows="5" isee:converter_size="medium">
+        <display page_width="612" page_height="792" page_cols="5" page_rows="5" isee:converter_size="medium" scroll_x="728">
             <alias x="519" y="1552" uid="91">
                 <of>Net_Present_Value_PV&amp;Battery</of>
                 <label_side>right</label_side>
@@ -1445,7 +1445,7 @@
                 <from>ImitationScaleFactor</from>
                 <to>PV_adoption_thru_imitation</to>
             </connector>
-            <connector x="559" y="165" uid="6" color="black">
+            <connector x="560" y="165" uid="6" color="black">
                 <from>InnovationScaleFactor</from>
                 <to>PV_adoption_thru_innovation</to>
             </connector>
@@ -1499,7 +1499,7 @@
                 <from>discount_factor_loan_payment_2</from>
                 <to>Annual_Loan_Payment__PV_&amp;_batt</to>
             </connector>
-            <connector x="1245" y="98" uid="133">
+            <connector x="1244" y="99" uid="133">
                 <from>
                     <alias uid="130" />
                 </from>
@@ -1509,7 +1509,7 @@
                 <from>annual_demand_with_PV</from>
                 <to>utiliity_variable_cost</to>
             </connector>
-            <connector x="1234" y="1610" uid="170" color="black">
+            <connector x="1233" y="1611" uid="170" color="black">
                 <from>Initial_Equity_Investment_add_batt</from>
                 <to>Loan_Principal_add_batt</to>
             </connector>
@@ -1573,7 +1573,7 @@
                 </from>
                 <to>debt_interest_rate_as_fraction_2</to>
             </connector>
-            <connector x="1245" y="94" uid="137">
+            <connector x="1246" y="93" uid="137">
                 <from>
                     <alias uid="130" />
                 </from>
@@ -1731,7 +1731,7 @@
                 </from>
                 <to>total_demand</to>
             </connector>
-            <connector x="1522" y="1822" uid="189" color="black">
+            <connector x="1522" y="1821" uid="189" color="black">
                 <from>discount_factor_loan_1</from>
                 <to>NPV_Loan_Payment_add_batt</to>
             </connector>
@@ -1899,7 +1899,7 @@
                 </from>
                 <to>fraction_var_cost_over_retail_price</to>
             </connector>
-            <connector x="1627" y="593" uid="120">
+            <connector x="1627" y="594" uid="120">
                 <from>
                     <alias uid="115" />
                 </from>
@@ -1945,7 +1945,7 @@
                 <from>NPV_Revs_Net_of_Op_CostPV</from>
                 <to>Net_Present_Value_PV</to>
             </connector>
-            <connector x="1130" y="2268" uid="207" color="black">
+            <connector x="1130" y="2270" uid="207" color="black">
                 <from>FCI_PV&amp;batt</from>
                 <to>Initial_Equity_Investment_PV&amp;Batt</to>
             </connector>
@@ -1953,11 +1953,11 @@
                 <from>annual_demand_with_PV</from>
                 <to>total_demand</to>
             </connector>
-            <connector x="184" y="634" uid="16" color="black">
+            <connector x="183" y="631" uid="16" color="black">
                 <from>switched_limit_on_ratio_of_PV_to_total_hhold</from>
                 <to>PV_adoption_thru_imitation</to>
             </connector>
-            <connector x="1015" y="1360" uid="208">
+            <connector x="1013" y="1360" uid="208">
                 <from>
                     <alias uid="103" />
                 </from>
@@ -1969,7 +1969,7 @@
                 </from>
                 <to>reg_houses_being_built</to>
             </connector>
-            <connector x="1116" y="1035" uid="209" color="black">
+            <connector x="1115" y="1034" uid="209" color="black">
                 <from>FCI_PV</from>
                 <to>Loan_Principal_PV</to>
             </connector>
@@ -2051,7 +2051,7 @@
                 </from>
                 <to>Req&apos;d_Rate_of_Return_add_batt</to>
             </connector>
-            <connector x="448" y="1371" uid="78">
+            <connector x="448" y="1370" uid="78">
                 <from>
                     <alias uid="80" />
                 </from>
@@ -2111,7 +2111,7 @@
                 <from>Annual_Loan_Payment_add_batt</from>
                 <to>NPV_Loan_Payment_add_batt</to>
             </connector>
-            <connector x="440" y="1527" uid="89">
+            <connector x="439" y="1529" uid="89">
                 <from>price_vector</from>
                 <to>attractiveness</to>
             </connector>
@@ -2157,7 +2157,7 @@
                 <from>battery_imitation_rate</from>
                 <to>defection_thru_imitation</to>
             </connector>
-            <connector x="1144" y="1683" uid="228" color="black">
+            <connector x="1144" y="1684" uid="228" color="black">
                 <from>FCI_adding_batteries</from>
                 <to>Initial_Equity_Investment_add_batt</to>
             </connector>
@@ -2179,7 +2179,7 @@
                 <from>Battery_incentive</from>
                 <to>battery_imitation_rate</to>
             </connector>
-            <connector x="834" y="740" uid="73">
+            <connector x="835" y="740" uid="73">
                 <from>
                     <alias uid="71" />
                 </from>
@@ -2199,7 +2199,7 @@
                 <from>Req&apos;d_Rate_of_Return_PV</from>
                 <to>discount_factor</to>
             </connector>
-            <connector x="1219" y="2196" uid="233" color="black">
+            <connector x="1220" y="2196" uid="233" color="black">
                 <from>Initial_Equity_Investment_PV&amp;Batt</from>
                 <to>Loan_Principal_PV&amp;batt</to>
             </connector>
@@ -2227,7 +2227,7 @@
                 <from>Expected_Annual_Cost_Battery</from>
                 <to>Expected_Net_annual_rev_add_batt</to>
             </connector>
-            <connector x="401" y="338" uid="23">
+            <connector x="401" y="337" uid="23">
                 <from>customers_with_PV</from>
                 <to>limit_on_ratio_of_PV_to_total_households</to>
             </connector>
@@ -2261,7 +2261,7 @@
                 <from>utility_fixed_cost</from>
                 <to>RETAIL_PRICE</to>
             </connector>
-            <connector x="1508" y="2407" uid="239" color="black">
+            <connector x="1508" y="2406" uid="239" color="black">
                 <from>discount_factor_loan_2</from>
                 <to>NPV_Loan_Payment_PV&amp;batt</to>
             </connector>
@@ -2299,13 +2299,13 @@
                 <from>Req&apos;d_Rate_of_Return_add_batt</from>
                 <to>discount_factor_loan_1</to>
             </connector>
-            <connector x="1329" y="1934" uid="242">
+            <connector x="1334" y="1936" uid="242">
                 <from>
                     <alias uid="100" />
                 </from>
                 <to>discount_factor_1</to>
             </connector>
-            <connector x="697" y="412" uid="66">
+            <connector x="697" y="413" uid="66">
                 <from>defectors</from>
                 <to>direct_defection_via_imitation</to>
             </connector>
@@ -2334,7 +2334,7 @@
                 <to>change_to_util_fixed_cost_from_new_homes</to>
             </connector>
             <stacked_container x="1543" y="49" height="282" width="492" uid="244">
-                <graph type="time_series" title="Untitled" background="#FFFFC9" show_grid="true" plot_numbers="false" isee:use_five_segments="false" date_time="2015-11-30T16:29:53Z" time_precision="2" from="2015" to="2050">
+                <graph type="time_series" title="Untitled" background="#FFFFC9" show_grid="true" plot_numbers="false" isee:use_five_segments="false" date_time="2015-12-02T09:09:10Z" time_precision="2" from="2015" to="2050">
                     <plot index="0" pen_width="3" color="blue" precision="max" show_y_axis="true">
                         <scale min="0" max="1" />
                         <entity name="RETAIL_PRICE" />
@@ -2351,7 +2351,7 @@
             </stacked_container>
             <pad_icon x="1540" y="189" width="26" height="22" color="#008F44" label_side="bottom" label="Graph 5" type="graph" icon_of="244" />
             <stacked_container x="1814" y="469" height="282" width="492" uid="123">
-                <graph type="time_series" title="Untitled" background="#FFFFC9" show_grid="true" plot_numbers="false" isee:use_five_segments="false" date_time="2015-11-30T16:29:53Z" time_precision="2" from="2015" to="2050">
+                <graph type="time_series" title="Untitled" background="#FFFFC9" show_grid="true" plot_numbers="false" isee:use_five_segments="false" date_time="2015-12-02T09:09:10Z" time_precision="2" from="2015" to="2050">
                     <plot index="0" pen_width="1" color="red" precision="max" show_y_axis="true">
                         <entity name="fraction_var_cost_over_retail_price" />
                     </plot>
@@ -2359,7 +2359,7 @@
             </stacked_container>
             <pad_icon x="1849" y="478" width="26" height="22" color="#008F44" label_side="bottom" label="fractions of retail price" type="graph" icon_of="123" />
             <stacked_container x="1944" y="1094" height="282" width="492" uid="245">
-                <graph type="time_series" title="Untitled" background="#FFFFC9" show_grid="true" plot_numbers="false" isee:use_five_segments="false" date_time="2015-11-30T16:29:53Z" time_precision="2" from="2015" to="2050">
+                <graph type="time_series" title="Untitled" background="#FFFFC9" show_grid="true" plot_numbers="false" isee:use_five_segments="false" date_time="2015-12-02T09:09:10Z" time_precision="2" from="2015" to="2050">
                     <plot index="0" pen_width="1" color="blue" precision="1" show_y_axis="true">
                         <entity name="Net_Present_Value_PV" />
                     </plot>
@@ -2367,7 +2367,7 @@
             </stacked_container>
             <pad_icon x="1958" y="1054" width="26" height="22" color="#008F44" label_side="bottom" label="Graph 2" type="graph" icon_of="245" />
             <stacked_container x="1916" y="1708" height="282" width="492" uid="246">
-                <graph type="time_series" title="Untitled" background="#FFFFC9" show_grid="true" plot_numbers="false" isee:use_five_segments="false" date_time="2015-11-30T16:29:53Z" time_precision="2" from="2015" to="2050">
+                <graph type="time_series" title="Untitled" background="#FFFFC9" show_grid="true" plot_numbers="false" isee:use_five_segments="false" date_time="2015-12-02T09:09:10Z" time_precision="2" from="2015" to="2050">
                     <plot index="0" pen_width="1" color="blue" precision="1" show_y_axis="true">
                         <entity name="Net_Present_Value_Battery" />
                     </plot>
@@ -2375,7 +2375,7 @@
             </stacked_container>
             <pad_icon x="1935" y="1721" width="26" height="22" color="#008F44" label_side="bottom" label="Graph 3" type="graph" icon_of="246" />
             <stacked_container x="1888" y="2308" height="282" width="492" uid="247">
-                <graph type="time_series" title="Untitled" background="#FFFFC9" show_grid="true" plot_numbers="false" isee:use_five_segments="false" date_time="2015-11-30T16:29:53Z" time_precision="2" from="2015" to="2050">
+                <graph type="time_series" title="Untitled" background="#FFFFC9" show_grid="true" plot_numbers="false" isee:use_five_segments="false" date_time="2015-12-02T09:09:10Z" time_precision="2" from="2015" to="2050">
                     <plot index="0" pen_width="1" color="blue" precision="1" show_y_axis="true">
                         <entity name="Net_Present_Value_PV&amp;Battery" />
                     </plot>
@@ -2383,7 +2383,7 @@
             </stacked_container>
             <pad_icon x="1908" y="2322" width="26" height="22" color="#008F44" label_side="bottom" label="Graph 4" type="graph" icon_of="247" />
             <stacked_container x="64" y="818" height="423" width="734" uid="248">
-                <graph type="time_series" title="Untitled" background="#FFFFC9" show_grid="true" plot_numbers="false" isee:use_five_segments="false" date_time="2015-11-30T16:29:53Z" time_precision="2" from="2015" to="2050">
+                <graph type="time_series" title="Untitled" background="#FFFFC9" show_grid="true" plot_numbers="false" isee:use_five_segments="false" date_time="2015-12-02T09:09:10Z" time_precision="2" from="2015" to="2050">
                     <plot index="0" pen_width="3" color="blue" precision="1" show_y_axis="true">
                         <scale min="1" max="3.813e+006" />
                         <entity name="regular_customers" />
@@ -2404,7 +2404,7 @@
             </stacked_container>
             <pad_icon x="233" y="943" width="26" height="22" color="#008F44" label_side="bottom" label="Graph 6" type="graph" icon_of="248" />
             <stacked_container height="282" width="492" uid="79">
-                <graph type="time_series" title="Untitled" background="#FFFFC9" show_grid="true" plot_numbers="false" isee:use_five_segments="false" date_time="2015-11-30T16:29:53Z" time_precision="2" from="2015" to="2050">
+                <graph type="time_series" title="Untitled" background="#FFFFC9" show_grid="true" plot_numbers="false" isee:use_five_segments="false" date_time="2015-12-02T09:09:10Z" time_precision="2" from="2015" to="2050">
                     <plot index="0" pen_width="1" color="blue" precision="1" show_y_axis="true">
                         <scale min="1014.06" max="35219.9" />
                         <entity name="houses_being_built" index="regular" />
@@ -2421,7 +2421,7 @@
             </stacked_container>
             <pad_icon x="589" y="1357" width="26" height="22" color="#008F44" label_side="bottom" label="houses being built" type="graph" icon_of="79" />
             <stacked_container height="282" width="492" uid="249">
-                <graph type="time_series" title="Untitled" background="#FFFFC9" show_grid="true" plot_numbers="false" isee:use_five_segments="false" date_time="2015-11-30T16:29:53Z" time_precision="2" from="2015" to="2050">
+                <graph type="time_series" title="Untitled" background="#FFFFC9" show_grid="true" plot_numbers="false" isee:use_five_segments="false" date_time="2015-12-02T09:09:10Z" time_precision="2" from="2015" to="2050">
                     <plot index="0" pen_width="1" color="blue" precision="1" show_y_axis="true">
                         <scale min="11120" max="198005" />
                         <entity name="FCI_PV" />
