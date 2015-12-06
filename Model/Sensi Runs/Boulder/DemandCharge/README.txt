@@ -1,0 +1,1 @@
+In these Boulder:Demand Charge case their were a few cells with ‘?’ instead of numerical values, specifically for sense run cases 350 and 351, the last three years and two respectively. I extrapolated out from previous values to fill in. For example, the Regular Customers leading up to the ‘?’s were on the order of 10^-100 so I filled these in with zeros.
