@@ -1,0 +1,145 @@
+go through effect of one at a time, for one city and each business model
+
+Criteria for DS?
+	decrease in reg customers
+	% drop in reg customers
+
+Lost ‘efficiency improvement’ in sensitivity analyses. Need to run these
+
+Are Sydney results in AUS$? No:converted baseline retail price with 1.4AUD = 1USD (import.xlsx)
+
+
+Map of sensitivity variables
+	graphical examples of variation due to each
+	Need to have Steve run efficiency improvement?
+Innovation scale factor is responsible for steps in regular customers
+
+Bottom 3 effectors:
+	Batt incent
+		offbeat squiggles in Sydney WC PV customers
+	PV incent (much more impact than Batt incentive)
+		squiggles in Sydney WC
+		(overall Sydney is most sensitive to Incentives)
+	Debt interest rate
+
+Top 3 effectors:
+	Efficiency improvement? effect on price primarily?
+	Req’d rate of return (clear effect on defectors at cost of 		PV customers)
+	Util fixed cost growth rate (retail price step pattern)
+	Innovation rate?
+	Wholesale price growth rate (eg. rising fuel costs)
+
+Syd, Boulder, & LA Net Metering:
+	Innovation rate has much more impact than imitation rate (switching between 1 and 5 for both)
+
+Price drop with defector spikes?
+	defector spikes when wholesale growth = 5% (not 1%)
+	More defectors due to incentives and 5x inn/imit rates
+
+
+Paper:
+	Add table of baseline values used for every city/model
+		highlighted in Excel sheet ‘RunCombos’
+
+Business models
+
+Analysis of ‘plot_with_limit’ figures:
+
+LA: No significant difference between NM and DC (NM has slightly more PV customers/less reg customers). WC has most increase in PV customers on average of scenarios / least amount of defectors. All three models have comparable retail prices.
+
+BO: Same trend as LA between NM and DC (NM has slightly more PV customers/less reg customers) - but also see more defectors in Boulder DC (vs NM only). Both Boulder NM and DC show a drop in Retail price with spikes in defectors. WC again retains the most customers (least amount of defectors), but Boulder WC has highest average Retail Price.
+
+SY: Very different trends from US cities. NM has highest spikes in defectors and results are more sensitive to incentives(? shorter period of oscillations). DC has least defectors and greatest PV customers. WC has greatest reg customers. Similar price trends across models, and (similar to Boulder NM and DC) price drops with spikes in defectors.
+
+Average change in values from 2015 to 2050 for all sensitivity cases with limit on ratio of PV customers:
+
+LA
+Demand Charge
+
+reg cust avg = -1325269 
+pv  cust avg = 868014 
+defector avg = 1060334 
+ret pric avg = 0.3769 
+
+LA
+Net Meter
+
+reg cust avg = -1370583 
+pv  cust avg = 890748 
+defector avg = 1082914 
+ret pric avg = 0.3822 
+
+LA
+WholesaleComp
+
+reg cust avg = -1288653 
+pv  cust avg = 1551439 
+defector avg = 340293 
+ret pric avg = 0.3874 
+
+
+Boulder
+Demand Charge
+
+reg cust avg = -13034 
+pv  cust avg = 15040 
+defector avg = 13277 
+ret pric avg = 0.1882 
+
+Boulder
+Net Meter
+
+reg cust avg = -14154 
+pv  cust avg = 20487 
+defector avg = 8949 
+ret pric avg = 0.2125 
+
+Boulder
+WholesaleComp
+
+reg cust avg = -13307 
+pv  cust avg = 24468 
+defector avg = 4122 
+ret pric avg = 0.2319 
+
+
+Sydney
+Demand Charge
+
+reg cust avg = 98500 
+pv  cust avg = 972069 
+defector avg = 331483 
+ret pric avg = 0.3428 
+
+
+Sydney
+Net Meter
+
+reg cust avg = 105566 
+pv  cust avg = 601670 
+defector avg = 694816 
+ret pric avg = 0.3137 
+
+
+Sydney
+WholesaleComp
+
+reg cust avg = 182888 
+pv  cust avg = 894830 
+defector avg = 324333 
+ret pric avg = 0.3303
+
+
+
+
+
+
+
+Analysis of ‘plot_with_limit2’ figures:
+Of the 3 business models, WC is most similar across cities.
+
+LA and Boulder DC models are very similar, but Sydney does not match well.
+
+NM is qualitatively different across all 3 cities.
+
+Sydney is only city with positive growth in regular customers, and it occurs for all three business models (there are some cases in Sydney NM with negative delta in PV customers, and some cases in Sydney DC with negative delta in reg customers - both when req’d rate of return is 1% - not baseline 10%).
