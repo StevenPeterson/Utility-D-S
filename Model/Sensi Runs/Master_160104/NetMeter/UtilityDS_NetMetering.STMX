@@ -1,0 +1,2467 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<xmile version="1.0" level="3" xmlns="http://www.systemdynamics.org/XMILE" xmlns:isee="http://iseesystems.com/XMILE">
+    <header>
+        <smile version="1.0" namespace="std, isee">
+            <uses_arrays>1</uses_arrays>
+        </smile>
+        <name>UtilityDS_NetMetering</name>
+        <uuid>18a46129-355a-4513-988a-9d57cd10046c</uuid>
+        <vendor>isee systems, inc.</vendor>
+        <product version="10.0.6" lang="en">STELLA</product>
+    </header>
+    <style>
+        <model font-family="Arial" font-size="9" />
+        <interface font-family="Arial" font-size="9" />
+    </style>
+    <sim_specs method="Euler" time_units="Years">
+        <start>2015</start>
+        <stop>2050</stop>
+        <dt>0.25</dt>
+    </sim_specs>
+    <dimensions>
+        <dim name="house_type">
+            <elem name="regular" />
+            <elem name="PV_house" />
+            <elem name="PV_batt" />
+        </dim>
+    </dimensions>
+    <model_units>
+        <units>
+            <eqn>$</eqn>
+        </units>
+        <units name="Per Year">
+            <eqn>1/Years</eqn>
+        </units>
+    </model_units>
+    <data>
+        <export frequency="on_demand" interval="1" orientation="horizontal" url="/Volumes/Macintosh HD/Users/nicklaws/Kite Drive/2015 Utility Death Spiral (Laws)/UDS Git repository/Utility-D-S/Model/Sensi Runs/Master_160104/NetMeter/1_RetailPrice.csv">
+            <table name="Comparative: p1" use_settings="true" />
+        </export>
+        <export frequency="on_demand" interval="1" orientation="horizontal" url="/Volumes/Macintosh HD/Users/nicklaws/Kite Drive/2015 Utility Death Spiral (Laws)/UDS Git repository/Utility-D-S/Model/Sensi Runs/Master_160104/NetMeter/2_RegularCust.csv">
+            <table name="Comparative: p2" use_settings="true" />
+        </export>
+        <export frequency="on_demand" interval="1" orientation="horizontal" url="/Volumes/Macintosh HD/Users/nicklaws/Kite Drive/2015 Utility Death Spiral (Laws)/UDS Git repository/Utility-D-S/Model/Sensi Runs/Master_160104/NetMeter/3_Cust_With_PV.csv">
+            <table name="Comparative: p3" use_settings="true" />
+        </export>
+        <export frequency="on_demand" interval="1" orientation="horizontal" url="/Volumes/Macintosh HD/Users/nicklaws/Kite Drive/2015 Utility Death Spiral (Laws)/UDS Git repository/Utility-D-S/Model/Sensi Runs/Master_160104/NetMeter/4_Defector.csv">
+            <table name="Comparative: p4" use_settings="true" />
+        </export>
+        <import type="Excel" enabled="false" frequency="on_demand" url="/Volumes/Macintosh HD/Users/nicklaws/Kite Drive/2015 Utility Death Spiral/UDS Git repository/Utility-D-S/Model/Data/import.xlsx" worksheet="LA" />
+    </data>
+    <isee:prefs layer="model" grid_width="20" grid_height="50" divide_by_zero_alert="true" hide_taskbar="true" show_module_prefix="true">
+        <isee:window width="1436" height="855" />
+        <isee:security />
+        <isee:print_setup width="588" height="768" />
+    </isee:prefs>
+    <isee:equation_prefs order_by="module" />
+    <model>
+        <aux name="historical_data">
+            <doc>historical number of PV customers in LA</doc>
+            <eqn>time</eqn>
+            <gf>
+                <xscale min="2000" max="2015" />
+                <yscale min="0" max="2" />
+                <ypts>83,92,101,111,122,134,148,162,592,1363,2512,4244,6886,11111,14039</ypts>
+            </gf>
+            <display x="786" y="643" color="blue" />
+        </aux>
+        <aux name="utility_fixed_cost">
+            <eqn>baseline_util_fixed_cost&#x0A;*&#x0A;(1 + util_fixed_cost_growth_rate_%_per_year*(time-2015))&#x0A;+&#x0A;change_to_util_fixed_cost_from_new_homes&#x0A;</eqn>
+            <units>$</units>
+            <display x="1221" y="313" color="blue" label_side="left" label_angle="118" />
+        </aux>
+        <aux name="utiliity_variable_cost">
+            <eqn>regular_customers * annual_base_demand * wholesale_price_of_elec&#x0A;+&#x0A;customers_with_PV * annual_demand_with_PV * wholesale_price_of_elec_for_PV_customers</eqn>
+            <units>$</units>
+            <display x="1175" y="230" color="blue" label_angle="335" />
+        </aux>
+        <aux name="util_fixed_cost_growth_rate_%_per_year">
+            <eqn>0.01</eqn>
+            <display x="1270" y="319" color="#FF7F00" label_side="right" label_angle="8" />
+        </aux>
+        <aux name="baseline_retail_price">
+            <doc>2015 LA retail price&#x0A;http://www.bls.gov/regions/west/news-release/2015/averageenergyprices_losangeles_20150303.htm</doc>
+            <eqn>0.209</eqn>
+            <display x="1295" y="225" color="#FF7F00" label_side="right" />
+        </aux>
+        <aux name="RETAIL_PRICE">
+            <eqn>(utility_fixed_cost+utiliity_variable_cost)&#x0A;/total_demand</eqn>
+            <display x="1104" y="414" color="blue" label_side="left" label_angle="168" />
+        </aux>
+        <aux name="wholesale_price_of_elec">
+            <eqn>baseline_wholesale_elec_price&#x0A;*(1 + wholesale_price_growth_rate_%_per_year*(time-2015))</eqn>
+            <display x="1117" y="217" color="blue" label_side="top" label_angle="99" />
+        </aux>
+        <aux name="total_demand">
+            <eqn>regular_customers*annual_base_demand+customers_with_PV*annual_demand_with_PV</eqn>
+            <display x="1175" y="114" color="blue" label_side="top" label_angle="81" />
+        </aux>
+        <aux name="new_reg_homes">
+            <eqn>regular_customers-INIT(regular_customers)</eqn>
+            <display x="1228" y="446" color="blue" label_side="left" label_angle="192" />
+        </aux>
+        <aux name="new_PV_homes">
+            <eqn>customers_with_PV-INIT(customers_with_PV)</eqn>
+            <display x="1311" y="442" color="blue" label_side="right" />
+        </aux>
+        <aux name="change_to_util_fixed_cost_from_new_homes">
+            <eqn>utiltiy_incremental_fixed_cost_per_new_home_$&#x0A;*&#x0A;(new_reg_homes&#x0A;+new_PV_homes)</eqn>
+            <units>$</units>
+            <display x="1274" y="378" color="blue" label_side="right" label_angle="36" />
+        </aux>
+        <aux name="added_utility_cost_of_PV_customer_$kWh">
+            <eqn>0.01</eqn>
+            <display x="1104" y="296" color="#FF7F00" label_angle="211" />
+        </aux>
+        <aux name="wholesale_price_of_elec_for_PV_customers">
+            <eqn>(wholesale_price_of_elec&#x0A;+added_utility_cost_of_PV_customer_$kWh)&#x0A;*(1 + wholesale_price_growth_rate_%_per_year*(time-2015))</eqn>
+            <display x="1123" y="257" color="blue" label_side="left" label_angle="200" />
+        </aux>
+        <aux name="baseline_util_fixed_cost">
+            <eqn>INIT(total_demand)*baseline_retail_price&#x0A;-INIT(utiliity_variable_cost)</eqn>
+            <units>$</units>
+            <display x="1270" y="285" color="blue" label_side="right" />
+        </aux>
+        <aux name="annual_demand_with_PV">
+            <eqn>annual_base_demand&#x0A;-&#x0A;annual_PV_production_kWh&#x0A;*ELCC_as_function_of_PV_penetration</eqn>
+            <display x="1267" y="162" color="blue" label_angle="343" />
+        </aux>
+        <aux name="fraction_of_PV_to_regular_customers">
+            <eqn>customers_with_PV /&#x0A;(regular_customers+1)</eqn>
+            <units>Unitless</units>
+            <display x="1179" y="63" color="blue" label_side="top" label_angle="118" />
+        </aux>
+        <aux name="fraction_var_cost_over_retail_price">
+            <eqn>utiliity_variable_cost/total_demand/RETAIL_PRICE</eqn>
+            <units>Unitless</units>
+            <display x="1580" y="496" color="blue" label_side="left" label_angle="176" />
+        </aux>
+        <aux name="fraction_fixed_cost_over_retail_price">
+            <eqn>utility_fixed_cost/total_demand/RETAIL_PRICE</eqn>
+            <units>Unitless</units>
+            <display x="1674" y="494" color="blue" label_side="right" label_angle="352" />
+        </aux>
+        <aux name="Initial_Equity_Investment_PV">
+            <doc>DEFINITION: Amount of total project Fixed Capital Investment to be financed through equity ( $ )&#x0A;&#x0A;UNITS:  US Dollars&#x0A;&#x0A;TYPE: Internal calculation&#x0A;&#x0A;SOURCE: &#x0A;&#x0A;COMMENT:</doc>
+            <eqn>FCI_PV*Equity_Fraction</eqn>
+            <units>$</units>
+            <display x="1347" y="941" color="black" label_side="right" />
+        </aux>
+        <aux name="FCI_PV">
+            <doc>DEFINITION: Expected Fixed Capital Investment for &quot;next&quot; Pioneer Plant, after Capital Subsidy&#x0A; &#x0A;UNITS: US Dollars&#x0A; &#x0A;TYPE: Internal Calculation&#x0A; &#x0A;SOURCE: &#x0A; &#x0A;COMMENT: &#x0A;</doc>
+            <eqn>TIME</eqn>
+            <gf type="extrapolate">
+                <xscale min="2014" max="2050" />
+                <yscale min="0" max="2" />
+                <ypts>21105,19295,18755,17580,16765,15770,15140,14595,14055,13330,13060,12700,12245,12335,12245,12155,12065,11975,11900,11795,11550,11435,11400,11380,11360,11340,11320,11300,11280,11260,11240,11220,11200,11180,11160,11140,11120</ypts>
+            </gf>
+            <units>$</units>
+            <display x="1107" y="1030" color="red" label_side="left" label_angle="176" />
+        </aux>
+        <aux name="Expected_Annual_Cost_PV">
+            <doc>DEFINITION: Calculates expected operating cost for &quot;next&quot; pioneer plant when fully operational&#x0A;&#x0A;UNITS:  USD per year&#x0A;&#x0A;TYPE: Internal Calculation for this sector&#x0A;&#x0A;SOURCE: N/A&#x0A;&#x0A;COMMENT: Downstream NPV calculation assumes constant costs over plant lifetime, once operational. &#x0A;</doc>
+            <eqn>TIME</eqn>
+            <gf>
+                <xscale min="0" max="12" />
+                <yscale min="0" max="2" />
+                <ypts>300,300,300,300,300,300,300,300,300,300,300,300,300,300,300,300,300,300,300,300,300,300,300,300,300,300,300,300,300,300,300,300,300,300,300,300,300</ypts>
+            </gf>
+            <display x="1157" y="1475" color="red" label_side="left" label_angle="172" />
+        </aux>
+        <aux name="Expected_annual_Rev_PV">
+            <doc>DEFINITION: Calculates expected revenues for Pioneer-scale plant when plant is fullly operational&#x0A;&#x0A;UNITS:  USD per year&#x0A;&#x0A;TYPE: Internal Calculation for this sector&#x0A;&#x0A;SOURCE: N/A&#x0A;&#x0A;COMMENT: Downstream NPV calculation assumes constant revs over plant lifetime, once operational. &#x0A;&#x0A;&#x0A;</doc>
+            <eqn>annual_PV_production_kWh * RETAIL_PRICE</eqn>
+            <units>$</units>
+            <display x="1166" y="1414" color="red" label_side="top" label_angle="115" />
+        </aux>
+        <aux name="Net_Present_Value_PV">
+            <doc>DEFINITION: Net Present Value of Project, discounted to &quot;now&quot; in simulation&#x0A;&#x0A;UNITS:  US Dollars&#x0A;&#x0A;TYPE: Calculation; Sector Interface&#x0A;&#x0A;SOURCE: N/A&#x0A;&#x0A;COMMENT: Sums the input PV calculations to provide overall NPV for the project.&#x0A;</doc>
+            <eqn>NPV_Revs_Net_of_Op_CostPV-&#x0A;(Initial_Equity_Investment_PV + NPV_Loan_Payment_PV)</eqn>
+            <units>$</units>
+            <display x="1756" y="1112" color="#008F44" label_side="top" label_angle="14" />
+        </aux>
+        <aux name="Equity_Fraction">
+            <doc>Expected fraction of Investment to be funded through  financing</doc>
+            <eqn>0.5</eqn>
+            <units>Unitless</units>
+            <display x="1101" y="941" color="red" label_side="left" label_angle="196" />
+        </aux>
+        <aux name="Loan_Principal_PV">
+            <doc>DEFINITION: Amount of total project Fixed Capital Investment for &quot;next&quot; pioneer project to be financed through loan financing &#x0A;&#x0A;UNITS:  US Dollars&#x0A;&#x0A;TYPE: Internal calculation&#x0A;&#x0A;SOURCE:&#x0A;&#x0A;COMMENT: &#x0A;</doc>
+            <eqn>FCI_PV-Initial_Equity_Investment_PV</eqn>
+            <units>$</units>
+            <display x="1347" y="1038" color="black" label_side="left" label_angle="150" />
+        </aux>
+        <aux name="Annual_Loan_Payment_PV_only">
+            <doc>DEFINITION: Annual payment associated with repayment of loan &#x0A;&#x0A;UNITS:  USD per year&#x0A;&#x0A;TYPE: Internal Calculation&#x0A;&#x0A;SOURCE: &#x0A;&#x0A;COMMENT: &#x0A;</doc>
+            <eqn>Loan_Principal_PV/discount_factor_loan_payment</eqn>
+            <display x="1501" y="1115" color="black" label_angle="201" />
+        </aux>
+        <aux name="NPV_Revs_Net_of_Op_CostPV">
+            <doc>DEFINITION: Calculates NPV of revenues net of operating cost, assuming constant net over pioneer plant operational lifetime &#x0A;&#x0A;UNITS:   US Dollars&#x0A;&#x0A;TYPE: Internal Calculation for this sector&#x0A;&#x0A;SOURCE: N/A&#x0A;&#x0A;COMMENT: Using expected rev net of operating cost, this eq&apos;n does a PV calculation for the entire project length (using discount factor 3), and then subtracts the PV associated with design, construction, startup, leaving the PV of the expected rev net of op cost for the time that the project is fully operational.  Assumes net 0 for rev net of op cost during start-up period.&#x0A;</doc>
+            <eqn>Expected_Net_annual_rev_PV*(discount_factor)</eqn>
+            <units>$</units>
+            <display x="1730" y="1414" color="black" label_angle="225" />
+        </aux>
+        <aux name="Expected_Net_annual_rev_PV">
+            <doc>DEFINITION: Calculates expected revenues net of  expected operating cost for plant when fully operational, using current values for inputs &#x0A;&#x0A;UNITS:  USD per year&#x0A;&#x0A;TYPE: Internal Calculation for this sector&#x0A;&#x0A;SOURCE: N/A&#x0A;&#x0A;COMMENT: Downstream NPV calculation assumes constant rev net of op cost over plant lifetime, once plant is operational. &#x0A;</doc>
+            <eqn>Expected_annual_Rev_PV-Expected_Annual_Cost_PV</eqn>
+            <display x="1369" y="1414" color="black" label_side="top" label_angle="22" />
+        </aux>
+        <aux name="NPV_Loan_Payment_PV">
+            <doc>DEFINITION: Calculates NPV of loan payments over length of loan &#x0A;&#x0A;UNITS:  US Dollars&#x0A;&#x0A;TYPE: Internal Calculation for this sector&#x0A;&#x0A;SOURCE: N/A&#x0A;&#x0A;COMMENT: Using annual loan payment, this eq&apos;n does a PV calculation for the Design/Construction/Startup phase + Loan term, and then subtracts the PV associated with design, construction, startup, leaving the NPV of loan payments over period loan is repaid.  Note that this assumes no loan payment until plant is fully operational.</doc>
+            <eqn>Annual_Loan_Payment_PV_only*(discount_factor_loan)</eqn>
+            <units>$</units>
+            <display x="1570" y="1115" color="black" label_side="top" label_angle="50" />
+        </aux>
+        <aux name="project_lifetime_NPV">
+            <doc>DEFINITION: Total length of commercial project, including Design/Construction/Startup and expected plant lifetime once operationall&#x0A;&#x0A;UNITS:  years&#x0A;&#x0A;TYPE: Internal Calculation for this sector&#x0A;&#x0A;SOURCE: N/A&#x0A;&#x0A;COMMENT:&#x0A;</doc>
+            <eqn>20</eqn>
+            <units>years</units>
+            <display x="1396" y="1331" color="red" label_side="top" label_angle="159" />
+        </aux>
+        <aux name="Req&apos;d_Rate_of_Return_as_%">
+            <doc>Project rate of return required to stimulate investment in a project, given current state of industry &#x0A;&#x0A; &#x0A;</doc>
+            <eqn>10</eqn>
+            <units>Unitless</units>
+            <display x="1055" y="1272" color="red" />
+        </aux>
+        <aux name="discount_factor">
+            <doc>DEFINITION:  Calculates discount factor for doing NPV calculation for total commercial project length, incl. design, construction, startup, project lifetime. &#x0A;&#x0A;UNITS:  years&#x0A;&#x0A;TYPE:  Internal Calculation for this sector&#x0A;&#x0A;SOURCE:  Standard financial calculation for annuity.  See, for example, Present Value entry in wikipedia&#x0A;&#x0A;COMMENT:  Req&apos;d Rate of Return &gt;0 or eq&apos;n will generate division by 0.&#x0A;&#x0A;Units check fails because of exponentiation operation&#x0A;</doc>
+            <eqn>(1/Req&apos;d_Rate_of_Return_PV)*&#x0A;(1-1/(1+Req&apos;d_Rate_of_Return_PV)^project_lifetime_NPV)</eqn>
+            <units>years</units>
+            <display x="1647" y="1331" color="black" label_side="top" label_angle="14" />
+        </aux>
+        <aux name="discount_factor_loan_payment">
+            <doc>DEFINITION:  Calculates discount factor for doing NPV calculation associated with loan repayment (principal + interest) &#x0A;&#x0A;UNITS:  years&#x0A;&#x0A;TYPE:  Internal Calculation for this sector&#x0A;&#x0A;SOURCE:  Standard financial calculation for annuity.  See, for example, Present Value entry in wikipedia&#x0A;&#x0A;COMMENT:  Req&apos;d Rate of Return &gt;0 or eq&apos;n will generate division by 0.&#x0A;&#x0A;Units check fails because of exponentiation operation</doc>
+            <eqn>(1/debt_interest_rate_as_fraction)*&#x0A;(1-1/(1+debt_interest_rate_as_fraction)^(term_of_loan))</eqn>
+            <units>years</units>
+            <display x="1338" y="1115" color="black" label_side="top" label_angle="73" />
+        </aux>
+        <aux name="Req&apos;d_Rate_of_Return_PV">
+            <doc>DEFINITION: Project rate of return required to stimulate investment in a project, given current state of industry, expressed as a fraction &#x0A; &#x0A;UNITS: 1/yr&#x0A; &#x0A;TYPE: Internal calculation&#x0A; &#x0A;SOURCE: &#x0A; &#x0A;COMMENTS: &#x0A; &#x0A;</doc>
+            <eqn>Req&apos;d_Rate_of_Return_as_%/100</eqn>
+            <units>Per Year</units>
+            <display x="1545" y="1272" color="black" label_side="right" label_angle="8" />
+        </aux>
+        <aux name="term_of_loan">
+            <doc>DEFINITION: Project rate of return required to stimulate investment in a project, given current state of industry &#x0A; &#x0A;UNITS: %/yr&#x0A; &#x0A;TYPE: Internal calculation&#x0A; &#x0A;SOURCE: &#x0A; &#x0A;COMMENTS: &#x0A; &#x0A;</doc>
+            <eqn>10</eqn>
+            <units>year</units>
+            <display x="1163" y="1208" color="red" />
+        </aux>
+        <aux name="debt_interest_rate_as_%">
+            <eqn>5</eqn>
+            <units>Unitless</units>
+            <display x="1095" y="1115" color="red" label_side="left" label_angle="188" />
+        </aux>
+        <aux name="debt_interest_rate_as_fraction">
+            <doc>DEFINITION: Project rate of return required to stimulate investment in a project, given current state of industry, expressed as a fraction &#x0A; &#x0A;UNITS: 1/yr&#x0A; &#x0A;TYPE: Internal calculation&#x0A; &#x0A;SOURCE: &#x0A; &#x0A;COMMENTS: &#x0A; &#x0A;</doc>
+            <eqn>debt_interest_rate_as_%/100</eqn>
+            <units>Per Year</units>
+            <display x="1221" y="1115" color="black" />
+        </aux>
+        <aux name="discount_factor_loan">
+            <doc>DEFINITION:  Calculates discount factor for doing NPV calculation associated with loan repayment (principal + interest) &#x0A;&#x0A;UNITS:  years&#x0A;&#x0A;TYPE:  Internal Calculation for this sector&#x0A;&#x0A;SOURCE:  Standard financial calculation for annuity.  See, for example, Present Value entry in wikipedia&#x0A;&#x0A;COMMENT:  Req&apos;d Rate of Return &gt;0 or eq&apos;n will generate division by 0.&#x0A;&#x0A;Units check fails because of exponentiation operation</doc>
+            <eqn>(1/Req&apos;d_Rate_of_Return_PV)*&#x0A;(1-1/(1+Req&apos;d_Rate_of_Return_PV)^(term_of_loan))</eqn>
+            <units>years</units>
+            <display x="1617" y="1208" color="black" label_side="right" label_angle="30" />
+        </aux>
+        <aux name="Initial_Equity_Investment_add_batt">
+            <doc>DEFINITION: Amount of total project Fixed Capital Investment to be financed through equity ( $ )&#x0A;&#x0A;UNITS:  US Dollars&#x0A;&#x0A;TYPE: Internal calculation&#x0A;&#x0A;SOURCE: &#x0A;&#x0A;COMMENT:</doc>
+            <eqn>FCI_adding_batteries*Equity_Fraction</eqn>
+            <units>$</units>
+            <display x="1232" y="1602" color="black" label_side="right" label_angle="16" />
+        </aux>
+        <aux name="FCI_adding_batteries">
+            <doc>DEFINITION: Expected Fixed Capital Investment for &quot;next&quot; Pioneer Plant, after Capital Subsidy&#x0A; &#x0A;UNITS: US Dollars&#x0A; &#x0A;TYPE: Internal Calculation&#x0A; &#x0A;SOURCE: &#x0A; &#x0A;COMMENT: &#x0A;</doc>
+            <eqn>TIME</eqn>
+            <gf>
+                <xscale min="2014" max="2050" />
+                <yscale min="0" max="2" />
+                <ypts>63599.919999999998,57051.68,53205.519999999997,49958.32,47108.559999999998,44255.080000000002,42064.559999999998,39902.879999999997,37681.720000000001,35841.32,34568.239999999998,32870.800000000003,31068.48,30127.84,29313.48,28434.119999999999,27814.759999999998,27585.400000000001,27437.599999999999,26996.68,26531.200000000001,26339.240000000002,26235.599999999999,26148.52,26061.439999999999,25909.360000000001,25757.279999999999,25540.200000000001,25453.119999999999,25366.040000000001,25213.959999999999,24996.880000000001,24844.799999999999,24757.720000000001,24670.639999999999,24583.560000000001,24496.48</ypts>
+            </gf>
+            <units>$</units>
+            <display x="1141" y="1693" color="red" label_side="left" label_angle="157" />
+        </aux>
+        <aux name="Expected_Annual_Cost_Battery">
+            <doc>DEFINITION: Calculates expected operating cost for &quot;next&quot; pioneer plant when fully operational&#x0A;&#x0A;UNITS:  USD per year&#x0A;&#x0A;TYPE: Internal Calculation for this sector&#x0A;&#x0A;SOURCE: N/A&#x0A;&#x0A;COMMENT: Downstream NPV calculation assumes constant costs over plant lifetime, once operational. &#x0A;</doc>
+            <eqn>TIME</eqn>
+            <gf>
+                <xscale min="0" max="12" />
+                <yscale min="0" max="2" />
+                <ypts>100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100</ypts>
+            </gf>
+            <display x="1071" y="2066" color="red" label_side="top" label_angle="168" />
+        </aux>
+        <aux name="Expected_annual_Rev_add_batt">
+            <doc>DEFINITION: Calculates expected revenues for Pioneer-scale plant when plant is fullly operational&#x0A;&#x0A;UNITS:  USD per year&#x0A;&#x0A;TYPE: Internal Calculation for this sector&#x0A;&#x0A;SOURCE: N/A&#x0A;&#x0A;COMMENT: Downstream NPV calculation assumes constant revs over plant lifetime, once operational. &#x0A;&#x0A;&#x0A;</doc>
+            <eqn>RETAIL_PRICE * (annual_base_demand - annual_PV_production_kWh)</eqn>
+            <units>$</units>
+            <display x="1080" y="2005" color="red" label_side="top" label_angle="115" />
+        </aux>
+        <aux name="Net_Present_Value_Battery">
+            <doc>DEFINITION: Net Present Value of Project, discounted to &quot;now&quot; in simulation&#x0A;&#x0A;UNITS:  US Dollars&#x0A;&#x0A;TYPE: Calculation; Sector Interface&#x0A;&#x0A;SOURCE: N/A&#x0A;&#x0A;COMMENT: Sums the input PV calculations to provide overall NPV for the project.&#x0A;</doc>
+            <eqn>NPV_Revs_Net_of_Op_Cost_add_batt-&#x0A;(Initial_Equity_Investment_add_batt + NPV_Loan_Payment_add_batt)</eqn>
+            <units>$</units>
+            <display x="1739" y="1746" color="#008F44" label_side="right" label_angle="38" />
+        </aux>
+        <aux name="Loan_Principal_add_batt">
+            <doc>DEFINITION: Amount of total project Fixed Capital Investment for &quot;next&quot; pioneer project to be financed through loan financing &#x0A;&#x0A;UNITS:  US Dollars&#x0A;&#x0A;TYPE: Internal calculation&#x0A;&#x0A;SOURCE:&#x0A;&#x0A;COMMENT: &#x0A;</doc>
+            <eqn>FCI_adding_batteries-Initial_Equity_Investment_add_batt</eqn>
+            <units>$</units>
+            <display x="1309" y="1693" color="black" label_side="right" label_angle="73" />
+        </aux>
+        <aux name="Annual_Loan_Payment_add_batt">
+            <doc>DEFINITION: Annual payment associated with repayment of loan &#x0A;&#x0A;UNITS:  USD per year&#x0A;&#x0A;TYPE: Internal Calculation&#x0A;&#x0A;SOURCE: &#x0A;&#x0A;COMMENT: &#x0A;</doc>
+            <eqn>Loan_Principal_add_batt/discount_factor_loan_payment_1</eqn>
+            <display x="1389" y="1753" color="black" label_angle="207" />
+        </aux>
+        <aux name="NPV_Revs_Net_of_Op_Cost_add_batt">
+            <doc>DEFINITION: Calculates NPV of revenues net of operating cost, assuming constant net over pioneer plant operational lifetime &#x0A;&#x0A;UNITS:   US Dollars&#x0A;&#x0A;TYPE: Internal Calculation for this sector&#x0A;&#x0A;SOURCE: N/A&#x0A;&#x0A;COMMENT: Using expected rev net of operating cost, this eq&apos;n does a PV calculation for the entire project length (using discount factor 3), and then subtracts the PV associated with design, construction, startup, leaving the PV of the expected rev net of op cost for the time that the project is fully operational.  Assumes net 0 for rev net of op cost during start-up period.&#x0A;</doc>
+            <eqn>Expected_Net_annual_rev_add_batt*(discount_factor_1)</eqn>
+            <units>$</units>
+            <display x="1703" y="2005" color="black" label_side="right" label_angle="52" />
+        </aux>
+        <aux name="Expected_Net_annual_rev_add_batt">
+            <doc>DEFINITION: Calculates expected revenues net of  expected operating cost for plant when fully operational, using current values for inputs &#x0A;&#x0A;UNITS:  USD per year&#x0A;&#x0A;TYPE: Internal Calculation for this sector&#x0A;&#x0A;SOURCE: N/A&#x0A;&#x0A;COMMENT: Downstream NPV calculation assumes constant rev net of op cost over plant lifetime, once plant is operational. &#x0A;</doc>
+            <eqn>Expected_annual_Rev_add_batt-Expected_Annual_Cost_battery</eqn>
+            <display x="1283" y="2005" color="black" label_side="top" label_angle="22" />
+        </aux>
+        <aux name="NPV_Loan_Payment_add_batt">
+            <doc>DEFINITION: Calculates NPV of loan payments over length of loan &#x0A;&#x0A;UNITS:  US Dollars&#x0A;&#x0A;TYPE: Internal Calculation for this sector&#x0A;&#x0A;SOURCE: N/A&#x0A;&#x0A;COMMENT: Using annual loan payment, this eq&apos;n does a PV calculation for the Design/Construction/Startup phase + Loan term, and then subtracts the PV associated with design, construction, startup, leaving the NPV of loan payments over period loan is repaid.  Note that this assumes no loan payment until plant is fully operational.</doc>
+            <eqn>Annual_Loan_Payment_add_batt*(discount_factor_loan_1)</eqn>
+            <units>$</units>
+            <display x="1455" y="1753" color="black" label_side="right" label_angle="62" />
+        </aux>
+        <aux name="discount_factor_1">
+            <doc>DEFINITION:  Calculates discount factor for doing NPV calculation for total commercial project length, incl. design, construction, startup, project lifetime. &#x0A;&#x0A;UNITS:  years&#x0A;&#x0A;TYPE:  Internal Calculation for this sector&#x0A;&#x0A;SOURCE:  Standard financial calculation for annuity.  See, for example, Present Value entry in wikipedia&#x0A;&#x0A;COMMENT:  Req&apos;d Rate of Return &gt;0 or eq&apos;n will generate division by 0.&#x0A;&#x0A;Units check fails because of exponentiation operation&#x0A;</doc>
+            <eqn>(1/Req&apos;d_Rate_of_Return_add_batt)*&#x0A;(1-1/(1+Req&apos;d_Rate_of_Return_add_batt)^project_lifetime_NPV)</eqn>
+            <units>years</units>
+            <display x="1620" y="1922" color="black" label_side="top" label_angle="62" />
+        </aux>
+        <aux name="discount_factor_loan_payment_1">
+            <doc>DEFINITION:  Calculates discount factor for doing NPV calculation associated with loan repayment (principal + interest) &#x0A;&#x0A;UNITS:  years&#x0A;&#x0A;TYPE:  Internal Calculation for this sector&#x0A;&#x0A;SOURCE:  Standard financial calculation for annuity.  See, for example, Present Value entry in wikipedia&#x0A;&#x0A;COMMENT:  Req&apos;d Rate of Return &gt;0 or eq&apos;n will generate division by 0.&#x0A;&#x0A;Units check fails because of exponentiation operation</doc>
+            <eqn>(1/debt_interest_rate_as_fraction_1)*&#x0A;(1-1/(1+debt_interest_rate_as_fraction_1)^(term_of_loan))</eqn>
+            <units>years</units>
+            <display x="1226" y="1753" color="black" label_side="top" label_angle="122" />
+        </aux>
+        <aux name="Req&apos;d_Rate_of_Return_add_batt">
+            <doc>DEFINITION: Project rate of return required to stimulate investment in a project, given current state of industry, expressed as a fraction &#x0A; &#x0A;UNITS: 1/yr&#x0A; &#x0A;TYPE: Internal calculation&#x0A; &#x0A;SOURCE: &#x0A; &#x0A;COMMENTS: &#x0A; &#x0A;</doc>
+            <eqn>Req&apos;d_Rate_of_Return_as_%/100</eqn>
+            <units>Per Year</units>
+            <display x="1458" y="1865" color="black" />
+        </aux>
+        <aux name="debt_interest_rate_as_fraction_1">
+            <doc>DEFINITION: Project rate of return required to stimulate investment in a project, given current state of industry, expressed as a fraction &#x0A; &#x0A;UNITS: 1/yr&#x0A; &#x0A;TYPE: Internal calculation&#x0A; &#x0A;SOURCE: &#x0A; &#x0A;COMMENTS: &#x0A; &#x0A;</doc>
+            <eqn>debt_interest_rate_as_%/100</eqn>
+            <units>Per Year</units>
+            <display x="1169" y="1753" color="black" />
+        </aux>
+        <aux name="discount_factor_loan_1">
+            <doc>DEFINITION:  Calculates discount factor for doing NPV calculation associated with loan repayment (principal + interest) &#x0A;&#x0A;UNITS:  years&#x0A;&#x0A;TYPE:  Internal Calculation for this sector&#x0A;&#x0A;SOURCE:  Standard financial calculation for annuity.  See, for example, Present Value entry in wikipedia&#x0A;&#x0A;COMMENT:  Req&apos;d Rate of Return &gt;0 or eq&apos;n will generate division by 0.&#x0A;&#x0A;Units check fails because of exponentiation operation</doc>
+            <eqn>(1/Req&apos;d_Rate_of_Return_add_batt)*&#x0A;(1-1/(1+Req&apos;d_Rate_of_Return_add_batt)^(term_of_loan))</eqn>
+            <units>years</units>
+            <display x="1526" y="1830" color="black" label_side="left" label_angle="126" />
+        </aux>
+        <aux name="Initial_Equity_Investment_PV&amp;Batt">
+            <doc>DEFINITION: Amount of total project Fixed Capital Investment to be financed through equity ( $ )&#x0A;&#x0A;UNITS:  US Dollars&#x0A;&#x0A;TYPE: Internal calculation&#x0A;&#x0A;SOURCE: &#x0A;&#x0A;COMMENT:</doc>
+            <eqn>FCI_PV&amp;batt*Equity_Fraction</eqn>
+            <units>$</units>
+            <display x="1218" y="2187" color="black" label_side="right" label_angle="20" />
+        </aux>
+        <aux name="FCI_PV&amp;batt">
+            <doc>DEFINITION: Expected Fixed Capital Investment for &quot;next&quot; Pioneer Plant, after Capital Subsidy&#x0A; &#x0A;UNITS: US Dollars&#x0A; &#x0A;TYPE: Internal Calculation&#x0A; &#x0A;SOURCE: &#x0A; &#x0A;COMMENT: &#x0A;</doc>
+            <eqn>TIME</eqn>
+            <gf>
+                <xscale min="2014" max="2050" />
+                <yscale min="0" max="2" />
+                <ypts>83016.520000000004,74803.080000000002,70460.119999999995,66131.919999999998,62532.360000000001,58763.480000000003,55993.360000000001,53330.279999999999,50612.32,48104.919999999998,46583.440000000002,44554.800000000003,42333.879999999997,41476.040000000001,40578.879999999997,39616.720000000001,38914.559999999998,38602.400000000001,38385.599999999999,37848.080000000002,37157.199999999997,36859.440000000002,36723.599999999999,36618.120000000003,36512.639999999999,36342.160000000003,36171.68,35936.199999999997,35830.720000000001,35725.239999999998,35554.760000000002,35319.279999999999,35148.800000000003,35043.32,34937.839999999997,34832.360000000001,34726.879999999997</ypts>
+            </gf>
+            <units>$</units>
+            <display x="1128" y="2278" color="red" label_side="top" label_angle="103" />
+        </aux>
+        <aux name="Expected_Annual_Cost_PV_&amp;_Battery">
+            <doc>DEFINITION: Calculates expected operating cost for &quot;next&quot; pioneer plant when fully operational&#x0A;&#x0A;UNITS:  USD per year&#x0A;&#x0A;TYPE: Internal Calculation for this sector&#x0A;&#x0A;SOURCE: N/A&#x0A;&#x0A;COMMENT: Downstream NPV calculation assumes constant costs over plant lifetime, once operational. &#x0A;</doc>
+            <eqn>TIME</eqn>
+            <gf>
+                <xscale min="0" max="12" />
+                <yscale min="0" max="400" />
+                <ypts>400,400,400,400,400,400,400,400,400,400,400,400,400,400,400,400,400,400,400,400,400,400,400,400,400,400,400,400,400,400,400,400,400,400,400,400,400</ypts>
+            </gf>
+            <display x="1057" y="2651" color="red" label_side="left" label_angle="207" />
+        </aux>
+        <aux name="Expected_annual_Rev_PV&amp;Batt">
+            <doc>DEFINITION: Calculates expected revenues for Pioneer-scale plant when plant is fullly operational&#x0A;&#x0A;UNITS:  USD per year&#x0A;&#x0A;TYPE: Internal Calculation for this sector&#x0A;&#x0A;SOURCE: N/A&#x0A;&#x0A;COMMENT: Downstream NPV calculation assumes constant revs over plant lifetime, once operational. &#x0A;&#x0A;&#x0A;</doc>
+            <eqn>annual_base_demand*RETAIL_PRICE</eqn>
+            <display x="1066" y="2590" color="red" label_side="top" label_angle="115" />
+        </aux>
+        <aux name="Net_Present_Value_PV&amp;Battery">
+            <doc>DEFINITION: Net Present Value of Project, discounted to &quot;now&quot; in simulation&#x0A;&#x0A;UNITS:  US Dollars&#x0A;&#x0A;TYPE: Calculation; Sector Interface&#x0A;&#x0A;SOURCE: N/A&#x0A;&#x0A;COMMENT: Sums the input PV calculations to provide overall NPV for the project.&#x0A;</doc>
+            <eqn>NPV_Revs_Net_of_Op_Cost_PV&amp;batt-&#x0A;(Initial_Equity_Investment_PV&amp;Batt + NPV_Loan_Payment_PV&amp;batt)</eqn>
+            <units>$</units>
+            <display x="1696" y="2341" color="#008F44" label_side="right" label_angle="38" />
+        </aux>
+        <aux name="Loan_Principal_PV&amp;batt">
+            <doc>DEFINITION: Amount of total project Fixed Capital Investment for &quot;next&quot; pioneer project to be financed through loan financing &#x0A;&#x0A;UNITS:  US Dollars&#x0A;&#x0A;TYPE: Internal calculation&#x0A;&#x0A;SOURCE:&#x0A;&#x0A;COMMENT: &#x0A;</doc>
+            <eqn>FCI_PV&amp;batt-Initial_Equity_Investment_PV&amp;Batt</eqn>
+            <units>$</units>
+            <display x="1295" y="2278" color="black" label_side="left" label_angle="172" />
+        </aux>
+        <aux name="Annual_Loan_Payment__PV_&amp;_batt">
+            <doc>DEFINITION: Annual payment associated with repayment of loan &#x0A;&#x0A;UNITS:  USD per year&#x0A;&#x0A;TYPE: Internal Calculation&#x0A;&#x0A;SOURCE: &#x0A;&#x0A;COMMENT: &#x0A;</doc>
+            <eqn>Loan_Principal_PV&amp;batt/discount_factor_loan_payment_2</eqn>
+            <display x="1375" y="2338" color="black" label_angle="207" />
+        </aux>
+        <aux name="NPV_Revs_Net_of_Op_Cost_PV&amp;batt">
+            <doc>DEFINITION: Calculates NPV of revenues net of operating cost, assuming constant net over pioneer plant operational lifetime &#x0A;&#x0A;UNITS:   US Dollars&#x0A;&#x0A;TYPE: Internal Calculation for this sector&#x0A;&#x0A;SOURCE: N/A&#x0A;&#x0A;COMMENT: Using expected rev net of operating cost, this eq&apos;n does a PV calculation for the entire project length (using discount factor 3), and then subtracts the PV associated with design, construction, startup, leaving the PV of the expected rev net of op cost for the time that the project is fully operational.  Assumes net 0 for rev net of op cost during start-up period.&#x0A;</doc>
+            <eqn>Expected_Net_annual_rev_PV&amp;Batt*(discount_factor_2)</eqn>
+            <units>$</units>
+            <display x="1689" y="2590" color="black" label_side="right" label_angle="52" />
+        </aux>
+        <aux name="Expected_Net_annual_rev_PV&amp;Batt">
+            <doc>DEFINITION: Calculates expected revenues net of  expected operating cost for plant when fully operational, using current values for inputs &#x0A;&#x0A;UNITS:  USD per year&#x0A;&#x0A;TYPE: Internal Calculation for this sector&#x0A;&#x0A;SOURCE: N/A&#x0A;&#x0A;COMMENT: Downstream NPV calculation assumes constant rev net of op cost over plant lifetime, once plant is operational. &#x0A;</doc>
+            <eqn>Expected_annual_Rev_PV&amp;Batt-Expected_Annual_Cost_PV_&amp;_Battery</eqn>
+            <display x="1269" y="2590" color="black" label_side="top" label_angle="22" />
+        </aux>
+        <aux name="NPV_Loan_Payment_PV&amp;batt">
+            <doc>DEFINITION: Calculates NPV of loan payments over length of loan &#x0A;&#x0A;UNITS:  US Dollars&#x0A;&#x0A;TYPE: Internal Calculation for this sector&#x0A;&#x0A;SOURCE: N/A&#x0A;&#x0A;COMMENT: Using annual loan payment, this eq&apos;n does a PV calculation for the Design/Construction/Startup phase + Loan term, and then subtracts the PV associated with design, construction, startup, leaving the NPV of loan payments over period loan is repaid.  Note that this assumes no loan payment until plant is fully operational.</doc>
+            <eqn>Annual_Loan_Payment__PV_&amp;_batt*(discount_factor_loan_2)</eqn>
+            <units>$</units>
+            <display x="1441" y="2338" color="black" label_side="right" label_angle="45" />
+        </aux>
+        <aux name="discount_factor_2">
+            <doc>DEFINITION:  Calculates discount factor for doing NPV calculation for total commercial project length, incl. design, construction, startup, project lifetime. &#x0A;&#x0A;UNITS:  years&#x0A;&#x0A;TYPE:  Internal Calculation for this sector&#x0A;&#x0A;SOURCE:  Standard financial calculation for annuity.  See, for example, Present Value entry in wikipedia&#x0A;&#x0A;COMMENT:  Req&apos;d Rate of Return &gt;0 or eq&apos;n will generate division by 0.&#x0A;&#x0A;Units check fails because of exponentiation operation&#x0A;</doc>
+            <eqn>(1/Req&apos;d_Rate_of_Return_PV&amp;batt)*&#x0A;(1-1/(1+Req&apos;d_Rate_of_Return_PV&amp;batt)^project_lifetime_NPV)</eqn>
+            <units>years</units>
+            <display x="1606" y="2507" color="black" label_side="top" label_angle="62" />
+        </aux>
+        <aux name="discount_factor_loan_payment_2">
+            <doc>DEFINITION:  Calculates discount factor for doing NPV calculation associated with loan repayment (principal + interest) &#x0A;&#x0A;UNITS:  years&#x0A;&#x0A;TYPE:  Internal Calculation for this sector&#x0A;&#x0A;SOURCE:  Standard financial calculation for annuity.  See, for example, Present Value entry in wikipedia&#x0A;&#x0A;COMMENT:  Req&apos;d Rate of Return &gt;0 or eq&apos;n will generate division by 0.&#x0A;&#x0A;Units check fails because of exponentiation operation</doc>
+            <eqn>(1/debt_interest_rate_as_fraction_2)*&#x0A;(1-1/(1+debt_interest_rate_as_fraction_2)^(term_of_loan))</eqn>
+            <units>years</units>
+            <display x="1212" y="2338" color="black" label_side="top" label_angle="122" />
+        </aux>
+        <aux name="Req&apos;d_Rate_of_Return_PV&amp;batt">
+            <doc>DEFINITION: Project rate of return required to stimulate investment in a project, given current state of industry, expressed as a fraction &#x0A; &#x0A;UNITS: 1/yr&#x0A; &#x0A;TYPE: Internal calculation&#x0A; &#x0A;SOURCE: &#x0A; &#x0A;COMMENTS: &#x0A; &#x0A;</doc>
+            <eqn>Req&apos;d_Rate_of_Return_as_%/100</eqn>
+            <units>Per Year</units>
+            <display x="1444" y="2450" color="black" />
+        </aux>
+        <aux name="debt_interest_rate_as_fraction_2">
+            <doc>DEFINITION: Project rate of return required to stimulate investment in a project, given current state of industry, expressed as a fraction &#x0A; &#x0A;UNITS: 1/yr&#x0A; &#x0A;TYPE: Internal calculation&#x0A; &#x0A;SOURCE: &#x0A; &#x0A;COMMENTS: &#x0A; &#x0A;</doc>
+            <eqn>debt_interest_rate_as_%/100</eqn>
+            <units>Per Year</units>
+            <display x="1155" y="2338" color="black" />
+        </aux>
+        <aux name="discount_factor_loan_2">
+            <doc>DEFINITION:  Calculates discount factor for doing NPV calculation associated with loan repayment (principal + interest) &#x0A;&#x0A;UNITS:  years&#x0A;&#x0A;TYPE:  Internal Calculation for this sector&#x0A;&#x0A;SOURCE:  Standard financial calculation for annuity.  See, for example, Present Value entry in wikipedia&#x0A;&#x0A;COMMENT:  Req&apos;d Rate of Return &gt;0 or eq&apos;n will generate division by 0.&#x0A;&#x0A;Units check fails because of exponentiation operation</doc>
+            <eqn>(1/Req&apos;d_Rate_of_Return_PV&amp;batt)*&#x0A;(1-1/(1+Req&apos;d_Rate_of_Return_PV&amp;batt)^(term_of_loan))</eqn>
+            <units>years</units>
+            <display x="1512" y="2415" color="black" label_side="left" label_angle="126" />
+        </aux>
+        <flow name="PV_houses_being_built">
+            <eqn>houses_being_built[PV_house]</eqn>
+            <non_negative />
+            <display x="328" y="366" color="blue">
+                <pts>
+                    <pt x="289" y="366" />
+                    <pt x="368" y="366" />
+                    <pt x="368" y="337" />
+                </pts>
+            </display>
+        </flow>
+        <flow name="PV_batt_houes_being_built">
+            <eqn>houses_being_built[PV_batt]</eqn>
+            <non_negative />
+            <display x="605" y="454" color="blue" label_angle="277">
+                <pts>
+                    <pt x="557" y="454" />
+                    <pt x="653" y="454" />
+                    <pt x="653" y="412" />
+                </pts>
+            </display>
+        </flow>
+        <stock name="regular_customers">
+            <eqn>3.361031E+6</eqn>
+            <inflow>reg_houses_being_built</inflow>
+            <outflow>PV_adoption_thru_imitation</outflow>
+            <outflow>PV_adoption_thru_innovation</outflow>
+            <outflow>direct_defection_via_innovation</outflow>
+            <outflow>direct_defection_via_imitation</outflow>
+            <non_negative />
+            <display x="144" y="214" color="blue" label_side="center" />
+        </stock>
+        <stock name="customers_with_PV">
+            <doc>estimated in LA_PV historical.xlsx</doc>
+            <eqn>1.4344E+4</eqn>
+            <inflow>PV_adoption_thru_imitation</inflow>
+            <inflow>PV_adoption_thru_innovation</inflow>
+            <inflow>PV_houses_being_built</inflow>
+            <outflow>defection_thru_innovation</outflow>
+            <outflow>defection_thru_imitation</outflow>
+            <non_negative />
+            <display x="388" y="320" color="blue" label_angle="35" />
+        </stock>
+        <flow name="PV_adoption_thru_imitation">
+            <eqn>customers_with_PV&#x0A;* PV_imitation_rate&#x0A;*switched_limit_on_ratio_of_PV_to_total_hhold&#x0A;*PV_imitation_factor_from_density_of_PV_households&#x0A;*ImitationScaleFactor&#x0A;*drain_slowing_function_of_reg_customers</eqn>
+            <non_negative />
+            <display x="258" y="329" color="blue" label_side="right" label_angle="32">
+                <pts>
+                    <pt x="151" y="231" />
+                    <pt x="151" y="329" />
+                    <pt x="366" y="329" />
+                </pts>
+            </display>
+        </flow>
+        <flow name="PV_adoption_thru_innovation">
+            <eqn>regular_customers &#x0A;* PV_innovation_rate &#x0A;* InnovationScaleFactor&#x0A;* switched_limit_on_ratio_of_PV_to_total_hhold&#x0A;*drain_slowing_function_of_reg_customers</eqn>
+            <non_negative />
+            <display x="270" y="219" color="blue" label_side="right" label_angle="28">
+                <pts>
+                    <pt x="166" y="219" />
+                    <pt x="374" y="219" />
+                    <pt x="374" y="303" />
+                </pts>
+            </display>
+        </flow>
+        <aux name="PV_innovation_rate">
+            <doc>Initial value of PV innovation rate set to 0.5% of regular customers per year &#x0A;&#x0A;Assumed to grow linearly to 5% when NPV reaches $10,000 greater than NPV in 2015&#x0A;&#x0A;&#x0A;(0.5% value estimated using Census values and reported PV installations by Souther California Edison)</doc>
+            <eqn>Net_present_value_PV&#x0A;-  INIT(Net_present_value_PV)&#x0A;+ PV_incentive</eqn>
+            <gf type="extrapolate">
+                <xscale min="0" max="10000" />
+                <yscale min="0" max="0.05" />
+                <ypts>0.0053900709220000001,0.0086879432619999999,0.010638297872,0.012411347518,0.013829787234,0.015957446808999999,0.018971631206000001,0.022163120567,0.024468085106000001,0.027304964538999998,0.030496453901,0.032269503546,0.035106382978999998,0.037411347518000002,0.039716312056999999,0.043262411347999997,0.044858156028000001,0.046808510637999998,0.048936170213000001,0.050000000000000003,0.050999999999999997</ypts>
+            </gf>
+            <display x="311" y="159" color="blue" label_side="top" label_angle="153" />
+        </aux>
+        <aux name="PV_imitation_rate">
+            <doc>graphical function of NPV + incentive&#x0A;&#x0A;Assumed to be 0.1% of existing PV customers per year for a $2,000 NPV. &#x0A;Grows linearly to 0.4% for NPV = $10,000</doc>
+            <eqn>Net_present_value_PV&#x0A;+PV_incentive</eqn>
+            <gf type="extrapolate">
+                <xscale min="0" max="10000" />
+                <yscale min="0" max="0.005" />
+                <ypts>0,0.00050167224080267597,0.00096989966555183996,0.0013712374580000001,0.0017391304350000002,0.0021070234110000001,0.0024414715720000001,0.002909698997,0.003244147157,0.0035785953180000004,0.004013377926</ypts>
+            </gf>
+            <display x="179" y="351" color="blue" label_side="left" label_angle="176" />
+        </aux>
+        <aux name="limit_on_ratio_of_PV_to_total_households">
+            <doc>(graphical) this function slows the rate of solar adoption as the ratio of homes with PV (including defectors) to total homes approaches  the ratio of owner occupied homes to total homes. This limit on the number of homes with PV is placed in the model under the assumption that renters and landlords are unlikely to install PV systems on rental units.&#x0A;&#x0A;for reg customers greater than threshold&#x0A;=1&#x0A;&#x0A;for reg customers less than threshold&#x0A;tapers to zero as graphical function</doc>
+            <eqn>(customers_with_PV+defectors)&#x0A;/&#x0A;(total_households+1)</eqn>
+            <gf>
+                <xscale min="0" max="0.55" />
+                <yscale min="0" max="1" />
+                <ypts>1,1,1,0.98936170212800001,0.97163120567399996,0.95390070922000003,0.91843971631200005,0.87943262411300005,0.83333333333299997,0.787234042553,0.70567375886499994,0.624113475177,0.460992907801,0.287234042553,0.18439716312099999,0.085106382979,0.042553191488999997,0.021276595745000002,0.0035460992910000002,0,0</ypts>
+            </gf>
+            <units>Unitless</units>
+            <display x="286" y="552" color="#FF7F00" label_side="left" label_angle="168" />
+        </aux>
+        <stock name="defectors">
+            <eqn>1.0</eqn>
+            <inflow>direct_defection_via_innovation</inflow>
+            <inflow>direct_defection_via_imitation</inflow>
+            <inflow>PV_batt_houes_being_built</inflow>
+            <inflow>defection_thru_innovation</inflow>
+            <inflow>defection_thru_imitation</inflow>
+            <non_negative />
+            <display x="675" y="395" color="blue" label_side="right" label_angle="4" />
+        </stock>
+        <flow name="defection_thru_innovation">
+            <eqn>customers_with_PV&#x0A;*battery_innovation_rate&#x0A;*InnovationScaleFactor&#x0A;*drain_slowing_function_of_PV_customers</eqn>
+            <non_negative />
+            <display x="531" y="308" color="blue" label_side="right" label_angle="28">
+                <pts>
+                    <pt x="410" y="308" />
+                    <pt x="653" y="308" />
+                    <pt x="653" y="378" />
+                </pts>
+            </display>
+        </flow>
+        <aux name="PV&amp;batt_innovation_rate">
+            <doc>Graphical function of NPV+incentive&#x0A;&#x0A;Pv&amp;Battery innovation rate is assumed to be &#x0A;0.1% of existing offgrid customers per year for zero NPV+incentive. &#x0A;&#x0A;Grows linearly to 0.5% for a $10,000  NPV+incentive.</doc>
+            <eqn>Net_Present_Value_PV&amp;Battery&#x0A;+ PV_incentive</eqn>
+            <gf>
+                <xscale min="0" max="10000" />
+                <yscale min="0" max="0.01" />
+                <ypts>0.001,0.0014886731389999999,0.0019417475730000001,0.002233009709,0.0025889967640000001,0.0028478964399999999,0.0032038834949999996,0.0035922330100000002,0.0041100323619999999,0.004660194175,0.0052427184469999999</ypts>
+            </gf>
+            <display x="418" y="60" color="blue" label_side="top" label_angle="111" />
+        </aux>
+        <aux name="PV&amp;batt_imitation_rate">
+            <doc>Graphical function of NPV + incentive&#x0A;&#x0A;PV&amp;Battery imitation rate is assumed to be &#x0A;0.1% of existing PV customers per year for a $2,000 NPV. &#x0A;&#x0A;Grows linearly to 0.4% for NPV = $10,000</doc>
+            <eqn>Net_Present_Value_PV&amp;Battery&#x0A;+Battery_incentive</eqn>
+            <gf type="extrapolate">
+                <xscale min="0" max="10000" />
+                <yscale min="0" max="0.01" />
+                <ypts>6.6889632107023397e-05,0.00026755852842809402,0.00056856187290969904,0.00093645484949832799,0.0013712374580000001,0.0017725752510000001,0.002240802676,0.0027090300999999999,0.0031772575249999998,0.0036454849500000006,0.0040802675590000002</ypts>
+            </gf>
+            <display x="411" y="668" color="blue" label_side="left" label_angle="200" />
+        </aux>
+        <flow name="direct_defection_via_innovation">
+            <eqn>regular_customers &#x0A;* PV&amp;batt_innovation_rate&#x0A;*InnovationScaleFactor&#x0A;*switched_limit_on_ratio_of_PV_to_total_hhold&#x0A;*drain_slowing_function_of_reg_customers</eqn>
+            <non_negative />
+            <display x="411" y="110" color="blue" label_side="right" label_angle="319">
+                <pts>
+                    <pt x="145" y="197" />
+                    <pt x="145" y="110" />
+                    <pt x="677" y="110" />
+                    <pt x="677" y="378" />
+                </pts>
+            </display>
+        </flow>
+        <flow name="direct_defection_via_imitation">
+            <eqn>PV&amp;batt_imitation_rate&#x0A;* defectors&#x0A;*ImitationScaleFactor&#x0A;*switched_limit_on_ratio_of_PV_to_total_hhold&#x0A;*drain_slowing_function_of_reg_customers</eqn>
+            <non_negative />
+            <display x="406" y="608" color="blue" label_side="right" label_angle="28">
+                <pts>
+                    <pt x="135" y="231" />
+                    <pt x="135" y="608" />
+                    <pt x="677" y="608" />
+                    <pt x="677" y="412" />
+                </pts>
+            </display>
+        </flow>
+        <aux name="battery_innovation_rate">
+            <doc>Battery innovation rate is assumed to be &#x0A;0.1% of existing offgrid customers per year for the initial NPV. &#x0A;&#x0A;Grows linearly to 0.5% for a $10,000 increase in NPV from the initial NPV.&#x0A;&#x0A;</doc>
+            <eqn>Net_Present_Value_Battery&#x0A;+ Battery_incentive</eqn>
+            <gf type="extrapolate">
+                <xscale min="0" max="10000" />
+                <yscale min="0" max="0.01" />
+                <ypts>0.00081560283687943296,0.0013829787229999999,0.0017021276599999999,0.001879432624,0.0021985815600000002,0.0025177304959999999,0.002943262411,0.0034397163119999998,0.0041134751769999998,0.0044680851059999997,0.0051063829789999996</ypts>
+            </gf>
+            <display x="517" y="241" color="blue" label_side="top" label_angle="133" />
+        </aux>
+        <flow name="reg_houses_being_built">
+            <eqn>houses_being_built[regular]</eqn>
+            <non_negative />
+            <display x="85" y="225" color="blue" label_angle="243">
+                <pts>
+                    <pt x="48" y="225" />
+                    <pt x="122" y="225" />
+                </pts>
+            </display>
+        </flow>
+        <aux name="total_grid_customers">
+            <eqn>regular_customers+customers_with_PV</eqn>
+            <display x="800" y="713" color="blue" label_side="top" label_angle="94" />
+        </aux>
+        <aux name="battery_imitation_rate">
+            <doc>Battery imitation rate is assumed to be &#x0A;0.1% of existing PV customers per year for a $2,000 NPV. &#x0A;&#x0A;Grows linearly to 0.4% for NPV = $10,000&#x0A;</doc>
+            <eqn>Net_Present_Value_Battery&#x0A;+ Battery_incentive</eqn>
+            <gf type="extrapolate">
+                <xscale min="0" max="10000" />
+                <yscale min="0" max="0.01" />
+                <ypts>3.3444816053511699e-05,0.00033444816053511699,0.00076923076923076901,0.0011036789300000001,0.0016053511710000003,0.002006688963,0.0025083612039999998,0.0029765886290000002,0.0033779264209999999,0.0037792642140000001,0.0042809364550000003</ypts>
+            </gf>
+            <display x="456" y="432" color="blue" label_angle="291" />
+        </aux>
+        <flow name="defection_thru_imitation">
+            <eqn>defectors&#x0A;* battery_imitation_rate&#x0A;*ImitationScaleFactor&#x0A;*drain_slowing_function_of_PV_customers</eqn>
+            <non_negative />
+            <display x="527" y="399" color="blue" label_side="right" label_angle="36">
+                <pts>
+                    <pt x="402" y="337" />
+                    <pt x="402" y="399" />
+                    <pt x="653" y="399" />
+                </pts>
+            </display>
+        </flow>
+        <aux name="population_growth_rate">
+            <doc>from census.gov LA population grew by 0.6% from 2013 to 2014&#x0A;we are assuming that homes will grow at same rate as population, though there are 3 people per household</doc>
+            <eqn>TIME</eqn>
+            <gf>
+                <xscale min="2000" max="2050" />
+                <yscale min="0" max="0.006" />
+                <ypts>0.0060000000000000001,0.0060000000000000001,0.0058842443730000001,0.0058070739550000004,0.0056141479099999997,0.0053440514470000002,0.0050739549839999998,0.0046881028940000003,0.0041093247590000001,0.0036077170419999997,0.0029710610930000002</ypts>
+            </gf>
+            <display x="419" y="1470" color="blue" label_side="top" label_angle="94" />
+        </aux>
+        <aux name="total_households">
+            <eqn>regular_customers+customers_with_PV+defectors</eqn>
+            <display x="331" y="1425" color="blue" />
+        </aux>
+        <aux name="total_growth_in_households">
+            <eqn>total_households*population_growth_rate</eqn>
+            <display x="341" y="1500" color="blue" />
+        </aux>
+        <array name="price_vector">
+            <doc>DEFINITION: Scales NPV of commercial scale project by normalizing by 1 billion.&#x0A;&#x0A;UNITS:  million USD&#x0A;&#x0A;TYPE: Calculation&#x0A;&#x0A;SOURCE: N/A&#x0A;&#x0A;COMMENT: &#x0A;</doc>
+            <dimensions>
+                <dim name="house_type" />
+            </dimensions>
+            <aux subscript="regular">
+                <eqn>-Net_Present_Value_of_BAU </eqn>
+            </aux>
+            <aux subscript="PV_house">
+                <eqn>-Net_Present_Value_PV</eqn>
+            </aux>
+            <aux subscript="PV_batt">
+                <eqn>-Net_Present_Value_PV&amp;Battery</eqn>
+            </aux>
+            <units>$</units>
+            <display x="442" y="1518" color="red" label_angle="216" />
+        </array>
+        <aux name="scale_factor_B_house_attractiveness">
+            <doc>DEFINITION: Weighting factor for logit function calculation&#x0A; &#x0A;UNITS: &#x0A; &#x0A;TYPE: &#x0A; &#x0A;SOURCE: &#x0A; &#x0A;COMMENTS: </doc>
+            <eqn>1e-05</eqn>
+            <display x="253" y="1688" color="red" label_side="top" label_angle="164" />
+        </aux>
+        <aux name="attractiveness">
+            <doc>DEFINITION: attractiveness of investment in full commercial scale plants by technology by region based on economic considerations alone&#x0A; &#x0A;UNITS:&#x0A; &#x0A;TYPE: Internal Calculation&#x0A; &#x0A;SOURCE: &#x0A; &#x0A;COMMENTS: </doc>
+            <dimensions>
+                <dim name="house_type" />
+            </dimensions>
+            <eqn>EXP(unexplained_utility_k[house_type] - scale_factor_B_house_attractiveness*price_vector[house_type])</eqn>
+            <units>Unitless</units>
+            <display x="338" y="1678" color="black" label_side="right" label_angle="62" />
+        </aux>
+        <aux name="total_attractiveness">
+            <doc>DEFINITION: rollup of attractiveness across all uses of plant construction capacity&#x0A;&#x0A;UNITS: attractiveness units&#x0A; &#x0A;TYPE: Internal Calculation&#x0A; &#x0A;SOURCE: &#x0A; &#x0A;COMMENTS: </doc>
+            <eqn>sum(attractiveness)&#x0A;</eqn>
+            <units>Unitless</units>
+            <display x="289" y="1613" color="black" label_side="left" />
+        </aux>
+        <array name="unexplained_utility_k">
+            <doc>DEFINITION: Assumed non-$-based utility component ofattractiveness of commercial scale operations&#x0A; &#x0A;UNITS: dimensionless fraction&#x0A; &#x0A;TYPE: Internal Calculation&#x0A; &#x0A;SOURCE: &#x0A; &#x0A;COMMENTS: </doc>
+            <dimensions>
+                <dim name="house_type" />
+            </dimensions>
+            <aux subscript="regular">
+                <eqn>2</eqn>
+            </aux>
+            <aux subscript="PV_house">
+                <eqn>1</eqn>
+            </aux>
+            <aux subscript="PV_batt">
+                <eqn>1</eqn>
+            </aux>
+            <units>Unitless</units>
+            <display x="259" y="1726" color="red" label_angle="326" />
+        </array>
+        <aux name="relative_attractiveness">
+            <doc>DEFINITION: &#x0A; &#x0A;UNITS: &#x0A; &#x0A;TYPE: Internal Calculation&#x0A; &#x0A;SOURCE: &#x0A; &#x0A;COMMENTS: </doc>
+            <dimensions>
+                <dim name="house_type" />
+            </dimensions>
+            <eqn>attractiveness/total_attractiveness</eqn>
+            <units>Unitless</units>
+            <display x="338" y="1569" color="black" label_side="right" />
+        </aux>
+        <aux name="houses_being_built">
+            <dimensions>
+                <dim name="house_type" />
+            </dimensions>
+            <eqn>total_growth_in_households*relative_attractiveness</eqn>
+            <display x="169" y="1519" color="blue" label_side="left" label_angle="176" />
+        </aux>
+        <aux name="Battery_incentive">
+            <doc>Incentives are introduced as dollar additions to net present value</doc>
+            <eqn>0</eqn>
+            <display x="474" y="353" color="#FF7F00" label_side="left" label_angle="168" />
+        </aux>
+        <aux name="PV_incentive">
+            <doc>Incentives are introduced as dollar additions to net present value</doc>
+            <eqn>0</eqn>
+            <units>$</units>
+            <display x="206" y="260" color="#FF7F00" label_side="left" label_angle="164" />
+        </aux>
+        <aux name="PV_imitation_factor_from_density_of_PV_households">
+            <doc>graphical function of (customers_with_PV+defectors)&#x0A;/ total_households&#x0A;&#x0A;Increases PV adoption through imitation as the number of homes with PV systems increases.&#x0A;&#x0A;Starts as 1 (no effect) with no PV homes. Grows linearly to 2 as all homes become PV homes</doc>
+            <eqn>(customers_with_PV+defectors)&#x0A;/&#x0A;total_households</eqn>
+            <gf>
+                <xscale min="0" max="1" />
+                <yscale min="0" max="2" />
+                <ypts>1,1.1238095238100001,1.225396825397,1.352380952381,1.4539682539679999,1.549206349206,1.631746031746,1.695238095238,1.790476190476,1.892063492063,2</ypts>
+            </gf>
+            <units>Unitless</units>
+            <display x="261" y="431" color="blue" label_side="left" label_angle="172" />
+        </aux>
+        <aux name="utiltiy_incremental_fixed_cost_per_new_home_$">
+            <eqn>1000.0</eqn>
+            <display x="1207" y="376" color="#FF7F00" />
+        </aux>
+        <aux name="wholesale_price_growth_rate_%_per_year">
+            <eqn>0.01</eqn>
+            <display x="1018" y="235" color="#FF7F00" label_side="left" label_angle="192" />
+        </aux>
+        <aux name="drain_slowing_function_of_PV_customers">
+            <doc>for PV customers greater than threshold&#x0A;=1&#x0A;&#x0A;for PV customers less than threshold&#x0A;tapers to zero as graphical function</doc>
+            <eqn>customers_with_PV/threshold_of_customers_to_slow_customer_draining</eqn>
+            <gf>
+                <xscale min="0" max="1" />
+                <yscale min="0" max="1" />
+                <ypts>0,0,0.041800643086816698,0.17041800643086799,0.35873015873015901,0.628571428571429,0.80385852090032195,0.91318327974276503,0.96784565916398702,1,1</ypts>
+            </gf>
+            <units>Unitless</units>
+            <display x="938" y="783" color="blue" label_angle="298" />
+        </aux>
+        <aux name="threshold_of_customers_to_slow_customer_draining">
+            <eqn>2.0E+6</eqn>
+            <display x="1044" y="745" color="blue" />
+        </aux>
+        <aux name="drain_slowing_function_of_reg_customers">
+            <doc>for PV customers greater than threshold&#x0A;=1&#x0A;&#x0A;for PV customers less than threshold&#x0A;tapers to zero as graphical function</doc>
+            <eqn>regular_customers/threshold_of_customers_to_slow_customer_draining</eqn>
+            <gf>
+                <xscale min="0" max="1" />
+                <yscale min="0" max="1" />
+                <ypts>0,0,0.041800643086816698,0.17041800643086799,0.35873015873015901,0.628571428571429,0.80385852090032195,0.91318327974276503,0.96784565916398702,1,1</ypts>
+            </gf>
+            <units>Unitless</units>
+            <display x="933" y="668" color="blue" label_angle="298" />
+        </aux>
+        <aux name="ELCC_as_function_of_PV_penetration">
+            <doc>values for 0 to 20% penetration from NREL 2006&#x0A;&quot;Update: Effective Load-Carrying Capability of Photovoltaics in the United States&quot;</doc>
+            <eqn>fraction_of_PV_to_regular_customers</eqn>
+            <gf>
+                <xscale min="0" max="1" />
+                <yscale min="0" max="1" />
+                <ypts>0.72347266881028904,0.66000000000000003,0.58999999999999997,0.52000000000000002,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5</ypts>
+            </gf>
+            <units>Unitless</units>
+            <display x="1357" y="106" color="blue" label_side="right" label_angle="344" />
+        </aux>
+        <aux name="annual_PV_production_kWh">
+            <eqn>12469</eqn>
+            <display x="1410" y="162" color="blue" label_side="top" label_angle="118" />
+        </aux>
+        <stock name="annual_base_demand">
+            <eqn>16648</eqn>
+            <outflow>reduction_in_annual_base_demand</outflow>
+            <non_negative />
+            <display x="1089" y="162" color="blue" />
+        </stock>
+        <flow name="reduction_in_annual_base_demand">
+            <eqn>annual_base_demand*efficiency_improvement_of_reg_customers_as_%_per_year/100</eqn>
+            <non_negative />
+            <display x="1040" y="157" color="blue" label_angle="201">
+                <pts>
+                    <pt x="1067" y="157" />
+                    <pt x="1013" y="157" />
+                </pts>
+            </display>
+        </flow>
+        <aux name="efficiency_improvement_of_reg_customers_as_%_per_year">
+            <doc>reduction in demand of regular customers as percent per year</doc>
+            <eqn>0.5</eqn>
+            <display x="1017" y="115" color="blue" label_side="top" label_angle="115" />
+        </aux>
+        <aux name="PV_&amp;_battery_LCOE">
+            <doc>taken from RMI figure 2&#x0A;&#x0A;&#x0A;</doc>
+            <eqn>TIME</eqn>
+            <gf type="extrapolate">
+                <xscale min="2015" max="2050" />
+                <yscale min="0" max="4" />
+                <ypts>0.73499999999999999,0.66200000000000003,0.65000000000000002,0.64000000000000001,0.60899999999999999,0.56000000000000005,0.54500000000000004,0.505,0.48499999999999999,0.45900000000000002,0.44400000000000001,0.42399999999999999,0.41199999999999998,0.39900000000000002,0.38700000000000001,0.379,0.379,0.372,0.371,0.36699999999999999,0.36399999999999999,0.36199999999999999,0.36099999999999999,0.35899999999999999,0.35699999999999998,0.35499999999999998,0.35299999999999998,0.35099999999999998,0.34999999999999998,0.34799999999999998,0.34599999999999997,0.34399999999999997,0.34200000000000003,0.34000000000000002,0.33900000000000002,0.33800000000000002</ypts>
+            </gf>
+            <display x="1809" y="366" color="blue" label_side="top" label_angle="41" />
+        </aux>
+        <aux name="PV_LCOE">
+            <doc>LCOE caclulated in &quot;Price forecast data.xlsx&quot; using data taken from RMI figure 18: residential installed pv cost forecast&#x0A;</doc>
+            <eqn>TIME</eqn>
+            <gf type="extrapolate">
+                <xscale min="2015" max="2050" />
+                <yscale min="0" max="1" />
+                <ypts>0.29580000000000001,0.28089999999999998,0.22259999999999999,0.20979999999999999,0.19389999999999999,0.18640000000000001,0.1799,0.17349999999999999,0.16489999999999999,0.16159999999999999,0.15740000000000001,0.152,0.153,0.152,0.15090000000000001,0.14979999999999999,0.1487,0.1479,0.14660000000000001,0.14369999999999999,0.14230000000000001,0.1419,0.14169999999999999,0.1414,0.14119999999999999,0.14099999999999999,0.14069999999999999,0.14050000000000001,0.14019999999999999,0.14000000000000001,0.13980000000000001,0.13950000000000001,0.13930000000000001,0.1391,0.13880000000000001,0.1386</ypts>
+            </gf>
+            <display x="1722" y="373" color="blue" label_side="top" label_angle="107" />
+        </aux>
+        <aux name="Net_Present_Value_of_BAU">
+            <doc>BAU = business as usual. Sticking with a grid connected home without distributed generation is seen as a breaking even and therefore has NPV = 0 for all time.</doc>
+            <eqn>0</eqn>
+            <units>$</units>
+            <display x="530" y="1461" color="blue" label_side="right" label_angle="352" />
+        </aux>
+        <aux name="baseline_wholesale_elec_price">
+            <doc>manually calibrated to produce correct fraction of utility costs from generation</doc>
+            <eqn>0.118</eqn>
+            <display x="1047" y="204" color="black" label_side="left" />
+        </aux>
+        <aux name="ImitationScaleFactor">
+            <eqn>1</eqn>
+            <display x="406" y="508" color="red" />
+        </aux>
+        <aux name="InnovationScaleFactor">
+            <eqn>1</eqn>
+            <display x="567" y="169" color="red" />
+        </aux>
+        <aux name="use_limit_on_ratio_of_PV_to_total_hhold">
+            <eqn>1</eqn>
+            <units>Unitless</units>
+            <display x="108" y="660" color="red" label_side="top" label_angle="130" />
+        </aux>
+        <aux name="switched_limit_on_ratio_of_PV_to_total_hhold">
+            <eqn>IF use_limit_on_ratio_of_PV_to_total_hhold = 1 then limit_on_ratio_of_PV_to_total_households else 1</eqn>
+            <units>Unitless</units>
+            <display x="186" y="643" color="red" />
+        </aux>
+        <group name="Bass_diffusion_of_households">
+            <entity name="regular_customers" />
+            <entity name="direct_defection_via_imitation" />
+            <entity name="direct_defection_via_innovation" />
+            <entity name="PV_adoption_thru_imitation" />
+            <entity name="PV_adoption_thru_innovation" />
+            <entity name="PV_houses_being_built" />
+            <entity name="reg_houses_being_built" />
+            <entity name="PV_imitation_rate" />
+            <entity name="PV_incentive" />
+            <entity name="PV_innovation_rate" />
+            <entity name="customers_with_PV" />
+            <entity name="defection_thru_imitation" />
+            <entity name="defection_thru_innovation" />
+            <entity name="Battery_incentive" />
+            <entity name="battery_innovation_rate" />
+            <entity name="InnovationScaleFactor" />
+            <entity name="PV&amp;batt_innovation_rate" />
+            <entity name="limit_on_ratio_of_PV_to_total_households" />
+            <entity name="PV&amp;batt_imitation_rate" />
+            <entity name="PV_imitation_factor_from_density_of_PV_households" />
+            <entity name="switched_limit_on_ratio_of_PV_to_total_hhold" />
+            <entity name="use_limit_on_ratio_of_PV_to_total_hhold" />
+            <entity name="defectors" />
+            <entity name="PV_batt_houes_being_built" />
+            <entity name="battery_imitation_rate" />
+            <entity name="ImitationScaleFactor" />
+            <entity name="historical_data" />
+            <entity name="total_grid_customers" />
+            <display x="17" y="22" width="878" height="765" color="red">
+                <item uid="0" />
+                <item uid="1" />
+                <item uid="2" />
+                <item uid="3" />
+                <item uid="4" />
+                <item uid="5" />
+                <item uid="6" />
+                <item uid="7" />
+                <item uid="8" />
+                <item uid="9" />
+                <item uid="10" />
+                <item uid="11" />
+                <item uid="12" />
+                <item uid="13" />
+                <item uid="14" />
+                <item uid="15" />
+                <item uid="16" />
+                <item uid="17" />
+                <item uid="18" />
+                <item uid="19" />
+                <item uid="20" />
+                <item uid="21" />
+                <item uid="22" />
+                <item uid="23" />
+                <item uid="24" />
+                <item uid="25" />
+                <item uid="26" />
+                <item uid="27" />
+                <item uid="28" />
+                <item uid="29" />
+                <item uid="30" />
+                <item uid="31" />
+                <item uid="32" />
+                <item uid="33" />
+                <item uid="34" />
+                <item uid="35" />
+                <item uid="36" />
+                <item uid="37" />
+                <item uid="38" />
+                <item uid="39" />
+                <item uid="40" />
+                <item uid="41" />
+                <item uid="42" />
+                <item uid="43" />
+                <item uid="44" />
+                <item uid="45" />
+                <item uid="46" />
+                <item uid="47" />
+                <item uid="48" />
+                <item uid="49" />
+                <item uid="50" />
+                <item uid="51" />
+                <item uid="52" />
+                <item uid="53" />
+                <item uid="54" />
+                <item uid="55" />
+                <item uid="56" />
+                <item uid="57" />
+                <item uid="58" />
+                <item uid="59" />
+                <item uid="60" />
+                <item uid="61" />
+                <item uid="62" />
+                <item uid="63" />
+                <item uid="64" />
+                <item uid="65" />
+                <item uid="66" />
+                <item uid="67" />
+                <item uid="68" />
+                <item uid="69" />
+                <item uid="70" />
+                <item uid="71" />
+                <item uid="72" />
+                <item uid="73" />
+            </display>
+        </group>
+        <group name="new_homes">
+            <entity name="attractiveness" />
+            <entity name="houses_being_built" />
+            <entity name="relative_attractiveness" />
+            <entity name="scale_factor_B_house_attractiveness" />
+            <entity name="total_attractiveness" />
+            <entity name="total_growth_in_households" />
+            <entity name="total_households" />
+            <entity name="unexplained_utility_k" />
+            <entity name="Net_Present_Value_of_BAU" />
+            <entity name="population_growth_rate" />
+            <entity name="price_vector" />
+            <display x="66" y="1307" width="573" height="471" color="red">
+                <item uid="74" />
+                <item uid="75" />
+                <item uid="76" />
+                <item uid="77" />
+                <item uid="78" />
+                <item uid="79" />
+                <item uid="80" />
+                <item uid="81" />
+                <item uid="82" />
+                <item uid="83" />
+                <item uid="84" />
+                <item uid="85" />
+                <item uid="86" />
+                <item uid="87" />
+                <item uid="88" />
+                <item uid="89" />
+                <item uid="90" />
+                <item uid="91" />
+                <item uid="92" />
+                <item uid="93" />
+                <item uid="94" />
+                <item uid="95" />
+            </display>
+        </group>
+        <group name="NPV_Battery_system_added_to_existing_PV_system">
+            <entity name="FCI_adding_batteries" />
+            <entity name="Annual_Loan_Payment_add_batt" />
+            <entity name="debt_interest_rate_as_fraction_1" />
+            <entity name="discount_factor_loan_payment_1" />
+            <entity name="Initial_Equity_Investment_add_batt" />
+            <entity name="Loan_Principal_add_batt" />
+            <entity name="Net_Present_Value_Battery" />
+            <entity name="NPV_Loan_Payment_add_batt" />
+            <entity name="Expected_Annual_Cost_Battery" />
+            <entity name="Expected_annual_Rev_add_batt" />
+            <entity name="Expected_Net_annual_rev_add_batt" />
+            <entity name="Req&apos;d_Rate_of_Return_add_batt" />
+            <entity name="discount_factor_1" />
+            <entity name="discount_factor_loan_1" />
+            <entity name="NPV_Revs_Net_of_Op_Cost_add_batt" />
+            <display locked="true" x="890" y="1538" width="984" height="575" color="red">
+                <item uid="96" />
+                <item uid="97" />
+                <item uid="98" />
+                <item uid="99" />
+                <item uid="100" />
+                <item uid="101" />
+                <item uid="102" />
+                <item uid="103" />
+                <item uid="104" />
+                <item uid="105" />
+            </display>
+        </group>
+        <group name="NPV_PV">
+            <entity name="Equity_Fraction" />
+            <entity name="FCI_PV" />
+            <entity name="Initial_Equity_Investment_PV" />
+            <entity name="Loan_Principal_PV" />
+            <entity name="debt_interest_rate_as_%" />
+            <entity name="Req&apos;d_Rate_of_Return_as_%" />
+            <entity name="debt_interest_rate_as_fraction" />
+            <entity name="discount_factor_loan_payment" />
+            <entity name="Expected_annual_Rev_PV" />
+            <entity name="Expected_Net_annual_rev_PV" />
+            <entity name="project_lifetime_NPV" />
+            <entity name="term_of_loan" />
+            <entity name="Annual_Loan_Payment_PV_only" />
+            <entity name="discount_factor" />
+            <entity name="discount_factor_loan" />
+            <entity name="Net_Present_Value_PV" />
+            <entity name="NPV_Loan_Payment_PV" />
+            <entity name="Req&apos;d_Rate_of_Return_PV" />
+            <entity name="Expected_Annual_Cost_PV" />
+            <entity name="NPV_Revs_Net_of_Op_CostPV" />
+            <display locked="true" x="882" y="907" width="1040" height="589" color="red">
+                <item uid="106" />
+                <item uid="107" />
+            </display>
+        </group>
+        <group name="NPV_PV_&amp;_Battery">
+            <entity name="Annual_Loan_Payment__PV_&amp;_batt" />
+            <entity name="debt_interest_rate_as_fraction_2" />
+            <entity name="discount_factor_loan_payment_2" />
+            <entity name="FCI_PV&amp;batt" />
+            <entity name="Initial_Equity_Investment_PV&amp;Batt" />
+            <entity name="Loan_Principal_PV&amp;batt" />
+            <entity name="Req&apos;d_Rate_of_Return_PV&amp;batt" />
+            <entity name="discount_factor_loan_2" />
+            <entity name="Net_Present_Value_PV&amp;Battery" />
+            <entity name="NPV_Loan_Payment_PV&amp;batt" />
+            <entity name="Expected_annual_Rev_PV&amp;Batt" />
+            <entity name="Expected_Annual_Cost_PV_&amp;_Battery" />
+            <entity name="Expected_Net_annual_rev_PV&amp;Batt" />
+            <entity name="discount_factor_2" />
+            <entity name="NPV_Revs_Net_of_Op_Cost_PV&amp;batt" />
+            <display locked="true" x="885" y="2153" width="985" height="527" color="red">
+                <item uid="108" />
+                <item uid="109" />
+                <item uid="110" />
+                <item uid="111" />
+                <item uid="112" />
+                <item uid="113" />
+                <item uid="114" />
+            </display>
+        </group>
+        <group name="calibration_of_utility_var_cost_to_56%_of_retail_price">
+            <entity name="fraction_fixed_cost_over_retail_price" />
+            <entity name="fraction_var_cost_over_retail_price" />
+            <display x="1472" y="432" width="875" height="358" color="red">
+                <item uid="115" />
+                <item uid="116" />
+                <item uid="117" />
+                <item uid="118" />
+                <item uid="119" />
+                <item uid="120" />
+                <item uid="121" />
+                <item uid="122" />
+                <item uid="123" />
+                <item uid="124" />
+                <item uid="125" />
+                <item uid="126" />
+            </display>
+        </group>
+        <group name="retail_price_formulation">
+            <entity name="annual_base_demand" />
+            <entity name="reduction_in_annual_base_demand" />
+            <entity name="added_utility_cost_of_PV_customer_$kWh" />
+            <entity name="baseline_wholesale_elec_price" />
+            <entity name="efficiency_improvement_of_reg_customers_as_%_per_year" />
+            <entity name="wholesale_price_growth_rate_%_per_year" />
+            <entity name="wholesale_price_of_elec_for_PV_customers" />
+            <entity name="annual_demand_with_PV" />
+            <entity name="annual_PV_production_kWh" />
+            <entity name="baseline_retail_price" />
+            <entity name="baseline_util_fixed_cost" />
+            <entity name="ELCC_as_function_of_PV_penetration" />
+            <entity name="fraction_of_PV_to_regular_customers" />
+            <entity name="total_demand" />
+            <entity name="utiliity_variable_cost" />
+            <entity name="utility_fixed_cost" />
+            <entity name="util_fixed_cost_growth_rate_%_per_year" />
+            <entity name="wholesale_price_of_elec" />
+            <entity name="RETAIL_PRICE" />
+            <entity name="change_to_util_fixed_cost_from_new_homes" />
+            <entity name="new_PV_homes" />
+            <entity name="new_reg_homes" />
+            <entity name="utiltiy_incremental_fixed_cost_per_new_home_$" />
+            <display x="900" y="23" width="564" height="529" color="red">
+                <item uid="127" />
+                <item uid="128" />
+                <item uid="129" />
+                <item uid="130" />
+                <item uid="131" />
+                <item uid="132" />
+                <item uid="133" />
+                <item uid="134" />
+                <item uid="135" />
+                <item uid="136" />
+                <item uid="137" />
+                <item uid="138" />
+                <item uid="139" />
+                <item uid="140" />
+                <item uid="141" />
+                <item uid="142" />
+                <item uid="143" />
+                <item uid="144" />
+                <item uid="145" />
+                <item uid="146" />
+                <item uid="147" />
+                <item uid="148" />
+                <item uid="149" />
+                <item uid="150" />
+                <item uid="151" />
+                <item uid="152" />
+                <item uid="153" />
+                <item uid="154" />
+                <item uid="155" />
+                <item uid="156" />
+                <item uid="157" />
+                <item uid="158" />
+                <item uid="159" />
+                <item uid="160" />
+                <item uid="161" />
+                <item uid="162" />
+                <item uid="163" />
+                <item uid="164" />
+                <item uid="165" />
+                <item uid="166" />
+                <item uid="167" />
+                <item uid="168" />
+                <item uid="169" />
+            </display>
+        </group>
+        <display page_width="588" page_height="768" page_cols="5" page_rows="5" isee:converter_size="medium" scroll_x="680" scroll_y="1952">
+            <alias x="519" y="1552" uid="91">
+                <of>Net_Present_Value_PV&amp;Battery</of>
+                <label_side>right</label_side>
+                <label_angle>20</label_angle>
+            </alias>
+            <alias x="396" y="0" uid="170">
+                <of>annual_PV_production_kWh</of>
+            </alias>
+            <alias x="254" y="1362" uid="74">
+                <of>regular_customers</of>
+            </alias>
+            <alias x="509" y="44" uid="25">
+                <of>Net_Present_Value_PV&amp;Battery</of>
+                <label_side>right</label_side>
+            </alias>
+            <alias x="328" y="632" uid="41">
+                <of>Battery_incentive</of>
+            </alias>
+            <alias x="1319" y="2508" uid="114">
+                <of>project_lifetime_NPV</of>
+            </alias>
+            <alias x="458" y="1354" uid="80">
+                <of>defectors</of>
+            </alias>
+            <alias x="1230" y="518" uid="163">
+                <of>regular_customers</of>
+            </alias>
+            <alias x="1072" y="2416" uid="108">
+                <of>term_of_loan</of>
+            </alias>
+            <alias x="968" y="1949" uid="98">
+                <of>annual_base_demand</of>
+            </alias>
+            <alias x="316" y="50" uid="0">
+                <of>PV_incentive</of>
+            </alias>
+            <alias x="372" y="74" uid="1">
+                <of>drain_slowing_function_of_reg_customers</of>
+            </alias>
+            <alias x="1668" y="538" uid="116">
+                <of>utility_fixed_cost</of>
+            </alias>
+            <alias x="1020" y="1411" uid="107">
+                <of>RETAIL_PRICE</of>
+            </alias>
+            <alias x="1320" y="1932" uid="102">
+                <of>project_lifetime_NPV</of>
+            </alias>
+            <alias x="419" y="183" uid="26">
+                <of>switched_limit_on_ratio_of_PV_to_total_hhold</of>
+            </alias>
+            <alias x="722" y="495" uid="53">
+                <of>houses_being_built</of>
+            </alias>
+            <alias x="1110" y="1829" uid="103">
+                <of>term_of_loan</of>
+            </alias>
+            <alias x="1063" y="2325" uid="109">
+                <of>debt_interest_rate_as_%</of>
+            </alias>
+            <alias x="1101" y="2466" uid="111">
+                <of>Req&apos;d_Rate_of_Return_as_%</of>
+            </alias>
+            <alias x="469" y="653" uid="54">
+                <of>drain_slowing_function_of_reg_customers</of>
+            </alias>
+            <alias x="1105" y="1604" uid="97">
+                <of>Equity_Fraction</of>
+            </alias>
+            <alias x="1626" y="602" uid="117">
+                <of>RETAIL_PRICE</of>
+            </alias>
+            <alias x="1099" y="2192" uid="110">
+                <of>Equity_Fraction</of>
+            </alias>
+            <alias x="981" y="2588" uid="112">
+                <of>RETAIL_PRICE</of>
+            </alias>
+            <alias x="1068" y="1737" uid="96">
+                <of>debt_interest_rate_as_%</of>
+            </alias>
+            <alias x="1333" y="507" uid="164">
+                <of>customers_with_PV</of>
+            </alias>
+            <alias x="1091" y="82" uid="131">
+                <of>regular_customers</of>
+            </alias>
+            <alias x="348" y="1355" uid="75">
+                <of>customers_with_PV</of>
+            </alias>
+            <alias x="69" y="169" uid="2">
+                <of>houses_being_built</of>
+                <label_side>top</label_side>
+                <label_angle>58</label_angle>
+            </alias>
+            <alias x="522" y="1502" uid="92">
+                <of>Net_Present_Value_PV</of>
+                <label_side>right</label_side>
+                <label_angle>12</label_angle>
+            </alias>
+            <alias x="1073" y="1954" uid="99">
+                <of>annual_PV_production_kWh</of>
+                <label_side>top</label_side>
+                <label_angle>77</label_angle>
+            </alias>
+            <alias x="307" y="272" uid="3">
+                <of>drain_slowing_function_of_reg_customers</of>
+            </alias>
+            <alias x="1628" y="461" uid="118">
+                <of>total_demand</of>
+            </alias>
+            <alias x="984" y="1992" uid="100">
+                <of>RETAIL_PRICE</of>
+            </alias>
+            <alias x="1099" y="476" uid="162">
+                <of>total_demand</of>
+                <label_side>left</label_side>
+                <label_angle>176</label_angle>
+            </alias>
+            <alias x="258" y="252" uid="4">
+                <of>Net_Present_Value_PV</of>
+                <label_side>right</label_side>
+                <label_angle>12</label_angle>
+            </alias>
+            <alias x="576" y="322" uid="27">
+                <of>drain_slowing_function_of_PV_customers</of>
+            </alias>
+            <alias x="323" y="395" uid="42">
+                <of>houses_being_built</of>
+            </alias>
+            <alias x="1322" y="252" uid="132">
+                <of>total_demand</of>
+                <label_side>right</label_side>
+                <label_angle>356</label_angle>
+            </alias>
+            <alias x="748" y="760" uid="70">
+                <of>customers_with_PV</of>
+                <label_side>center</label_side>
+            </alias>
+            <alias x="1107" y="1894" uid="104">
+                <of>Req&apos;d_Rate_of_Return_as_%</of>
+            </alias>
+            <alias x="1267" y="81" uid="133">
+                <of>customers_with_PV</of>
+            </alias>
+            <alias x="417" y="737" uid="69">
+                <of>Net_Present_Value_PV&amp;Battery</of>
+                <label_side>left</label_side>
+                <label_angle>184</label_angle>
+            </alias>
+            <alias x="1006" y="1359" uid="106">
+                <of>annual_PV_production_kWh</of>
+            </alias>
+            <alias x="990" y="2522" uid="113">
+                <of>annual_base_demand</of>
+            </alias>
+            <alias x="223" y="479" uid="43">
+                <of>total_households</of>
+            </alias>
+            <alias x="839" y="757" uid="71">
+                <of>regular_customers</of>
+                <label_side>center</label_side>
+            </alias>
+            <alias x="516" y="369" uid="55">
+                <of>Net_Present_Value_Battery</of>
+                <label_side>right</label_side>
+                <label_angle>16</label_angle>
+            </alias>
+            <alias x="1580" y="536" uid="119">
+                <of>utiliity_variable_cost</of>
+            </alias>
+            <connector x="1306" y="434" uid="165" color="black">
+                <from>new_PV_homes</from>
+                <to>change_to_util_fixed_cost_from_new_homes</to>
+            </connector>
+            <connector x="1110" y="941" uid="171" color="black">
+                <from>Equity_Fraction</from>
+                <to>Initial_Equity_Investment_PV</to>
+            </connector>
+            <connector x="325" y="51" uid="5" color="black">
+                <from>
+                    <alias uid="0" />
+                </from>
+                <to>PV&amp;batt_innovation_rate</to>
+            </connector>
+            <connector x="1230" y="1115" uid="172" color="black">
+                <from>debt_interest_rate_as_fraction</from>
+                <to>discount_factor_loan_payment</to>
+            </connector>
+            <connector x="301" y="279" uid="6" color="black">
+                <from>
+                    <alias uid="3" />
+                </from>
+                <to>PV_adoption_thru_imitation</to>
+            </connector>
+            <connector x="201" y="268" uid="7" color="black">
+                <from>PV_incentive</from>
+                <to>PV_imitation_rate</to>
+            </connector>
+            <connector x="267" y="1721" uid="81" color="black">
+                <from>unexplained_utility_k</from>
+                <to>attractiveness</to>
+            </connector>
+            <connector x="1100" y="467" uid="166" color="black">
+                <from>
+                    <alias uid="162" />
+                </from>
+                <to>RETAIL_PRICE</to>
+            </connector>
+            <connector x="261" y="422" uid="8" color="black">
+                <from>PV_imitation_factor_from_density_of_PV_households</from>
+                <to>PV_adoption_thru_imitation</to>
+            </connector>
+            <connector x="1261" y="318" uid="134" color="black">
+                <from>util_fixed_cost_growth_rate_%_per_year</from>
+                <to>utility_fixed_cost</to>
+            </connector>
+            <connector x="1405" y="1331" uid="173" color="black">
+                <from>project_lifetime_NPV</from>
+                <to>discount_factor</to>
+            </connector>
+            <connector x="255" y="244" uid="9" color="black">
+                <from>
+                    <alias uid="4" />
+                </from>
+                <to>PV_innovation_rate</to>
+            </connector>
+            <connector x="760" y="743" uid="67" color="black">
+                <from>
+                    <alias uid="70" />
+                </from>
+                <to>total_grid_customers</to>
+            </connector>
+            <connector x="1214" y="319" uid="135" color="black">
+                <from>utility_fixed_cost</from>
+                <to>RETAIL_PRICE</to>
+            </connector>
+            <connector x="1508" y="2407" uid="174" color="black">
+                <from>discount_factor_loan_2</from>
+                <to>NPV_Loan_Payment_PV&amp;batt</to>
+            </connector>
+            <connector x="1074" y="1963" uid="105" color="#FF007F">
+                <from>
+                    <alias uid="99" />
+                </from>
+                <to>Expected_annual_Rev_add_batt</to>
+            </connector>
+            <connector x="346" y="1372" uid="76" color="black">
+                <from>
+                    <alias uid="75" />
+                </from>
+                <to>total_households</to>
+            </connector>
+            <connector x="400" y="501" uid="10" color="black">
+                <from>ImitationScaleFactor</from>
+                <to>PV_adoption_thru_imitation</to>
+            </connector>
+            <connector x="188" y="349" uid="11" color="black">
+                <from>PV_imitation_rate</from>
+                <to>PV_adoption_thru_imitation</to>
+            </connector>
+            <connector x="770" y="776" uid="72" color="black">
+                <from>
+                    <alias uid="70" />
+                </from>
+                <to>drain_slowing_function_of_PV_customers</to>
+            </connector>
+            <connector x="1175" y="1414" uid="175" color="black">
+                <from>Expected_annual_Rev_PV</from>
+                <to>Expected_Net_annual_rev_PV</to>
+            </connector>
+            <connector x="1116" y="1893" uid="176" color="black">
+                <from>
+                    <alias uid="104" />
+                </from>
+                <to>Req&apos;d_Rate_of_Return_add_batt</to>
+            </connector>
+            <connector x="379" y="79" uid="28" color="black">
+                <from>
+                    <alias uid="1" />
+                </from>
+                <to>direct_defection_via_innovation</to>
+            </connector>
+            <connector x="1621" y="466" uid="120" color="black">
+                <from>
+                    <alias uid="118" />
+                </from>
+                <to>fraction_var_cost_over_retail_price</to>
+            </connector>
+            <connector x="1150" y="1693" uid="177" color="black">
+                <from>FCI_adding_batteries</from>
+                <to>Loan_Principal_add_batt</to>
+            </connector>
+            <connector x="411" y="1465" uid="82" color="black">
+                <from>population_growth_rate</from>
+                <to>total_growth_in_households</to>
+            </connector>
+            <connector x="659" y="412" uid="56" color="black">
+                <from>defectors</from>
+                <to>defection_thru_imitation</to>
+            </connector>
+            <connector x="1466" y="1868" uid="178" color="black">
+                <from>Req&apos;d_Rate_of_Return_add_batt</from>
+                <to>discount_factor_1</to>
+            </connector>
+            <connector x="990" y="1963" uid="101" color="#FF007F">
+                <from>
+                    <alias uid="98" />
+                </from>
+                <to>Expected_annual_Rev_add_batt</to>
+            </connector>
+            <connector x="1614" y="1199" uid="179" color="black">
+                <from>discount_factor_loan</from>
+                <to>NPV_Loan_Payment_PV</to>
+            </connector>
+            <connector x="1027" y="233" uid="127" color="black">
+                <from>wholesale_price_growth_rate_%_per_year</from>
+                <to>wholesale_price_of_elec</to>
+            </connector>
+            <connector x="500" y="45" uid="29" color="black">
+                <from>
+                    <alias uid="25" />
+                </from>
+                <to>PV&amp;batt_innovation_rate</to>
+            </connector>
+            <connector x="116" y="657" uid="44" color="black">
+                <from>use_limit_on_ratio_of_PV_to_total_hhold</from>
+                <to>switched_limit_on_ratio_of_PV_to_total_hhold</to>
+            </connector>
+            <connector x="1129" y="251" uid="136" color="black">
+                <from>wholesale_price_of_elec_for_PV_customers</from>
+                <to>utiliity_variable_cost</to>
+            </connector>
+            <connector x="1172" y="238" uid="137" color="black">
+                <from>utiliity_variable_cost</from>
+                <to>RETAIL_PRICE</to>
+            </connector>
+            <connector x="1036" y="742" uid="180" color="black">
+                <from>threshold_of_customers_to_slow_customer_draining</from>
+                <to>drain_slowing_function_of_PV_customers</to>
+            </connector>
+            <connector x="448" y="1371" uid="77" color="black">
+                <from>
+                    <alias uid="80" />
+                </from>
+                <to>total_households</to>
+            </connector>
+            <connector x="1401" y="162" uid="138" color="black">
+                <from>annual_PV_production_kWh</from>
+                <to>annual_demand_with_PV</to>
+            </connector>
+            <connector x="1178" y="1753" uid="181" color="black">
+                <from>debt_interest_rate_as_fraction_1</from>
+                <to>discount_factor_loan_payment_1</to>
+            </connector>
+            <connector x="302" y="265" uid="12" color="black">
+                <from>
+                    <alias uid="3" />
+                </from>
+                <to>PV_adoption_thru_innovation</to>
+            </connector>
+            <connector x="571" y="330" uid="30" color="black">
+                <from>
+                    <alias uid="27" />
+                </from>
+                <to>defection_thru_imitation</to>
+            </connector>
+            <connector x="558" y="169" uid="31" color="black">
+                <from>InnovationScaleFactor</from>
+                <to>direct_defection_via_innovation</to>
+            </connector>
+            <connector x="1114" y="1604" uid="182" color="black">
+                <from>
+                    <alias uid="97" />
+                </from>
+                <to>Initial_Equity_Investment_add_batt</to>
+            </connector>
+            <connector x="559" y="165" uid="13" color="black">
+                <from>InnovationScaleFactor</from>
+                <to>PV_adoption_thru_innovation</to>
+            </connector>
+            <connector x="567" y="178" uid="32" color="black">
+                <from>InnovationScaleFactor</from>
+                <to>defection_thru_innovation</to>
+            </connector>
+            <connector x="410" y="499" uid="57" color="black">
+                <from>ImitationScaleFactor</from>
+                <to>defection_thru_imitation</to>
+            </connector>
+            <connector x="406" y="517" uid="58" color="black">
+                <from>ImitationScaleFactor</from>
+                <to>direct_defection_via_imitation</to>
+            </connector>
+            <connector x="195" y="642" uid="45" color="black">
+                <from>switched_limit_on_ratio_of_PV_to_total_hhold</from>
+                <to>direct_defection_via_imitation</to>
+            </connector>
+            <connector x="423" y="175" uid="33" color="black">
+                <from>
+                    <alias uid="26" />
+                </from>
+                <to>direct_defection_via_innovation</to>
+            </connector>
+            <connector x="228" y="472" uid="46" color="black">
+                <from>
+                    <alias uid="43" />
+                </from>
+                <to>PV_imitation_factor_from_density_of_PV_households</to>
+            </connector>
+            <connector x="1119" y="226" uid="139" color="black">
+                <from>wholesale_price_of_elec</from>
+                <to>wholesale_price_of_elec_for_PV_customers</to>
+            </connector>
+            <connector x="1114" y="71" uid="140" color="black">
+                <from>
+                    <alias uid="131" />
+                </from>
+                <to>fraction_of_PV_to_regular_customers</to>
+            </connector>
+            <connector x="1355" y="1042" uid="183" color="black">
+                <from>Loan_Principal_PV</from>
+                <to>Annual_Loan_Payment_PV_only</to>
+            </connector>
+            <connector x="1172" y="1208" uid="184" color="black">
+                <from>term_of_loan</from>
+                <to>discount_factor_loan</to>
+            </connector>
+            <connector x="1221" y="2338" uid="185" color="black">
+                <from>discount_factor_loan_payment_2</from>
+                <to>Annual_Loan_Payment__PV_&amp;_batt</to>
+            </connector>
+            <connector x="1245" y="98" uid="141" color="black">
+                <from>
+                    <alias uid="133" />
+                </from>
+                <to>utiliity_variable_cost</to>
+            </connector>
+            <connector x="1260" y="167" uid="142" color="black">
+                <from>annual_demand_with_PV</from>
+                <to>utiliity_variable_cost</to>
+            </connector>
+            <connector x="1234" y="1610" uid="186" color="black">
+                <from>Initial_Equity_Investment_add_batt</from>
+                <to>Loan_Principal_add_batt</to>
+            </connector>
+            <connector x="1113" y="98" uid="143" color="black">
+                <from>
+                    <alias uid="131" />
+                </from>
+                <to>utiliity_variable_cost</to>
+            </connector>
+            <connector x="1245" y="70" uid="144" color="black">
+                <from>
+                    <alias uid="133" />
+                </from>
+                <to>fraction_of_PV_to_regular_customers</to>
+            </connector>
+            <connector x="337" y="630" uid="47" color="black">
+                <from>
+                    <alias uid="41" />
+                </from>
+                <to>PV&amp;batt_imitation_rate</to>
+            </connector>
+            <connector x="1450" y="2338" uid="187" color="black">
+                <from>NPV_Loan_Payment_PV&amp;batt</from>
+                <to>Net_Present_Value_PV&amp;Battery</to>
+            </connector>
+            <connector x="1241" y="1604" uid="188" color="black">
+                <from>Initial_Equity_Investment_add_batt</from>
+                <to>Net_Present_Value_Battery</to>
+            </connector>
+            <connector x="1110" y="2466" uid="189" color="black">
+                <from>
+                    <alias uid="111" />
+                </from>
+                <to>Req&apos;d_Rate_of_Return_PV&amp;batt</to>
+            </connector>
+            <connector x="513" y="1504" uid="93" color="black">
+                <from>
+                    <alias uid="92" />
+                </from>
+                <to>price_vector</to>
+            </connector>
+            <connector x="1384" y="2338" uid="190" color="black">
+                <from>Annual_Loan_Payment__PV_&amp;_batt</from>
+                <to>NPV_Loan_Payment_PV&amp;batt</to>
+            </connector>
+            <connector x="1355" y="944" uid="191" color="black">
+                <from>Initial_Equity_Investment_PV</from>
+                <to>Net_Present_Value_PV</to>
+            </connector>
+            <connector x="332" y="1501" uid="83" color="black">
+                <from>total_growth_in_households</from>
+                <to>houses_being_built</to>
+            </connector>
+            <connector x="412" y="729" uid="59" color="black">
+                <from>
+                    <alias uid="69" />
+                </from>
+                <to>PV&amp;batt_imitation_rate</to>
+            </connector>
+            <connector x="330" y="389" uid="48" color="black">
+                <from>
+                    <alias uid="42" />
+                </from>
+                <to>PV_houses_being_built</to>
+            </connector>
+            <connector x="1108" y="2193" uid="192" color="black">
+                <from>
+                    <alias uid="110" />
+                </from>
+                <to>Initial_Equity_Investment_PV&amp;Batt</to>
+            </connector>
+            <connector x="462" y="648" uid="60" color="black">
+                <from>
+                    <alias uid="54" />
+                </from>
+                <to>direct_defection_via_imitation</to>
+            </connector>
+            <connector x="1328" y="2508" uid="193" color="black">
+                <from>
+                    <alias uid="114" />
+                </from>
+                <to>discount_factor_2</to>
+            </connector>
+            <connector x="332" y="1434" uid="84" color="black">
+                <from>total_households</from>
+                <to>total_growth_in_households</to>
+            </connector>
+            <connector x="410" y="318" uid="34" color="black">
+                <from>customers_with_PV</from>
+                <to>defection_thru_innovation</to>
+            </connector>
+            <connector x="1166" y="1473" uid="194" color="black">
+                <from>Expected_Annual_Cost_PV</from>
+                <to>Expected_Net_annual_rev_PV</to>
+            </connector>
+            <connector x="396" y="337" uid="14" color="black">
+                <from>customers_with_PV</from>
+                <to>PV_imitation_factor_from_density_of_PV_households</to>
+            </connector>
+            <connector x="1612" y="2513" uid="195" color="black">
+                <from>discount_factor_2</from>
+                <to>NPV_Revs_Net_of_Op_Cost_PV&amp;batt</to>
+            </connector>
+            <connector x="1042" y="736" uid="196" color="black">
+                <from>threshold_of_customers_to_slow_customer_draining</from>
+                <to>drain_slowing_function_of_reg_customers</to>
+            </connector>
+            <connector x="1012" y="2523" uid="197" color="black">
+                <from>
+                    <alias uid="113" />
+                </from>
+                <to>Expected_annual_Rev_PV&amp;Batt</to>
+            </connector>
+            <connector x="1064" y="1272" uid="198" color="black">
+                <from>Req&apos;d_Rate_of_Return_as_%</from>
+                <to>Req&apos;d_Rate_of_Return_PV</to>
+            </connector>
+            <connector x="1113" y="93" uid="145" color="black">
+                <from>
+                    <alias uid="131" />
+                </from>
+                <to>total_demand</to>
+            </connector>
+            <connector x="1522" y="1822" uid="199" color="black">
+                <from>discount_factor_loan_1</from>
+                <to>NPV_Loan_Payment_add_batt</to>
+            </connector>
+            <connector x="1233" y="439" uid="167" color="black">
+                <from>new_reg_homes</from>
+                <to>change_to_util_fixed_cost_from_new_homes</to>
+            </connector>
+            <connector x="410" y="184" uid="15" color="black">
+                <from>
+                    <alias uid="26" />
+                </from>
+                <to>PV_adoption_thru_innovation</to>
+            </connector>
+            <connector x="1019" y="124" uid="128" color="black">
+                <from>efficiency_improvement_of_reg_customers_as_%_per_year</from>
+                <to>reduction_in_annual_base_demand</to>
+            </connector>
+            <connector x="230" y="485" uid="49" color="black">
+                <from>
+                    <alias uid="43" />
+                </from>
+                <to>limit_on_ratio_of_PV_to_total_households</to>
+            </connector>
+            <connector x="279" y="557" uid="50" color="black">
+                <from>limit_on_ratio_of_PV_to_total_households</from>
+                <to>switched_limit_on_ratio_of_PV_to_total_hhold</to>
+            </connector>
+            <connector x="567" y="319" uid="35" color="black">
+                <from>
+                    <alias uid="27" />
+                </from>
+                <to>defection_thru_innovation</to>
+            </connector>
+            <connector x="1235" y="1753" uid="200" color="black">
+                <from>discount_factor_loan_payment_1</from>
+                <to>Annual_Loan_Payment_add_batt</to>
+            </connector>
+            <connector x="1187" y="58" uid="146" color="black">
+                <from>fraction_of_PV_to_regular_customers</from>
+                <to>ELCC_as_function_of_PV_penetration</to>
+            </connector>
+            <connector x="1080" y="2412" uid="201" color="black">
+                <from>
+                    <alias uid="108" />
+                </from>
+                <to>discount_factor_loan_payment_2</to>
+            </connector>
+            <connector x="1104" y="1115" uid="202" color="black">
+                <from>debt_interest_rate_as_%</from>
+                <to>debt_interest_rate_as_fraction</to>
+            </connector>
+            <connector x="1119" y="1829" uid="203" color="black">
+                <from>
+                    <alias uid="103" />
+                </from>
+                <to>discount_factor_loan_1</to>
+            </connector>
+            <connector x="417" y="69" uid="36" color="black">
+                <from>PV&amp;batt_innovation_rate</from>
+                <to>direct_defection_via_innovation</to>
+            </connector>
+            <connector x="1635" y="466" uid="121" color="black">
+                <from>
+                    <alias uid="118" />
+                </from>
+                <to>fraction_fixed_cost_over_retail_price</to>
+            </connector>
+            <connector x="1111" y="179" uid="147" color="black">
+                <from>annual_base_demand</from>
+                <to>utiliity_variable_cost</to>
+            </connector>
+            <connector x="714" y="499" uid="61" color="black">
+                <from>
+                    <alias uid="53" />
+                </from>
+                <to>PV_batt_houes_being_built</to>
+            </connector>
+            <connector x="206" y="251" uid="16" color="black">
+                <from>PV_incentive</from>
+                <to>PV_innovation_rate</to>
+            </connector>
+            <connector x="1171" y="1204" uid="204" color="black">
+                <from>term_of_loan</from>
+                <to>discount_factor_loan_payment</to>
+            </connector>
+            <connector x="1584" y="528" uid="122" color="black">
+                <from>
+                    <alias uid="119" />
+                </from>
+                <to>fraction_var_cost_over_retail_price</to>
+            </connector>
+            <connector x="1077" y="1739" uid="205" color="black">
+                <from>
+                    <alias uid="96" />
+                </from>
+                <to>debt_interest_rate_as_fraction_1</to>
+            </connector>
+            <connector x="1627" y="593" uid="123" color="black">
+                <from>
+                    <alias uid="117" />
+                </from>
+                <to>fraction_fixed_cost_over_retail_price</to>
+            </connector>
+            <connector x="1261" y="285" uid="148" color="black">
+                <from>baseline_util_fixed_cost</from>
+                <to>utility_fixed_cost</to>
+            </connector>
+            <connector x="1689" y="2581" uid="206" color="black">
+                <from>NPV_Revs_Net_of_Op_Cost_PV&amp;batt</from>
+                <to>Net_Present_Value_PV&amp;Battery</to>
+            </connector>
+            <connector x="1029" y="1411" uid="207" color="black">
+                <from>
+                    <alias uid="107" />
+                </from>
+                <to>Expected_annual_Rev_PV</to>
+            </connector>
+            <connector x="338" y="1669" uid="85" color="black">
+                <from>attractiveness</from>
+                <to>relative_attractiveness</to>
+            </connector>
+            <connector x="990" y="2588" uid="208" color="black">
+                <from>
+                    <alias uid="112" />
+                </from>
+                <to>Expected_annual_Rev_PV&amp;Batt</to>
+            </connector>
+            <connector x="1378" y="1414" uid="209" color="black">
+                <from>Expected_Net_annual_rev_PV</from>
+                <to>NPV_Revs_Net_of_Op_CostPV</to>
+            </connector>
+            <connector x="1164" y="2338" uid="210" color="black">
+                <from>debt_interest_rate_as_fraction_2</from>
+                <to>discount_factor_loan_payment_2</to>
+            </connector>
+            <connector x="1066" y="2649" uid="211" color="black">
+                <from>Expected_Annual_Cost_PV_&amp;_Battery</from>
+                <to>Expected_Net_annual_rev_PV&amp;Batt</to>
+            </connector>
+            <connector x="366" y="331" uid="17" color="black">
+                <from>customers_with_PV</from>
+                <to>PV_adoption_thru_imitation</to>
+            </connector>
+            <connector x="1115" y="1027" uid="212" color="black">
+                <from>FCI_PV</from>
+                <to>Initial_Equity_Investment_PV</to>
+            </connector>
+            <connector x="276" y="1379" uid="78" color="black">
+                <from>
+                    <alias uid="74" />
+                </from>
+                <to>total_households</to>
+            </connector>
+            <connector x="1453" y="2451" uid="213" color="black">
+                <from>Req&apos;d_Rate_of_Return_PV&amp;batt</from>
+                <to>discount_factor_loan_2</to>
+            </connector>
+            <connector x="1452" y="2453" uid="214" color="black">
+                <from>Req&apos;d_Rate_of_Return_PV&amp;batt</from>
+                <to>discount_factor_2</to>
+            </connector>
+            <connector x="1653" y="1337" uid="215" color="black">
+                <from>discount_factor</from>
+                <to>NPV_Revs_Net_of_Op_CostPV</to>
+            </connector>
+            <connector x="861" y="740" uid="68" color="black">
+                <from>
+                    <alias uid="71" />
+                </from>
+                <to>drain_slowing_function_of_reg_customers</to>
+            </connector>
+            <connector x="296" y="1607" uid="86" color="black">
+                <from>total_attractiveness</from>
+                <to>relative_attractiveness</to>
+            </connector>
+            <connector x="1704" y="1996" uid="216" color="black">
+                <from>NPV_Revs_Net_of_Op_Cost_add_batt</from>
+                <to>Net_Present_Value_Battery</to>
+            </connector>
+            <connector x="993" y="1993" uid="217" color="black">
+                <from>
+                    <alias uid="100" />
+                </from>
+                <to>Expected_annual_Rev_add_batt</to>
+            </connector>
+            <connector x="1268" y="371" uid="149" color="black">
+                <from>change_to_util_fixed_cost_from_new_homes</from>
+                <to>utility_fixed_cost</to>
+            </connector>
+            <connector x="166" y="222" uid="18" color="black">
+                <from>regular_customers</from>
+                <to>PV_adoption_thru_innovation</to>
+            </connector>
+            <connector x="1347" y="950" uid="218" color="black">
+                <from>Initial_Equity_Investment_PV</from>
+                <to>Loan_Principal_PV</to>
+            </connector>
+            <connector x="1089" y="2005" uid="219" color="black">
+                <from>Expected_annual_Rev_add_batt</from>
+                <to>Expected_Net_annual_rev_add_batt</to>
+            </connector>
+            <connector x="250" y="257" uid="19" color="black">
+                <from>
+                    <alias uid="4" />
+                </from>
+                <to>PV_imitation_rate</to>
+            </connector>
+            <connector x="1137" y="2278" uid="220" color="black">
+                <from>FCI_PV&amp;batt</from>
+                <to>Loan_Principal_PV&amp;batt</to>
+            </connector>
+            <connector x="1316" y="1698" uid="221" color="black">
+                <from>Loan_Principal_add_batt</from>
+                <to>Annual_Loan_Payment_add_batt</to>
+            </connector>
+            <connector x="1111" y="149" uid="150" color="black">
+                <from>annual_base_demand</from>
+                <to>total_demand</to>
+            </connector>
+            <connector x="1552" y="1266" uid="222" color="black">
+                <from>Req&apos;d_Rate_of_Return_PV</from>
+                <to>discount_factor_loan</to>
+            </connector>
+            <connector x="1398" y="1753" uid="223" color="black">
+                <from>Annual_Loan_Payment_add_batt</from>
+                <to>NPV_Loan_Payment_add_batt</to>
+            </connector>
+            <connector x="440" y="1527" uid="87" color="black">
+                <from>price_vector</from>
+                <to>attractiveness</to>
+            </connector>
+            <connector x="1735" y="1406" uid="224" color="black">
+                <from>NPV_Revs_Net_of_Op_CostPV</from>
+                <to>Net_Present_Value_PV</to>
+            </connector>
+            <connector x="1184" y="230" uid="151" color="black">
+                <from>utiliity_variable_cost</from>
+                <to>baseline_util_fixed_cost</to>
+            </connector>
+            <connector x="1104" y="287" uid="152" color="black">
+                <from>added_utility_cost_of_PV_customer_$kWh</from>
+                <to>wholesale_price_of_elec_for_PV_customers</to>
+            </connector>
+            <connector x="1669" y="529" uid="124" color="black">
+                <from>
+                    <alias uid="116" />
+                </from>
+                <to>fraction_fixed_cost_over_retail_price</to>
+            </connector>
+            <connector x="471" y="344" uid="37" color="black">
+                <from>Battery_incentive</from>
+                <to>battery_innovation_rate</to>
+            </connector>
+            <connector x="1464" y="1753" uid="225" color="black">
+                <from>NPV_Loan_Payment_add_batt</from>
+                <to>Net_Present_Value_Battery</to>
+            </connector>
+            <connector x="1111" y="162" uid="153" color="black">
+                <from>annual_base_demand</from>
+                <to>annual_demand_with_PV</to>
+            </connector>
+            <connector x="468" y="360" uid="62" color="black">
+                <from>Battery_incentive</from>
+                <to>battery_imitation_rate</to>
+            </connector>
+            <connector x="834" y="740" uid="73" color="black">
+                <from>
+                    <alias uid="71" />
+                </from>
+                <to>total_grid_customers</to>
+            </connector>
+            <connector x="306" y="166" uid="20" color="black">
+                <from>PV_innovation_rate</from>
+                <to>PV_adoption_thru_innovation</to>
+            </connector>
+            <connector x="1278" y="2590" uid="226" color="black">
+                <from>Expected_Net_annual_rev_PV&amp;Batt</from>
+                <to>NPV_Revs_Net_of_Op_Cost_PV&amp;batt</to>
+            </connector>
+            <connector x="410" y="659" uid="63" color="black">
+                <from>PV&amp;batt_imitation_rate</from>
+                <to>direct_defection_via_imitation</to>
+            </connector>
+            <connector x="1347" y="1115" uid="227" color="black">
+                <from>discount_factor_loan_payment</from>
+                <to>Annual_Loan_Payment_PV_only</to>
+            </connector>
+            <connector x="153" y="197" uid="21" color="black">
+                <from>regular_customers</from>
+                <to>direct_defection_via_innovation</to>
+            </connector>
+            <connector x="1126" y="219" uid="154" color="black">
+                <from>wholesale_price_of_elec</from>
+                <to>utiliity_variable_cost</to>
+            </connector>
+            <connector x="522" y="1466" uid="94" color="black">
+                <from>Net_Present_Value_of_BAU</from>
+                <to>price_vector</to>
+            </connector>
+            <connector x="1093" y="145" uid="129" color="black">
+                <from>annual_base_demand</from>
+                <to>reduction_in_annual_base_demand</to>
+            </connector>
+            <connector x="1467" y="1866" uid="228" color="black">
+                <from>Req&apos;d_Rate_of_Return_add_batt</from>
+                <to>discount_factor_loan_1</to>
+            </connector>
+            <connector x="333" y="1671" uid="88" color="black">
+                <from>attractiveness</from>
+                <to>total_attractiveness</to>
+            </connector>
+            <connector x="697" y="412" uid="64" color="black">
+                <from>defectors</from>
+                <to>direct_defection_via_imitation</to>
+            </connector>
+            <connector x="1117" y="1823" uid="229" color="black">
+                <from>
+                    <alias uid="103" />
+                </from>
+                <to>discount_factor_loan_payment_1</to>
+            </connector>
+            <connector x="1626" y="593" uid="125" color="black">
+                <from>
+                    <alias uid="117" />
+                </from>
+                <to>fraction_var_cost_over_retail_price</to>
+            </connector>
+            <connector x="660" y="413" uid="51" color="black">
+                <from>defectors</from>
+                <to>PV_imitation_factor_from_density_of_PV_households</to>
+            </connector>
+            <connector x="1027" y="237" uid="130" color="black">
+                <from>wholesale_price_growth_rate_%_per_year</from>
+                <to>wholesale_price_of_elec_for_PV_customers</to>
+            </connector>
+            <connector x="1215" y="372" uid="155" color="black">
+                <from>utiltiy_incremental_fixed_cost_per_new_home_$</from>
+                <to>change_to_util_fixed_cost_from_new_homes</to>
+            </connector>
+            <connector x="519" y="250" uid="38" color="black">
+                <from>battery_innovation_rate</from>
+                <to>defection_thru_innovation</to>
+            </connector>
+            <connector x="1329" y="490" uid="168" color="black">
+                <from>
+                    <alias uid="164" />
+                </from>
+                <to>new_PV_homes</to>
+            </connector>
+            <connector x="1130" y="2268" uid="230" color="black">
+                <from>FCI_PV&amp;batt</from>
+                <to>Initial_Equity_Investment_PV&amp;Batt</to>
+            </connector>
+            <connector x="1245" y="94" uid="156" color="black">
+                <from>
+                    <alias uid="133" />
+                </from>
+                <to>total_demand</to>
+            </connector>
+            <connector x="1259" y="158" uid="157" color="black">
+                <from>annual_demand_with_PV</from>
+                <to>total_demand</to>
+            </connector>
+            <connector x="184" y="634" uid="22" color="black">
+                <from>switched_limit_on_ratio_of_PV_to_total_hhold</from>
+                <to>PV_adoption_thru_imitation</to>
+            </connector>
+            <connector x="1015" y="1360" uid="231" color="black">
+                <from>
+                    <alias uid="106" />
+                </from>
+                <to>Expected_annual_Rev_PV</to>
+            </connector>
+            <connector x="1232" y="501" uid="169" color="black">
+                <from>
+                    <alias uid="163" />
+                </from>
+                <to>new_reg_homes</to>
+            </connector>
+            <connector x="72" y="178" uid="23" color="black">
+                <from>
+                    <alias uid="2" />
+                </from>
+                <to>reg_houses_being_built</to>
+            </connector>
+            <connector x="332" y="1563" uid="89" color="black">
+                <from>relative_attractiveness</from>
+                <to>houses_being_built</to>
+            </connector>
+            <connector x="1116" y="1035" uid="232" color="black">
+                <from>FCI_PV</from>
+                <to>Loan_Principal_PV</to>
+            </connector>
+            <connector x="1072" y="2326" uid="233" color="black">
+                <from>
+                    <alias uid="109" />
+                </from>
+                <to>debt_interest_rate_as_fraction_2</to>
+            </connector>
+            <connector x="1510" y="1115" uid="234" color="black">
+                <from>Annual_Loan_Payment_PV_only</from>
+                <to>NPV_Loan_Payment_PV</to>
+            </connector>
+            <connector x="1226" y="2190" uid="235" color="black">
+                <from>Initial_Equity_Investment_PV&amp;Batt</from>
+                <to>Net_Present_Value_PV&amp;Battery</to>
+            </connector>
+            <connector x="511" y="362" uid="39" color="black">
+                <from>
+                    <alias uid="55" />
+                </from>
+                <to>battery_innovation_rate</to>
+            </connector>
+            <connector x="262" y="1687" uid="90" color="black">
+                <from>scale_factor_B_house_attractiveness</from>
+                <to>attractiveness</to>
+            </connector>
+            <connector x="1075" y="2590" uid="236" color="black">
+                <from>Expected_annual_Rev_PV&amp;Batt</from>
+                <to>Expected_Net_annual_rev_PV&amp;Batt</to>
+            </connector>
+            <connector x="1292" y="2005" uid="237" color="black">
+                <from>Expected_Net_annual_rev_add_batt</from>
+                <to>NPV_Revs_Net_of_Op_Cost_add_batt</to>
+            </connector>
+            <connector x="653" y="406" uid="52" color="black">
+                <from>defectors</from>
+                <to>limit_on_ratio_of_PV_to_total_households</to>
+            </connector>
+            <connector x="464" y="428" uid="65" color="black">
+                <from>battery_imitation_rate</from>
+                <to>defection_thru_imitation</to>
+            </connector>
+            <connector x="1144" y="1683" uid="238" color="black">
+                <from>FCI_adding_batteries</from>
+                <to>Initial_Equity_Investment_add_batt</to>
+            </connector>
+            <connector x="1081" y="2417" uid="239" color="black">
+                <from>
+                    <alias uid="108" />
+                </from>
+                <to>discount_factor_loan_2</to>
+            </connector>
+            <connector x="1302" y="2283" uid="240" color="black">
+                <from>Loan_Principal_PV&amp;batt</from>
+                <to>Annual_Loan_Payment__PV_&amp;_batt</to>
+            </connector>
+            <connector x="1626" y="1928" uid="241" color="black">
+                <from>discount_factor_1</from>
+                <to>NPV_Revs_Net_of_Op_Cost_add_batt</to>
+            </connector>
+            <connector x="1553" y="1276" uid="242" color="black">
+                <from>Req&apos;d_Rate_of_Return_PV</from>
+                <to>discount_factor</to>
+            </connector>
+            <connector x="1219" y="2196" uid="243" color="black">
+                <from>Initial_Equity_Investment_PV&amp;Batt</from>
+                <to>Loan_Principal_PV&amp;batt</to>
+            </connector>
+            <connector x="1292" y="233" uid="158" color="black">
+                <from>baseline_retail_price</from>
+                <to>baseline_util_fixed_cost</to>
+            </connector>
+            <connector x="1080" y="2064" uid="244" color="black">
+                <from>Expected_Annual_Cost_Battery</from>
+                <to>Expected_Net_annual_rev_add_batt</to>
+            </connector>
+            <connector x="401" y="338" uid="24" color="black">
+                <from>customers_with_PV</from>
+                <to>limit_on_ratio_of_PV_to_total_households</to>
+            </connector>
+            <connector x="1349" y="111" uid="159" color="black">
+                <from>ELCC_as_function_of_PV_penetration</from>
+                <to>annual_demand_with_PV</to>
+            </connector>
+            <connector x="510" y="375" uid="66" color="black">
+                <from>
+                    <alias uid="55" />
+                </from>
+                <to>battery_imitation_rate</to>
+            </connector>
+            <connector x="1329" y="1934" uid="245" color="black">
+                <from>
+                    <alias uid="102" />
+                </from>
+                <to>discount_factor_1</to>
+            </connector>
+            <connector x="1313" y="252" uid="160" color="black">
+                <from>
+                    <alias uid="132" />
+                </from>
+                <to>baseline_util_fixed_cost</to>
+            </connector>
+            <connector x="511" y="1548" uid="95" color="black">
+                <from>
+                    <alias uid="91" />
+                </from>
+                <to>price_vector</to>
+            </connector>
+            <connector x="1579" y="1115" uid="246" color="black">
+                <from>NPV_Loan_Payment_PV</from>
+                <to>Net_Present_Value_PV</to>
+            </connector>
+            <connector x="1056" y="206" uid="161" color="black">
+                <from>baseline_wholesale_elec_price</from>
+                <to>wholesale_price_of_elec</to>
+            </connector>
+            <stacked_container x="1543" y="49" height="282" width="492" uid="247">
+                <graph type="time_series" background="#FFFFC9" show_grid="true" plot_numbers="false" isee:use_five_segments="false" date_time="2016-01-04T11:46:56Z" time_precision="2" from="2015" to="2050">
+                    <title>Untitled</title>
+                    <plot index="0" pen_width="3" color="blue" precision="max" show_y_axis="true">
+                        <scale min="0" max="1" />
+                        <entity name="RETAIL_PRICE" />
+                    </plot>
+                    <plot index="1" pen_width="3" color="#008F44" precision="0.01" show_y_axis="true">
+                        <scale min="0" max="1" />
+                        <entity name="PV_&amp;_battery_LCOE" />
+                    </plot>
+                    <plot index="2" pen_width="3" color="#FF7F00" precision="0.01" show_y_axis="true">
+                        <scale min="0" max="1" />
+                        <entity name="PV_LCOE" />
+                    </plot>
+                </graph>
+            </stacked_container>
+            <pad_icon x="1540" y="189" width="26" height="22" color="#008F44" label_side="bottom" label="Graph 5" type="graph" icon_of="247" />
+            <stacked_container x="1814" y="469" height="282" width="492" uid="126">
+                <graph type="time_series" background="#FFFFC9" show_grid="true" plot_numbers="false" isee:use_five_segments="false" date_time="2016-01-04T11:46:56Z" time_precision="2" from="2015" to="2050">
+                    <title>Untitled</title>
+                    <plot index="0" pen_width="1" color="red" precision="max" show_y_axis="true">
+                        <entity name="fraction_var_cost_over_retail_price" />
+                    </plot>
+                </graph>
+            </stacked_container>
+            <pad_icon x="1849" y="478" width="26" height="22" color="#008F44" label_side="bottom" label="fractions of retail price" type="graph" icon_of="126" />
+            <stacked_container x="1944" y="1094" height="282" width="492" uid="248">
+                <graph type="time_series" background="#FFFFC9" show_grid="true" plot_numbers="false" isee:use_five_segments="false" date_time="2016-01-04T11:46:56Z" time_precision="2" from="2015" to="2050">
+                    <title>Untitled</title>
+                    <plot index="0" pen_width="1" color="blue" precision="1" show_y_axis="true">
+                        <entity name="Net_Present_Value_PV" />
+                    </plot>
+                </graph>
+            </stacked_container>
+            <pad_icon x="1958" y="1054" width="26" height="22" color="#008F44" label_side="bottom" label="Graph 2" type="graph" icon_of="248" />
+            <stacked_container x="1916" y="1708" height="282" width="492" uid="249">
+                <graph type="time_series" background="#FFFFC9" show_grid="true" plot_numbers="false" isee:use_five_segments="false" date_time="2016-01-04T11:46:56Z" time_precision="2" from="2015" to="2050">
+                    <title>Untitled</title>
+                    <plot index="0" pen_width="1" color="blue" precision="1" show_y_axis="true">
+                        <entity name="Net_Present_Value_Battery" />
+                    </plot>
+                </graph>
+            </stacked_container>
+            <pad_icon x="1935" y="1721" width="26" height="22" color="#008F44" label_side="bottom" label="Graph 3" type="graph" icon_of="249" />
+            <stacked_container x="1888" y="2308" height="282" width="492" uid="250">
+                <graph type="time_series" background="#FFFFC9" show_grid="true" plot_numbers="false" isee:use_five_segments="false" date_time="2016-01-04T11:46:56Z" time_precision="2" from="2015" to="2050">
+                    <title>Untitled</title>
+                    <plot index="0" pen_width="1" color="blue" precision="1" show_y_axis="true">
+                        <entity name="Net_Present_Value_PV&amp;Battery" />
+                    </plot>
+                </graph>
+            </stacked_container>
+            <pad_icon x="1908" y="2322" width="26" height="22" color="#008F44" label_side="bottom" label="Graph 4" type="graph" icon_of="250" />
+            <stacked_container x="64" y="818" height="423" width="734" uid="251">
+                <graph type="time_series" background="#FFFFC9" show_grid="true" plot_numbers="false" isee:use_five_segments="false" date_time="2016-01-04T11:46:56Z" time_precision="2" from="2015" to="2050">
+                    <title>Untitled</title>
+                    <plot index="0" pen_width="3" color="blue" precision="1" show_y_axis="true">
+                        <scale min="1" max="3.813e+06" />
+                        <entity name="regular_customers" />
+                    </plot>
+                    <plot index="1" pen_width="3" color="red" precision="0.1" show_y_axis="true">
+                        <scale min="1" max="3.813e+06" />
+                        <entity name="customers_with_PV" />
+                    </plot>
+                    <plot index="2" pen_width="3" color="fuchsia" precision="0.1" show_y_axis="true">
+                        <scale min="1" max="3.813e+06" />
+                        <entity name="defectors" />
+                    </plot>
+                    <plot index="3" pen_width="3" color="#008F44" precision="1" show_y_axis="true">
+                        <scale min="1" max="3.813e+06" />
+                        <entity name="total_grid_customers" />
+                    </plot>
+                </graph>
+            </stacked_container>
+            <pad_icon x="233" y="943" width="26" height="22" color="#008F44" label_side="bottom" label="Graph 6" type="graph" icon_of="251" />
+            <stacked_container height="282" width="492" uid="79">
+                <graph type="time_series" background="#FFFFC9" show_grid="true" plot_numbers="false" isee:use_five_segments="false" date_time="2016-01-04T11:46:56Z" time_precision="2" from="2015" to="2050">
+                    <title>Untitled</title>
+                    <plot index="0" pen_width="1" color="blue" precision="1" show_y_axis="true">
+                        <scale min="1014.06" max="35219.9" />
+                        <entity name="houses_being_built" index="regular" />
+                    </plot>
+                    <plot index="1" pen_width="1" color="red" precision="1" show_y_axis="true">
+                        <scale min="1014.06" max="35219.9" />
+                        <entity name="houses_being_built" index="PV_house" />
+                    </plot>
+                    <plot index="2" pen_width="1" color="fuchsia" precision="1" show_y_axis="true">
+                        <scale min="1014.06" max="35219.9" />
+                        <entity name="houses_being_built" index="PV_batt" />
+                    </plot>
+                </graph>
+            </stacked_container>
+            <pad_icon x="589" y="1357" width="26" height="22" color="#008F44" label_side="bottom" label="houses being built" type="graph" icon_of="79" />
+            <stacked_container height="282" width="492" uid="252">
+                <graph type="time_series" background="#FFFFC9" show_grid="true" plot_numbers="false" isee:use_five_segments="false" date_time="2016-01-04T11:46:56Z" time_precision="2" from="2015" to="2050">
+                    <title>Untitled</title>
+                    <plot index="0" pen_width="1" color="blue" precision="1" show_y_axis="true">
+                        <scale min="11120" max="198005" />
+                        <entity name="FCI_PV" />
+                    </plot>
+                    <plot index="1" pen_width="1" color="red" precision="1" show_y_axis="true">
+                        <scale min="11120" max="198005" />
+                        <entity name="FCI_adding_batteries" />
+                    </plot>
+                    <plot index="2" pen_width="1" color="fuchsia" precision="1" show_y_axis="true">
+                        <scale min="11120" max="198005" />
+                        <entity name="FCI_PV&amp;batt" />
+                    </plot>
+                </graph>
+            </stacked_container>
+            <pad_icon x="1971" y="895" width="26" height="22" color="#008F44" label_side="bottom" label="Graph 10" type="graph" icon_of="252" />
+            <stacked_container x="2055" y="65" height="286" width="465" uid="253">
+                <table font-size="9" background="#E0E0E0" columns_width="59" column_width="59" orientation="vertical" date_time="2016-01-04T11:29:34Z">
+                    <title>Output Table</title>
+                    <item type="time" color="black" precision="max" width="100" />
+                    <item color="black" precision="0.01" delimit_000s="true" index="0">
+                        <entity name="RETAIL_PRICE" />
+                    </item>
+                    <item color="black" precision="0.01" delimit_000s="true" index="1">
+                        <entity name="customers_with_PV" />
+                    </item>
+                    <item color="black" precision="0.01" delimit_000s="true" index="2">
+                        <entity name="defectors" />
+                    </item>
+                    <item color="black" precision="0.01" delimit_000s="true" index="3">
+                        <entity name="regular_customers" />
+                    </item>
+                </table>
+            </stacked_container>
+            <pad_icon x="2395" y="91" width="26" height="22" color="#008F44" label_side="bottom" label="Table 1" type="table" icon_of="253" />
+            <stacked_container x="953" y="5" height="270" width="475" visible_index="3" uid="40">
+                <table font-size="9" background="#E0E0E0" comparative="true" columns_width="59" column_width="59" orientation="horizontal" date_time="2016-01-04T11:29:34Z">
+                    <title>Untitled Table</title>
+                    <item type="time" color="black" precision="max" width="100" />
+                    <item color="black" precision="0.01" delimit_000s="true" index="0">
+                        <entity name="RETAIL_PRICE" />
+                    </item>
+                    <item color="black" precision="0.01" delimit_000s="true" index="1">
+                        <entity name="RETAIL_PRICE" />
+                    </item>
+                </table>
+                <table font-size="9" background="#E0E0E0" comparative="true" columns_width="59" column_width="59" orientation="horizontal" date_time="2016-01-04T11:29:34Z">
+                    <title>Untitled Table</title>
+                    <item type="time" color="black" precision="max" width="100" />
+                    <item color="black" precision="0.01" delimit_000s="true" index="0">
+                        <entity name="regular_customers" />
+                    </item>
+                    <item color="black" precision="0.01" delimit_000s="true" index="1">
+                        <entity name="regular_customers" />
+                    </item>
+                </table>
+                <table font-size="9" background="#E0E0E0" comparative="true" columns_width="59" column_width="59" orientation="horizontal" date_time="2016-01-04T11:29:34Z">
+                    <title>Untitled Table</title>
+                    <item type="time" color="black" precision="max" width="100" />
+                    <item color="black" precision="0.01" delimit_000s="true" index="0">
+                        <entity name="customers_with_PV" />
+                    </item>
+                    <item color="black" precision="0.01" delimit_000s="true" index="1">
+                        <entity name="customers_with_PV" />
+                    </item>
+                </table>
+                <table font-size="9" background="#E0E0E0" comparative="true" columns_width="59" column_width="59" orientation="horizontal" date_time="2016-01-04T11:29:34Z">
+                    <title>Untitled Table</title>
+                    <item type="time" color="black" precision="max" width="100" />
+                    <item color="black" precision="0.01" delimit_000s="true" index="0">
+                        <entity name="defectors" />
+                    </item>
+                    <item color="black" precision="0.01" delimit_000s="true" index="1">
+                        <entity name="defectors" />
+                    </item>
+                </table>
+            </stacked_container>
+            <pad_icon x="800" y="91" width="26" height="22" color="#008F44" label_side="bottom" label="Comparative" type="table" icon_of="40" />
+            <text_box x="1510" y="637" uid="115" color="black" font-family="Arial" font-size="12" padding="5" border-style="solid" border-width="thin" width="256" height="114">These fractions are calculated and plotted to calibrate the wholesale elec prices such that the utility&apos;s fraction of variable cost in 2015 is 56% (see reference in &quot;links&quot; document on project Drive).</text_box>
+            <text_box x="996" y="563" uid="254" color="black" font-family="Arial" font-size="12" padding="5" border-style="solid" border-width="thin" width="453" height="73">If baseline retail price is changed then the wholesale price of electricity must be adjusted to acheive correct &quot;fraction var cost over retail price&quot;</text_box>
+        </display>
+        <interface page_cols="4" page_rows="5" page_width="788" page_height="528">
+            <simulation_delay>0</simulation_delay>
+        </interface>
+        <popup x="40" y="113" content="79" />
+        <popup x="40" y="113" content="252" />
+    </model>
+</xmile>
