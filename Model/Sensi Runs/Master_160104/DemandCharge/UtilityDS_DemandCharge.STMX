@@ -7,13 +7,13 @@
         <name>UtilityDS_DemandCharge</name>
         <uuid>18a46129-355a-4513-988a-9d57cd10046c</uuid>
         <vendor>isee systems, inc.</vendor>
-        <product version="10.0.6" lang="en">STELLA</product>
+        <product version="10.1.2" isee:saved_by_v1="false" lang="en">STELLA</product>
     </header>
     <style>
         <model font-family="Arial" font-size="9" />
         <interface font-family="Arial" font-size="9" />
     </style>
-    <sim_specs method="Euler" time_units="Years">
+    <sim_specs method="Euler" time_units="Years" isee:pause_after_rates="false" isee:instantaneous_flows="false">
         <start>2015</start>
         <stop>2050</stop>
         <dt>0.25</dt>
@@ -26,30 +26,54 @@
         </dim>
     </dimensions>
     <model_units>
-        <units>
-            <eqn>$</eqn>
+        <units name="Dimensionless">
+            <eqn>1</eqn>
+            <alias>dmnl</alias>
+            <alias>unitless</alias>
+        </units>
+        <units name="US Dollars">
+            <eqn>USD</eqn>
             <alias>$</alias>
+        </units>
+        <units name="Years">
+            <eqn />
+            <alias>yr</alias>
+            <alias>year</alias>
         </units>
         <units name="Per Year">
             <eqn>1/Years</eqn>
         </units>
     </model_units>
     <data>
-        <export frequency="on_demand" interval="1" orientation="horizontal" url="C:\Users\Steve Peterson\GitHub\Utility-D-S\Model\Sensi Runs\Master\DemandCharge\1_RetailPrice.csv">
+        <export frequency="on_demand" interval="1" orientation="horizontal" url="C:\Users\Steve Peterson\GitHub\Utility-D-S\Model\Sensi Runs\Master_160104\DemandCharge\1_RetailPrice.csv">
             <table name="Comparative: p1" use_settings="true" />
         </export>
-        <export frequency="on_demand" interval="1" orientation="horizontal" url="C:\Users\Steve Peterson\GitHub\Utility-D-S\Model\Sensi Runs\Master\DemandCharge\2_RegularCust.csv">
+        <export frequency="on_demand" interval="1" orientation="horizontal" url="C:\Users\Steve Peterson\GitHub\Utility-D-S\Model\Sensi Runs\Master_160104\DemandCharge\2_RegularCust.csv">
             <table name="Comparative: p2" use_settings="true" />
         </export>
-        <export frequency="on_demand" interval="1" orientation="horizontal" url="C:\Users\Steve Peterson\GitHub\Utility-D-S\Model\Sensi Runs\Master\DemandCharge\3_Cust_With_PV.csv">
+        <export frequency="on_demand" interval="1" orientation="horizontal" url="C:\Users\Steve Peterson\GitHub\Utility-D-S\Model\Sensi Runs\Master_160104\DemandCharge\3_Cust_With_PV.csv">
             <table name="Comparative: p3" use_settings="true" />
         </export>
-        <export frequency="on_demand" interval="1" orientation="horizontal" url="C:\Users\Steve Peterson\GitHub\Utility-D-S\Model\Sensi Runs\Master\DemandCharge\4_Defector.csv">
+        <export frequency="on_demand" interval="1" orientation="horizontal" url="C:\Users\Steve Peterson\GitHub\Utility-D-S\Model\Sensi Runs\Master_160104\DemandCharge\4_Defector.csv">
             <table name="Comparative: p4" use_settings="true" />
         </export>
     </data>
-    <isee:prefs layer="model" grid_width="20" grid_height="50" divide_by_zero_alert="true" hide_taskbar="true" show_module_prefix="true">
-        <isee:window width="1436" height="855" />
+    <isee:sensi_specs run="true">
+        <method>grid</method>
+        <isee:variable type="adhoc" name="PV_incentive">0, 5000</isee:variable>
+        <isee:variable type="adhoc" name="Battery_incentive">0,5000</isee:variable>
+        <isee:variable type="adhoc" name="InnovationScaleFactor">1,5</isee:variable>
+        <isee:variable type="adhoc" name="ImitationScaleFactor">1,5</isee:variable>
+        <isee:variable type="adhoc" name="efficiency_improvement_of_reg_customers_as_%_per_year">0.5, 2</isee:variable>
+        <isee:variable type="adhoc" name="util_fixed_cost_growth_rate_%_per_year">0.01, 0.05</isee:variable>
+        <isee:variable type="adhoc" name="wholesale_price_growth_rate_%_per_year">0.01, 0.05</isee:variable>
+        <isee:variable type="adhoc" name="debt_interest_rate_as_%">1, 10</isee:variable>
+        <isee:variable type="adhoc" name="Equity_Fraction">0.1, 0.8</isee:variable>
+        <isee:variable type="adhoc" name="Req&apos;d_Rate_of_Return_as_%">1, 10</isee:variable>
+        <isee:variable type="adhoc" name="use_limit_on_ratio_of_PV_to_total_hhold">1,0</isee:variable>
+    </isee:sensi_specs>
+    <isee:prefs last_model="true" layer="model" grid_width="20" grid_height="50" divide_by_zero_alert="true" hide_taskbar="true" show_module_prefix="true">
+        <isee:window width="578" height="501" />
         <isee:security />
         <isee:print_setup width="588" height="768" />
     </isee:prefs>
@@ -68,7 +92,7 @@
         <aux name="utility_fixed_cost">
             <eqn>baseline_util_fixed_cost&#x0A;*&#x0A;(1 + util_fixed_cost_growth_rate_%_per_year*(time-2015))&#x0A;+&#x0A;change_to_util_fixed_cost_from_new_homes&#x0A;</eqn>
             <units>$</units>
-            <display x="1221" y="313" color="blue" label_side="left" label_angle="118" />
+            <display x="1221" y="313" color="blue" label_side="left" label_angle="117" />
         </aux>
         <aux name="utiliity_variable_cost">
             <eqn>regular_customers * annual_base_demand * wholesale_price_of_elec&#x0A;+&#x0A;customers_with_PV * annual_demand_with_PV * wholesale_price_of_elec_for_PV_customers</eqn>
@@ -310,7 +334,7 @@
             <doc>DEFINITION: Amount of total project Fixed Capital Investment for &quot;next&quot; pioneer project to be financed through loan financing &#x0A;&#x0A;UNITS:  US Dollars&#x0A;&#x0A;TYPE: Internal calculation&#x0A;&#x0A;SOURCE:&#x0A;&#x0A;COMMENT: &#x0A;</doc>
             <eqn>FCI_adding_batteries-Initial_Equity_Investment_add_batt</eqn>
             <units>$</units>
-            <display x="1309" y="1693" color="black" label_side="right" label_angle="73" />
+            <display x="1309" y="1693" color="black" label_side="right" label_angle="74" />
         </aux>
         <aux name="Annual_Loan_Payment_add_batt">
             <doc>DEFINITION: Annual payment associated with repayment of loan &#x0A;&#x0A;UNITS:  USD per year&#x0A;&#x0A;TYPE: Internal Calculation&#x0A;&#x0A;SOURCE: &#x0A;&#x0A;COMMENT: &#x0A;</doc>
@@ -332,7 +356,7 @@
             <doc>DEFINITION: Calculates NPV of loan payments over length of loan &#x0A;&#x0A;UNITS:  US Dollars&#x0A;&#x0A;TYPE: Internal Calculation for this sector&#x0A;&#x0A;SOURCE: N/A&#x0A;&#x0A;COMMENT: Using annual loan payment, this eq&apos;n does a PV calculation for the Design/Construction/Startup phase + Loan term, and then subtracts the PV associated with design, construction, startup, leaving the NPV of loan payments over period loan is repaid.  Note that this assumes no loan payment until plant is fully operational.</doc>
             <eqn>Annual_Loan_Payment_add_batt*(discount_factor_loan_1)</eqn>
             <units>$</units>
-            <display x="1455" y="1753" color="black" label_side="right" label_angle="62" />
+            <display x="1455" y="1753" color="black" label_side="right" label_angle="63" />
         </aux>
         <aux name="discount_factor_1">
             <doc>DEFINITION:  Calculates discount factor for doing NPV calculation for total commercial project length, incl. design, construction, startup, project lifetime. &#x0A;&#x0A;UNITS:  years&#x0A;&#x0A;TYPE:  Internal Calculation for this sector&#x0A;&#x0A;SOURCE:  Standard financial calculation for annuity.  See, for example, Present Value entry in wikipedia&#x0A;&#x0A;COMMENT:  Req&apos;d Rate of Return &gt;0 or eq&apos;n will generate division by 0.&#x0A;&#x0A;Units check fails because of exponentiation operation&#x0A;</doc>
@@ -593,7 +617,7 @@
             <gf type="extrapolate">
                 <xscale min="0" max="10000" />
                 <yscale min="0" max="0.01" />
-                <ypts>6.6889632107023397e-05,0.00026755852842809402,0.00056856187290969904,0.00093645484949832799,0.0013712374580000001,0.0017725752510000001,0.002240802676,0.0027090300999999999,0.0031772575249999998,0.0036454849500000006,0.0040802675590000002</ypts>
+                <ypts>6.6889632107023397e-005,0.00026755852842809402,0.00056856187290969904,0.00093645484949832799,0.0013712374580000001,0.0017725752510000001,0.002240802676,0.0027090300999999999,0.0031772575249999998,0.0036454849500000006,0.0040802675590000002</ypts>
             </gf>
             <display x="411" y="668" color="blue" label_side="left" label_angle="200" />
         </aux>
@@ -651,7 +675,7 @@
             <gf type="extrapolate">
                 <xscale min="0" max="10000" />
                 <yscale min="0" max="0.01" />
-                <ypts>3.3444816053511699e-05,0.00033444816053511699,0.00076923076923076901,0.0011036789300000001,0.0016053511710000003,0.002006688963,0.0025083612039999998,0.0029765886290000002,0.0033779264209999999,0.0037792642140000001,0.0042809364550000003</ypts>
+                <ypts>3.3444816053511699e-005,0.00033444816053511699,0.00076923076923076901,0.0011036789300000001,0.0016053511710000003,0.002006688963,0.0025083612039999998,0.0029765886290000002,0.0033779264209999999,0.0037792642140000001,0.0042809364550000003</ypts>
             </gf>
             <display x="456" y="432" color="blue" label_angle="291" />
         </aux>
@@ -713,7 +737,7 @@
             </dimensions>
             <eqn>EXP(unexplained_utility_k[house_type] - scale_factor_B_house_attractiveness*price_vector[house_type])</eqn>
             <units>Unitless</units>
-            <display x="338" y="1678" color="black" label_side="right" label_angle="62" />
+            <display x="338" y="1678" color="black" label_side="right" label_angle="63" />
         </aux>
         <aux name="total_attractiveness">
             <doc>DEFINITION: rollup of attractiveness across all uses of plant construction capacity&#x0A;&#x0A;UNITS: attractiveness units&#x0A; &#x0A;TYPE: Internal Calculation&#x0A; &#x0A;SOURCE: &#x0A; &#x0A;COMMENTS: </doc>
@@ -900,31 +924,31 @@
             <display x="191" y="666" color="red" />
         </aux>
         <group name="Bass_diffusion_of_households">
+            <entity name="PV_houses_being_built" />
             <entity name="regular_customers" />
-            <entity name="direct_defection_via_imitation" />
-            <entity name="direct_defection_via_innovation" />
             <entity name="PV_adoption_thru_imitation" />
             <entity name="PV_adoption_thru_innovation" />
-            <entity name="PV_houses_being_built" />
-            <entity name="reg_houses_being_built" />
-            <entity name="PV_imitation_rate" />
-            <entity name="PV_incentive" />
             <entity name="PV_innovation_rate" />
+            <entity name="PV_imitation_rate" />
+            <entity name="direct_defection_via_innovation" />
+            <entity name="direct_defection_via_imitation" />
+            <entity name="reg_houses_being_built" />
+            <entity name="PV_incentive" />
             <entity name="customers_with_PV" />
-            <entity name="defection_thru_imitation" />
             <entity name="defection_thru_innovation" />
-            <entity name="Battery_incentive" />
-            <entity name="battery_innovation_rate" />
-            <entity name="InnovationScaleFactor" />
             <entity name="PV&amp;batt_innovation_rate" />
-            <entity name="ImitationScaleFactor" />
+            <entity name="battery_innovation_rate" />
+            <entity name="defection_thru_imitation" />
+            <entity name="Battery_incentive" />
+            <entity name="InnovationScaleFactor" />
             <entity name="limit_on_ratio_of_PV_to_total_households" />
             <entity name="PV&amp;batt_imitation_rate" />
             <entity name="PV_imitation_factor_from_density_of_PV_households" />
-            <entity name="switched_limit_on_ratio_of_PV_to_total_hhold" />
+            <entity name="ImitationScaleFactor" />
             <entity name="use_limit_on_ratio_of_PV_to_total_hhold" />
-            <entity name="defectors" />
+            <entity name="switched_limit_on_ratio_of_PV_to_total_hhold" />
             <entity name="PV_batt_houes_being_built" />
+            <entity name="defectors" />
             <entity name="battery_imitation_rate" />
             <entity name="historical_data" />
             <entity name="total_grid_customers" />
@@ -1006,17 +1030,17 @@
             </display>
         </group>
         <group name="new_homes">
-            <entity name="attractiveness" />
-            <entity name="houses_being_built" />
-            <entity name="relative_attractiveness" />
-            <entity name="scale_factor_B_house_attractiveness" />
-            <entity name="total_attractiveness" />
-            <entity name="total_growth_in_households" />
             <entity name="total_households" />
+            <entity name="total_growth_in_households" />
+            <entity name="scale_factor_B_house_attractiveness" />
+            <entity name="attractiveness" />
+            <entity name="total_attractiveness" />
             <entity name="unexplained_utility_k" />
-            <entity name="Net_Present_Value_of_BAU" />
+            <entity name="relative_attractiveness" />
+            <entity name="houses_being_built" />
             <entity name="population_growth_rate" />
             <entity name="price_vector" />
+            <entity name="Net_Present_Value_of_BAU" />
             <display x="66" y="1307" width="573" height="471" color="red">
                 <item uid="74" />
                 <item uid="75" />
@@ -1044,20 +1068,20 @@
         </group>
         <group name="NPV_Battery_system_added_to_existing_PV_system">
             <entity name="FCI_adding_batteries" />
-            <entity name="Annual_Loan_Payment_add_batt" />
-            <entity name="debt_interest_rate_as_fraction_1" />
-            <entity name="discount_factor_loan_payment_1" />
             <entity name="Initial_Equity_Investment_add_batt" />
             <entity name="Loan_Principal_add_batt" />
+            <entity name="Annual_Loan_Payment_add_batt" />
+            <entity name="discount_factor_loan_payment_1" />
+            <entity name="debt_interest_rate_as_fraction_1" />
             <entity name="Net_Present_Value_Battery" />
             <entity name="NPV_Loan_Payment_add_batt" />
             <entity name="Expected_Annual_Cost_Battery" />
             <entity name="Expected_annual_Rev_add_batt" />
             <entity name="Expected_Net_annual_rev_add_batt" />
             <entity name="Req&apos;d_Rate_of_Return_add_batt" />
+            <entity name="NPV_Revs_Net_of_Op_Cost_add_batt" />
             <entity name="discount_factor_1" />
             <entity name="discount_factor_loan_1" />
-            <entity name="NPV_Revs_Net_of_Op_Cost_add_batt" />
             <display locked="true" x="890" y="1538" width="984" height="575" color="red">
                 <item uid="96" />
                 <item uid="97" />
@@ -1073,24 +1097,24 @@
         </group>
         <group name="NPV_PV">
             <entity name="Equity_Fraction" />
-            <entity name="FCI_PV" />
             <entity name="Initial_Equity_Investment_PV" />
+            <entity name="FCI_PV" />
             <entity name="Loan_Principal_PV" />
+            <entity name="Req&apos;d_Rate_of_Return_as_%" />
             <entity name="debt_interest_rate_as_%" />
             <entity name="direct_PV_use" />
-            <entity name="Req&apos;d_Rate_of_Return_as_%" />
-            <entity name="debt_interest_rate_as_fraction" />
-            <entity name="discount_factor_loan_payment" />
             <entity name="Expected_annual_Rev_PV" />
             <entity name="Expected_Net_annual_rev_PV" />
             <entity name="project_lifetime_NPV" />
+            <entity name="discount_factor_loan_payment" />
             <entity name="term_of_loan" />
-            <entity name="Annual_Loan_Payment_PV_only" />
-            <entity name="discount_factor" />
-            <entity name="discount_factor_loan" />
+            <entity name="debt_interest_rate_as_fraction" />
             <entity name="Net_Present_Value_PV" />
+            <entity name="Annual_Loan_Payment_PV_only" />
             <entity name="NPV_Loan_Payment_PV" />
+            <entity name="discount_factor" />
             <entity name="Req&apos;d_Rate_of_Return_PV" />
+            <entity name="discount_factor_loan" />
             <entity name="Expected_Annual_Cost_PV" />
             <entity name="NPV_Revs_Net_of_Op_CostPV" />
             <display locked="true" x="882" y="907" width="1040" height="589" color="red">
@@ -1099,21 +1123,21 @@
             </display>
         </group>
         <group name="NPV_PV_&amp;_Battery">
-            <entity name="Annual_Loan_Payment__PV_&amp;_batt" />
-            <entity name="debt_interest_rate_as_fraction_2" />
-            <entity name="discount_factor_loan_payment_2" />
-            <entity name="FCI_PV&amp;batt" />
             <entity name="Initial_Equity_Investment_PV&amp;Batt" />
+            <entity name="FCI_PV&amp;batt" />
             <entity name="Loan_Principal_PV&amp;batt" />
+            <entity name="Annual_Loan_Payment__PV_&amp;_batt" />
+            <entity name="discount_factor_loan_payment_2" />
             <entity name="Req&apos;d_Rate_of_Return_PV&amp;batt" />
-            <entity name="discount_factor_loan_2" />
+            <entity name="debt_interest_rate_as_fraction_2" />
             <entity name="Net_Present_Value_PV&amp;Battery" />
             <entity name="NPV_Loan_Payment_PV&amp;batt" />
+            <entity name="discount_factor_loan_2" />
             <entity name="Expected_Annual_Cost_PV_&amp;_Battery" />
             <entity name="Expected_annual_Rev_PV&amp;Batt" />
             <entity name="Expected_Net_annual_rev_PV&amp;Batt" />
-            <entity name="discount_factor_2" />
             <entity name="NPV_Revs_Net_of_Op_Cost_PV&amp;batt" />
+            <entity name="discount_factor_2" />
             <display locked="true" x="885" y="2153" width="985" height="527" color="red">
                 <item uid="108" />
                 <item uid="109" />
@@ -1125,8 +1149,8 @@
             </display>
         </group>
         <group name="calibration_of_utility_var_cost_to_56%_of_retail_price">
-            <entity name="fraction_fixed_cost_over_retail_price" />
             <entity name="fraction_var_cost_over_retail_price" />
+            <entity name="fraction_fixed_cost_over_retail_price" />
             <display x="1472" y="432" width="875" height="358" color="red">
                 <item uid="115" />
                 <item uid="116" />
@@ -1143,28 +1167,28 @@
             </display>
         </group>
         <group name="retail_price_formulation">
+            <entity name="added_utility_cost_of_PV_customer_$kWh" />
+            <entity name="wholesale_price_of_elec_for_PV_customers" />
+            <entity name="wholesale_price_growth_rate_%_per_year" />
             <entity name="annual_base_demand" />
             <entity name="reduction_in_annual_base_demand" />
-            <entity name="added_utility_cost_of_PV_customer_$kWh" />
-            <entity name="baseline_wholesale_elec_price" />
             <entity name="efficiency_improvement_of_reg_customers_as_%_per_year" />
-            <entity name="wholesale_price_growth_rate_%_per_year" />
-            <entity name="wholesale_price_of_elec_for_PV_customers" />
-            <entity name="annual_demand_with_PV" />
-            <entity name="annual_PV_production_kWh" />
-            <entity name="baseline_retail_price" />
-            <entity name="baseline_util_fixed_cost" />
-            <entity name="ELCC_as_function_of_PV_penetration" />
-            <entity name="fraction_of_PV_to_regular_customers" />
-            <entity name="total_demand" />
-            <entity name="utiliity_variable_cost" />
+            <entity name="baseline_wholesale_elec_price" />
             <entity name="utility_fixed_cost" />
+            <entity name="utiliity_variable_cost" />
             <entity name="util_fixed_cost_growth_rate_%_per_year" />
+            <entity name="baseline_retail_price" />
             <entity name="wholesale_price_of_elec" />
+            <entity name="total_demand" />
+            <entity name="baseline_util_fixed_cost" />
+            <entity name="annual_demand_with_PV" />
+            <entity name="fraction_of_PV_to_regular_customers" />
+            <entity name="ELCC_as_function_of_PV_penetration" />
+            <entity name="annual_PV_production_kWh" />
             <entity name="RETAIL_PRICE" />
-            <entity name="change_to_util_fixed_cost_from_new_homes" />
-            <entity name="new_PV_homes" />
             <entity name="new_reg_homes" />
+            <entity name="new_PV_homes" />
+            <entity name="change_to_util_fixed_cost_from_new_homes" />
             <entity name="utiltiy_incremental_fixed_cost_per_new_home_$" />
             <display x="900" y="23" width="564" height="529" color="red">
                 <item uid="127" />
@@ -1212,7 +1236,7 @@
                 <item uid="169" />
             </display>
         </group>
-        <display page_width="588" page_height="768" page_cols="5" page_rows="5" isee:converter_size="medium" scroll_x="472" scroll_y="2208">
+        <display page_width="588" page_height="768" page_cols="5" page_rows="5" isee:converter_size="medium">
             <alias x="519" y="1552" uid="91">
                 <of>Net_Present_Value_PV&amp;Battery</of>
                 <label_side>right</label_side>
@@ -1416,7 +1440,7 @@
                 <from>FCI_adding_batteries</from>
                 <to>Loan_Principal_add_batt</to>
             </connector>
-            <connector x="1220" y="2195" uid="174" color="black">
+            <connector x="1219" y="2196" uid="174" color="black">
                 <from>Initial_Equity_Investment_PV&amp;Batt</from>
                 <to>Loan_Principal_PV&amp;batt</to>
             </connector>
@@ -1536,7 +1560,7 @@
                 <from>ELCC_as_function_of_PV_penetration</from>
                 <to>annual_demand_with_PV</to>
             </connector>
-            <connector x="1234" y="1611" uid="183" color="black">
+            <connector x="1234" y="1610" uid="183" color="black">
                 <from>Initial_Equity_Investment_add_batt</from>
                 <to>Loan_Principal_add_batt</to>
             </connector>
@@ -1566,7 +1590,7 @@
                 <from>Equity_Fraction</from>
                 <to>Initial_Equity_Investment_PV</to>
             </connector>
-            <connector x="440" y="1526" uid="85" color="black">
+            <connector x="440" y="1527" uid="85" color="black">
                 <from>price_vector</from>
                 <to>attractiveness</to>
             </connector>
@@ -1686,7 +1710,7 @@
                 </from>
                 <to>discount_factor_loan_1</to>
             </connector>
-            <connector x="1114" y="1033" uid="196" color="black">
+            <connector x="1116" y="1035" uid="196" color="black">
                 <from>FCI_PV</from>
                 <to>Loan_Principal_PV</to>
             </connector>
@@ -2096,7 +2120,7 @@
                 </from>
                 <to>direct_defection_via_imitation</to>
             </connector>
-            <connector x="1130" y="2269" uid="235" color="black">
+            <connector x="1130" y="2268" uid="235" color="black">
                 <from>FCI_PV&amp;batt</from>
                 <to>Initial_Equity_Investment_PV&amp;Batt</to>
             </connector>
@@ -2128,7 +2152,7 @@
                 <from>InnovationScaleFactor</from>
                 <to>PV_adoption_thru_innovation</to>
             </connector>
-            <connector x="530" y="171" uid="38" color="black">
+            <connector x="531" y="171" uid="38" color="black">
                 <from>InnovationScaleFactor</from>
                 <to>direct_defection_via_innovation</to>
             </connector>
@@ -2140,7 +2164,7 @@
                 <from>ImitationScaleFactor</from>
                 <to>PV_adoption_thru_imitation</to>
             </connector>
-            <connector x="199" y="662" uid="52" color="black">
+            <connector x="195" y="664" uid="52" color="black">
                 <from>switched_limit_on_ratio_of_PV_to_total_hhold</from>
                 <to>direct_defection_via_imitation</to>
             </connector>
@@ -2164,7 +2188,7 @@
                 </from>
                 <to>defection_thru_innovation</to>
             </connector>
-            <connector x="1329" y="1934" uid="238" color="black">
+            <connector x="1334" y="1936" uid="238" color="black">
                 <from>
                     <alias uid="104" />
                 </from>
@@ -2262,7 +2286,7 @@
                 <from>PV_incentive</from>
                 <to>PV_imitation_rate</to>
             </connector>
-            <connector x="696" y="412" uid="65" color="black">
+            <connector x="697" y="412" uid="65" color="black">
                 <from>defectors</from>
                 <to>direct_defection_via_imitation</to>
             </connector>
@@ -2279,8 +2303,7 @@
                 <to>utility_fixed_cost</to>
             </connector>
             <stacked_container x="1543" y="49" height="282" width="492" uid="245">
-                <graph type="time_series" background="#FFFFC9" show_grid="true" plot_numbers="false" isee:use_five_segments="false" date_time="2015-11-29T16:55:16Z" time_precision="2" from="2015" to="2050">
-                    <title>Untitled</title>
+                <graph type="time_series" title="Untitled" background="#FFFFC9" show_grid="true" plot_numbers="false" isee:use_five_segments="false" date_time="2016-01-08T12:31:00Z" cleared="true" time_precision="2" from="2015" to="2050">
                     <plot index="0" pen_width="3" color="blue" precision="max" show_y_axis="true">
                         <scale min="0" max="1" />
                         <entity name="RETAIL_PRICE" />
@@ -2297,8 +2320,7 @@
             </stacked_container>
             <pad_icon x="1540" y="189" width="26" height="22" color="#008F44" label_side="bottom" label="Graph 5" type="graph" icon_of="245" />
             <stacked_container x="1814" y="469" height="282" width="492" uid="126">
-                <graph type="time_series" background="#FFFFC9" show_grid="true" plot_numbers="false" isee:use_five_segments="false" date_time="2015-11-29T16:55:16Z" time_precision="2" from="2015" to="2050">
-                    <title>Untitled</title>
+                <graph type="time_series" title="Untitled" background="#FFFFC9" show_grid="true" plot_numbers="false" isee:use_five_segments="false" date_time="2016-01-08T12:31:00Z" cleared="true" time_precision="2" from="2015" to="2050">
                     <plot index="0" pen_width="1" color="red" precision="max" show_y_axis="true">
                         <entity name="fraction_var_cost_over_retail_price" />
                     </plot>
@@ -2306,8 +2328,7 @@
             </stacked_container>
             <pad_icon x="1849" y="478" width="26" height="22" color="#008F44" label_side="bottom" label="fractions of retail price" type="graph" icon_of="126" />
             <stacked_container x="1944" y="1094" height="282" width="492" uid="246">
-                <graph type="time_series" background="#FFFFC9" show_grid="true" plot_numbers="false" isee:use_five_segments="false" date_time="2015-11-29T16:55:16Z" time_precision="2" from="2015" to="2050">
-                    <title>Untitled</title>
+                <graph type="time_series" title="Untitled" background="#FFFFC9" show_grid="true" plot_numbers="false" isee:use_five_segments="false" date_time="2016-01-08T12:31:00Z" cleared="true" time_precision="2" from="2015" to="2050">
                     <plot index="0" pen_width="1" color="blue" precision="1" show_y_axis="true">
                         <entity name="Net_Present_Value_PV" />
                     </plot>
@@ -2315,8 +2336,7 @@
             </stacked_container>
             <pad_icon x="1958" y="1054" width="26" height="22" color="#008F44" label_side="bottom" label="Graph 2" type="graph" icon_of="246" />
             <stacked_container x="1916" y="1708" height="282" width="492" uid="247">
-                <graph type="time_series" background="#FFFFC9" show_grid="true" plot_numbers="false" isee:use_five_segments="false" date_time="2015-11-29T16:55:16Z" time_precision="2" from="2015" to="2050">
-                    <title>Untitled</title>
+                <graph type="time_series" title="Untitled" background="#FFFFC9" show_grid="true" plot_numbers="false" isee:use_five_segments="false" date_time="2016-01-08T12:31:00Z" cleared="true" time_precision="2" from="2015" to="2050">
                     <plot index="0" pen_width="1" color="blue" precision="1" show_y_axis="true">
                         <entity name="Net_Present_Value_Battery" />
                     </plot>
@@ -2324,8 +2344,7 @@
             </stacked_container>
             <pad_icon x="1935" y="1721" width="26" height="22" color="#008F44" label_side="bottom" label="Graph 3" type="graph" icon_of="247" />
             <stacked_container x="1888" y="2308" height="282" width="492" uid="248">
-                <graph type="time_series" background="#FFFFC9" show_grid="true" plot_numbers="false" isee:use_five_segments="false" date_time="2015-11-29T16:55:16Z" time_precision="2" from="2015" to="2050">
-                    <title>Untitled</title>
+                <graph type="time_series" title="Untitled" background="#FFFFC9" show_grid="true" plot_numbers="false" isee:use_five_segments="false" date_time="2016-01-08T12:31:00Z" cleared="true" time_precision="2" from="2015" to="2050">
                     <plot index="0" pen_width="1" color="blue" precision="1" show_y_axis="true">
                         <entity name="Net_Present_Value_PV&amp;Battery" />
                     </plot>
@@ -2333,30 +2352,28 @@
             </stacked_container>
             <pad_icon x="1908" y="2322" width="26" height="22" color="#008F44" label_side="bottom" label="Graph 4" type="graph" icon_of="248" />
             <stacked_container x="64" y="818" height="423" width="734" uid="249">
-                <graph type="time_series" background="#FFFFC9" show_grid="true" plot_numbers="false" isee:use_five_segments="false" date_time="2015-11-29T16:55:16Z" time_precision="2" from="2015" to="2050">
-                    <title>Untitled</title>
+                <graph type="time_series" title="Untitled" background="#FFFFC9" show_grid="true" plot_numbers="false" isee:use_five_segments="false" date_time="2016-01-08T12:31:00Z" cleared="true" time_precision="2" from="2015" to="2050">
                     <plot index="0" pen_width="3" color="blue" precision="1" show_y_axis="true">
-                        <scale min="1" max="3.805e+06" />
+                        <scale min="1" max="3.805e+006" />
                         <entity name="regular_customers" />
                     </plot>
                     <plot index="1" pen_width="3" color="red" precision="0.1" show_y_axis="true">
-                        <scale min="1" max="3.805e+06" />
+                        <scale min="1" max="3.805e+006" />
                         <entity name="customers_with_PV" />
                     </plot>
                     <plot index="2" pen_width="3" color="fuchsia" precision="0.1" show_y_axis="true">
-                        <scale min="1" max="3.805e+06" />
+                        <scale min="1" max="3.805e+006" />
                         <entity name="defectors" />
                     </plot>
                     <plot index="3" pen_width="3" color="#008F44" precision="1" show_y_axis="true">
-                        <scale min="1" max="3.805e+06" />
+                        <scale min="1" max="3.805e+006" />
                         <entity name="total_grid_customers" />
                     </plot>
                 </graph>
             </stacked_container>
             <pad_icon x="233" y="943" width="26" height="22" color="#008F44" label_side="bottom" label="Graph 6" type="graph" icon_of="249" />
             <stacked_container height="282" width="492" uid="79">
-                <graph type="time_series" background="#FFFFC9" show_grid="true" plot_numbers="false" isee:use_five_segments="false" date_time="2015-11-29T16:55:16Z" time_precision="2" from="2015" to="2050">
-                    <title>Untitled</title>
+                <graph type="time_series" title="Untitled" background="#FFFFC9" show_grid="true" plot_numbers="false" isee:use_five_segments="false" date_time="2016-01-08T12:31:00Z" cleared="true" time_precision="2" from="2015" to="2050">
                     <plot index="0" pen_width="1" color="blue" precision="1" show_y_axis="true">
                         <scale min="1014.06" max="35219.9" />
                         <entity name="houses_being_built" index="regular" />
@@ -2373,8 +2390,7 @@
             </stacked_container>
             <pad_icon x="589" y="1357" width="26" height="22" color="#008F44" label_side="bottom" label="houses being built" type="graph" icon_of="79" />
             <stacked_container height="282" width="492" uid="250">
-                <graph type="time_series" background="#FFFFC9" show_grid="true" plot_numbers="false" isee:use_five_segments="false" date_time="2015-11-29T16:55:16Z" time_precision="2" from="2015" to="2050">
-                    <title>Untitled</title>
+                <graph type="time_series" title="Untitled" background="#FFFFC9" show_grid="true" plot_numbers="false" isee:use_five_segments="false" date_time="2016-01-08T12:31:00Z" cleared="true" time_precision="2" from="2015" to="2050">
                     <plot index="0" pen_width="1" color="blue" precision="1" show_y_axis="true">
                         <scale min="11120" max="198005" />
                         <entity name="FCI_PV" />
@@ -2391,7 +2407,7 @@
             </stacked_container>
             <pad_icon x="1971" y="895" width="26" height="22" color="#008F44" label_side="bottom" label="Graph 10" type="graph" icon_of="250" />
             <stacked_container x="2055" y="65" height="286" width="465" uid="251">
-                <table font-size="9" background="#E0E0E0" columns_width="59" column_width="59" orientation="vertical" date_time="2015-11-01T18:07:25Z">
+                <table font-size="9" background="#E0E0E0" column_width="59" orientation="vertical" interval="1" cleared="true" date_time="2016-01-08T12:25:00Z">
                     <title>Output Table</title>
                     <item type="time" color="black" precision="max" width="100" />
                     <item color="black" precision="0.01" delimit_000s="true" index="0">
@@ -2409,32 +2425,32 @@
                 </table>
             </stacked_container>
             <pad_icon x="2395" y="91" width="26" height="22" color="#008F44" label_side="bottom" label="Table 1" type="table" icon_of="251" />
-            <stacked_container x="939" y="53" height="270" width="475" visible_index="3" uid="40">
-                <table font-size="9" background="#E0E0E0" comparative="true" columns_width="59" column_width="59" orientation="horizontal" date_time="2015-11-28T13:30:29Z">
+            <stacked_container height="270" width="475" uid="40">
+                <table font-size="9" background="#E0E0E0" comparative="true" column_width="59" orientation="horizontal" interval="1" cleared="true" date_time="2016-01-08T12:25:00Z">
                     <title>Untitled Table</title>
                     <item type="time" color="black" precision="max" width="100" />
-                    <item color="black" precision="0.01" delimit_000s="true" index="0">
+                    <item color="black" precision="max" display_as="number" index="0">
                         <entity name="RETAIL_PRICE" />
                     </item>
                 </table>
-                <table font-size="9" background="#E0E0E0" comparative="true" columns_width="59" column_width="59" orientation="horizontal" date_time="2015-11-28T13:30:29Z">
+                <table font-size="9" background="#E0E0E0" comparative="true" column_width="59" orientation="horizontal" interval="1" cleared="true" date_time="2016-01-08T12:25:00Z">
                     <title>Untitled Table</title>
                     <item type="time" color="black" precision="max" width="100" />
-                    <item color="black" precision="0.01" delimit_000s="true" index="0">
+                    <item color="black" precision="1" display_as="number" index="0">
                         <entity name="regular_customers" />
                     </item>
                 </table>
-                <table font-size="9" background="#E0E0E0" comparative="true" columns_width="59" column_width="59" orientation="horizontal" date_time="2015-11-28T13:30:29Z">
+                <table font-size="9" background="#E0E0E0" comparative="true" column_width="59" orientation="horizontal" interval="1" cleared="true" date_time="2016-01-08T12:25:00Z">
                     <title>Untitled Table</title>
                     <item type="time" color="black" precision="max" width="100" />
-                    <item color="black" precision="0.01" delimit_000s="true" index="0">
+                    <item color="black" precision="1" display_as="number" index="0">
                         <entity name="customers_with_PV" />
                     </item>
                 </table>
-                <table font-size="9" background="#E0E0E0" comparative="true" columns_width="59" column_width="59" orientation="horizontal" date_time="2015-11-28T13:30:29Z">
+                <table font-size="9" background="#E0E0E0" comparative="true" column_width="59" orientation="horizontal" interval="1" cleared="true" date_time="2016-01-08T12:25:00Z">
                     <title>Untitled Table</title>
                     <item type="time" color="black" precision="max" width="100" />
-                    <item color="black" precision="0.01" delimit_000s="true" index="0">
+                    <item color="black" precision="1" display_as="number" index="0">
                         <entity name="defectors" />
                     </item>
                 </table>
@@ -2442,11 +2458,15 @@
             <pad_icon x="786" y="139" width="26" height="22" color="#008F44" label_side="bottom" label="Comparative" type="table" icon_of="40" />
             <text_box x="1510" y="637" uid="115" color="black" font-family="Arial" font-size="12" padding="5" border-style="solid" border-width="thin" width="256" height="114">These fractions are calculated and plotted to calibrate the wholesale elec prices such that the utility&apos;s fraction of variable cost in 2015 is 56% (see reference in &quot;links&quot; document on project Drive).</text_box>
             <text_box x="996" y="563" uid="252" color="black" font-family="Arial" font-size="12" padding="5" border-style="solid" border-width="thin" width="453" height="73">If baseline retail price is changed then the wholesale price of electricity must be adjusted to acheive correct &quot;fraction var cost over retail price&quot;</text_box>
+            <style font-family="Arial" font-size="9" />
         </display>
         <interface page_cols="4" page_rows="5" page_width="788" page_height="528">
             <simulation_delay>0</simulation_delay>
+            <style font-family="Arial" font-size="9" />
         </interface>
         <popup x="40" y="113" content="79" />
         <popup x="40" y="113" content="250" />
+        <popup x="964" y="119" content="40" />
+        <style font-family="Arial" font-size="9" />
     </model>
 </xmile>
