@@ -73,7 +73,7 @@
         <isee:variable type="adhoc" name="use_limit_on_ratio_of_PV_to_total_hhold">1,0</isee:variable>
     </isee:sensi_specs>
     <isee:prefs last_model="true" layer="model" grid_width="20" grid_height="50" divide_by_zero_alert="true" hide_taskbar="true" show_module_prefix="true">
-        <isee:window width="578" height="501" />
+        <isee:window width="1920" height="997" />
         <isee:security />
         <isee:print_setup width="588" height="768" />
     </isee:prefs>
@@ -109,7 +109,7 @@
             <display x="1295" y="225" color="#FF7F00" label_side="right" />
         </aux>
         <aux name="RETAIL_PRICE">
-            <eqn>(utility_fixed_cost+utiliity_variable_cost)&#x0A;/total_demand</eqn>
+            <eqn>IF total_demand &gt;=1e7 then (utility_fixed_cost+utiliity_variable_cost)&#x0A;/total_demand else 10</eqn>
             <display x="1104" y="414" color="blue" label_side="left" label_angle="168" />
         </aux>
         <aux name="wholesale_price_of_elec">
@@ -1440,7 +1440,7 @@
                 <from>FCI_adding_batteries</from>
                 <to>Loan_Principal_add_batt</to>
             </connector>
-            <connector x="1219" y="2196" uid="174" color="black">
+            <connector x="1220" y="2196" uid="174" color="black">
                 <from>Initial_Equity_Investment_PV&amp;Batt</from>
                 <to>Loan_Principal_PV&amp;batt</to>
             </connector>
@@ -1560,7 +1560,7 @@
                 <from>ELCC_as_function_of_PV_penetration</from>
                 <to>annual_demand_with_PV</to>
             </connector>
-            <connector x="1234" y="1610" uid="183" color="black">
+            <connector x="1233" y="1611" uid="183" color="black">
                 <from>Initial_Equity_Investment_add_batt</from>
                 <to>Loan_Principal_add_batt</to>
             </connector>
@@ -1590,7 +1590,7 @@
                 <from>Equity_Fraction</from>
                 <to>Initial_Equity_Investment_PV</to>
             </connector>
-            <connector x="440" y="1527" uid="85" color="black">
+            <connector x="439" y="1529" uid="85" color="black">
                 <from>price_vector</from>
                 <to>attractiveness</to>
             </connector>
@@ -1674,7 +1674,7 @@
                 <from>PV&amp;batt_innovation_rate</from>
                 <to>direct_defection_via_innovation</to>
             </connector>
-            <connector x="1244" y="99" uid="143" color="black">
+            <connector x="1245" y="98" uid="143" color="black">
                 <from>
                     <alias uid="133" />
                 </from>
@@ -1710,7 +1710,7 @@
                 </from>
                 <to>discount_factor_loan_1</to>
             </connector>
-            <connector x="1116" y="1035" uid="196" color="black">
+            <connector x="1115" y="1034" uid="196" color="black">
                 <from>FCI_PV</from>
                 <to>Loan_Principal_PV</to>
             </connector>
@@ -1748,13 +1748,13 @@
                 <from>scale_factor_B_house_attractiveness</from>
                 <to>attractiveness</to>
             </connector>
-            <connector x="1245" y="94" uid="146" color="black">
+            <connector x="1246" y="93" uid="146" color="black">
                 <from>
                     <alias uid="133" />
                 </from>
                 <to>total_demand</to>
             </connector>
-            <connector x="447" y="1372" uid="76" color="black">
+            <connector x="448" y="1371" uid="76" color="black">
                 <from>
                     <alias uid="80" />
                 </from>
@@ -1770,7 +1770,7 @@
                 </from>
                 <to>direct_defection_via_innovation</to>
             </connector>
-            <connector x="1143" y="1684" uid="198" color="black">
+            <connector x="1144" y="1683" uid="198" color="black">
                 <from>FCI_adding_batteries</from>
                 <to>Initial_Equity_Investment_add_batt</to>
             </connector>
@@ -1806,7 +1806,7 @@
                 <from>PV_incentive</from>
                 <to>PV_innovation_rate</to>
             </connector>
-            <connector x="1627" y="594" uid="122" color="black">
+            <connector x="1627" y="593" uid="122" color="black">
                 <from>
                     <alias uid="119" />
                 </from>
@@ -1848,7 +1848,7 @@
                 <from>Initial_Equity_Investment_PV</from>
                 <to>Loan_Principal_PV</to>
             </connector>
-            <connector x="993" y="2005" uid="207" color="black">
+            <connector x="995" y="2005" uid="207" color="black">
                 <from>
                     <alias uid="98" />
                 </from>
@@ -1998,7 +1998,7 @@
                 <from>discount_factor_loan</from>
                 <to>NPV_Loan_Payment_PV</to>
             </connector>
-            <connector x="1508" y="2406" uid="224" color="black">
+            <connector x="1508" y="2407" uid="224" color="black">
                 <from>discount_factor_loan_2</from>
                 <to>NPV_Loan_Payment_PV&amp;batt</to>
             </connector>
@@ -2064,7 +2064,7 @@
                 </from>
                 <to>total_households</to>
             </connector>
-            <connector x="835" y="740" uid="73" color="black">
+            <connector x="834" y="740" uid="73" color="black">
                 <from>
                     <alias uid="70" />
                 </from>
@@ -2120,7 +2120,7 @@
                 </from>
                 <to>direct_defection_via_imitation</to>
             </connector>
-            <connector x="1130" y="2268" uid="235" color="black">
+            <connector x="1130" y="2270" uid="235" color="black">
                 <from>FCI_PV&amp;batt</from>
                 <to>Initial_Equity_Investment_PV&amp;Batt</to>
             </connector>
@@ -2188,7 +2188,7 @@
                 </from>
                 <to>defection_thru_innovation</to>
             </connector>
-            <connector x="1334" y="1936" uid="238" color="black">
+            <connector x="1328" y="1934" uid="238" color="black">
                 <from>
                     <alias uid="104" />
                 </from>
@@ -2212,7 +2212,7 @@
                 <from>Loan_Principal_PV</from>
                 <to>Annual_Loan_Payment_PV_only</to>
             </connector>
-            <connector x="1522" y="1821" uid="240" color="black">
+            <connector x="1522" y="1822" uid="240" color="black">
                 <from>discount_factor_loan_1</from>
                 <to>NPV_Loan_Payment_add_batt</to>
             </connector>
@@ -2286,7 +2286,7 @@
                 <from>PV_incentive</from>
                 <to>PV_imitation_rate</to>
             </connector>
-            <connector x="697" y="412" uid="65" color="black">
+            <connector x="697" y="413" uid="65" color="black">
                 <from>defectors</from>
                 <to>direct_defection_via_imitation</to>
             </connector>
