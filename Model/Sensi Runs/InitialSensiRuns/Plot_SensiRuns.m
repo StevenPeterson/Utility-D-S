@@ -35,10 +35,10 @@ var = TXT(1,2:10);                        % var = sensitivity variable names
 %-------------------------------------------------------------------
 
 plot_all         = 0; % 1 == plot the difference of 2050 value minus 2015 value for all 512  cases for each city and business model
-plot_with_limit  = 1; % 1 == plot runs 1:256, which have 'Use limit on ratio of PV to total households' = 1
+plot_with_limit  = 0; % 1 == plot runs 1:256, which have 'Use limit on ratio of PV to total households' = 1
                       %  3 figures, one for each CITY with subplots for each
                       %  BUSINESS MODEL
-plot_with_limit2 = 1; % 1 == plot runs 1:256, which have 'Use limit on ratio of PV to total households' = 1
+plot_with_limit2 = 0; % 1 == plot runs 1:256, which have 'Use limit on ratio of PV to total households' = 1
                       %  3 figures, one for each BUSINESS MODEL with subplots for each
                       %  CITY                     
                      
