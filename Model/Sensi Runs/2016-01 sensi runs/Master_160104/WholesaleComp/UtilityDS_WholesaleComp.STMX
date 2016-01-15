@@ -74,9 +74,9 @@
         <isee:variable type="adhoc" name="use_limit_on_ratio_of_PV_to_total_hhold">1,0</isee:variable>
     </isee:sensi_specs>
     <isee:prefs last_model="true" layer="model" grid_width="20" grid_height="50" divide_by_zero_alert="true" hide_taskbar="true" show_module_prefix="true">
-        <isee:window width="1920" height="997" />
+        <isee:window width="1898" height="934" />
         <isee:security />
-        <isee:print_setup width="588" height="768" />
+        <isee:print_setup width="612" height="792" />
     </isee:prefs>
     <isee:equation_prefs order_by="module" />
     <model>
@@ -110,7 +110,12 @@
             <display x="1295" y="225" color="#FF7F00" label_side="right" />
         </aux>
         <aux name="RETAIL_PRICE">
-            <eqn>IF total_demand &gt;=1e7 then (utility_fixed_cost+utiliity_variable_cost)&#x0A;/total_demand else 10</eqn>
+            <eqn>IF total_demand &gt; 0  then (utility_fixed_cost+utiliity_variable_cost)&#x0A;/total_demand else 10</eqn>
+            <gf>
+                <xscale min="0" max="10" />
+                <yscale min="0" max="10" />
+                <ypts>0,1,2,3,4,5,6,7,8,9,10</ypts>
+            </gf>
             <display x="1104" y="414" color="blue" label_side="left" label_angle="168" />
         </aux>
         <aux name="wholesale_price_of_elec">
@@ -157,12 +162,12 @@
             <display x="1179" y="63" color="blue" label_side="top" label_angle="118" />
         </aux>
         <aux name="fraction_var_cost_over_retail_price">
-            <eqn>utiliity_variable_cost/total_demand/RETAIL_PRICE</eqn>
+            <eqn>IF total_demand &gt; 0 THEN utiliity_variable_cost/total_demand/RETAIL_PRICE ELSE 0</eqn>
             <units>Unitless</units>
             <display x="1580" y="496" color="blue" label_side="left" label_angle="176" />
         </aux>
         <aux name="fraction_fixed_cost_over_retail_price">
-            <eqn>utility_fixed_cost/total_demand/RETAIL_PRICE</eqn>
+            <eqn>IF total_demand &gt; 0 THEN utility_fixed_cost/total_demand/RETAIL_PRICE else 0</eqn>
             <units>Unitless</units>
             <display x="1674" y="494" color="blue" label_side="right" label_angle="352" />
         </aux>
@@ -821,7 +826,7 @@
             <display x="938" y="783" color="blue" label_angle="298" />
         </aux>
         <aux name="threshold_of_customers_to_slow_customer_draining">
-            <eqn>2000000</eqn>
+            <eqn>INIT(total_households) * 0.5</eqn>
             <display x="1044" y="745" color="blue" />
         </aux>
         <aux name="drain_slowing_function_of_reg_customers">
@@ -1247,7 +1252,7 @@
                 <item uid="179" />
             </display>
         </group>
-        <display page_width="588" page_height="768" page_cols="5" page_rows="5" isee:converter_size="medium">
+        <display page_width="612" page_height="792" page_cols="5" page_rows="5" isee:converter_size="medium" scroll_y="243">
             <alias x="519" y="1552" uid="91">
                 <of>Net_Present_Value_PV&amp;Battery</of>
                 <label_side>right</label_side>
@@ -1292,7 +1297,7 @@
                 <of>Net_Present_Value_PV&amp;Battery</of>
                 <label_side>right</label_side>
             </alias>
-            <alias x="516" y="369" uid="55">
+            <alias x="516" y="369" uid="54">
                 <of>Net_Present_Value_Battery</of>
                 <label_side>right</label_side>
                 <label_angle>16</label_angle>
@@ -1320,7 +1325,7 @@
             <alias x="1110" y="1829" uid="106">
                 <of>term_of_loan</of>
             </alias>
-            <alias x="722" y="495" uid="56">
+            <alias x="722" y="495" uid="55">
                 <of>houses_being_built</of>
             </alias>
             <alias x="1036" y="1425" uid="116">
@@ -1335,7 +1340,7 @@
             <alias x="372" y="74" uid="3">
                 <of>drain_slowing_function_of_reg_customers</of>
             </alias>
-            <alias x="469" y="653" uid="57">
+            <alias x="469" y="653" uid="56">
                 <of>drain_slowing_function_of_reg_customers</of>
             </alias>
             <alias x="1068" y="1737" uid="96">
@@ -1433,11 +1438,14 @@
             <alias x="385" y="159" uid="5">
                 <of>switched_limit_on_ratio_of_PV_to_total_hhold</of>
             </alias>
-            <connector x="1042" y="736" uid="180" color="black">
+            <alias x="1177" y="755" uid="180">
+                <of>total_households</of>
+            </alias>
+            <connector x="1042" y="736" uid="181" color="black">
                 <from>threshold_of_customers_to_slow_customer_draining</from>
                 <to>drain_slowing_function_of_reg_customers</to>
             </connector>
-            <connector x="1080" y="2412" uid="181" color="black">
+            <connector x="1080" y="2412" uid="182" color="black">
                 <from>
                     <alias uid="117" />
                 </from>
@@ -1449,7 +1457,7 @@
                 </from>
                 <to>PV_imitation_factor_from_density_of_PV_households</to>
             </connector>
-            <connector x="1355" y="1042" uid="182" color="black">
+            <connector x="1355" y="1042" uid="183" color="black">
                 <from>Loan_Principal_PV</from>
                 <to>Annual_Loan_Payment_PV_only</to>
             </connector>
@@ -1457,17 +1465,17 @@
                 <from>PV_imitation_factor_from_density_of_PV_households</from>
                 <to>PV_adoption_thru_imitation</to>
             </connector>
-            <connector x="1108" y="2193" uid="183" color="black">
+            <connector x="1108" y="2193" uid="184" color="black">
                 <from>
                     <alias uid="119" />
                 </from>
                 <to>Initial_Equity_Investment_PV&amp;Batt</to>
             </connector>
-            <connector x="1221" y="2338" uid="184" color="black">
+            <connector x="1221" y="2338" uid="185" color="black">
                 <from>discount_factor_loan_payment_2</from>
                 <to>Annual_Loan_Payment__PV_&amp;_batt</to>
             </connector>
-            <connector x="1522" y="1822" uid="185" color="black">
+            <connector x="1522" y="1822" uid="186" color="black">
                 <from>discount_factor_loan_1</from>
                 <to>NPV_Loan_Payment_add_batt</to>
             </connector>
@@ -1479,7 +1487,7 @@
                 <from>regular_customers</from>
                 <to>direct_defection_via_innovation</to>
             </connector>
-            <connector x="1302" y="2283" uid="186" color="black">
+            <connector x="1302" y="2283" uid="187" color="black">
                 <from>Loan_Principal_PV&amp;batt</from>
                 <to>Annual_Loan_Payment__PV_&amp;_batt</to>
             </connector>
@@ -1515,7 +1523,7 @@
                 </from>
                 <to>Expected_annual_Rev_PV</to>
             </connector>
-            <connector x="1081" y="2417" uid="187" color="black">
+            <connector x="1081" y="2417" uid="188" color="black">
                 <from>
                     <alias uid="117" />
                 </from>
@@ -1535,7 +1543,7 @@
                 <from>annual_PV_production_kWh</from>
                 <to>annual_demand_with_PV</to>
             </connector>
-            <connector x="1241" y="1604" uid="188" color="black">
+            <connector x="1241" y="1604" uid="189" color="black">
                 <from>Initial_Equity_Investment_add_batt</from>
                 <to>Net_Present_Value_Battery</to>
             </connector>
@@ -1571,7 +1579,7 @@
                 </from>
                 <to>Expected_annual_Rev_add_batt</to>
             </connector>
-            <connector x="1378" y="1414" uid="189" color="black">
+            <connector x="1378" y="1414" uid="190" color="black">
                 <from>Expected_Net_annual_rev_PV</from>
                 <to>NPV_Revs_Net_of_Op_CostPV</to>
             </connector>
@@ -1593,9 +1601,9 @@
                 </from>
                 <to>drain_slowing_function_of_PV_customers</to>
             </connector>
-            <connector x="462" y="648" uid="58" color="black">
+            <connector x="462" y="648" uid="57" color="black">
                 <from>
-                    <alias uid="57" />
+                    <alias uid="56" />
                 </from>
                 <to>direct_defection_via_imitation</to>
             </connector>
@@ -1613,15 +1621,15 @@
                 <from>customers_with_PV</from>
                 <to>limit_on_ratio_of_PV_to_total_households</to>
             </connector>
-            <connector x="1164" y="2338" uid="190" color="black">
+            <connector x="1164" y="2338" uid="191" color="black">
                 <from>debt_interest_rate_as_fraction_2</from>
                 <to>discount_factor_loan_payment_2</to>
             </connector>
-            <connector x="1036" y="742" uid="191" color="black">
+            <connector x="1036" y="742" uid="192" color="black">
                 <from>threshold_of_customers_to_slow_customer_draining</from>
                 <to>drain_slowing_function_of_PV_customers</to>
             </connector>
-            <connector x="1117" y="1823" uid="192" color="black">
+            <connector x="1117" y="1823" uid="193" color="black">
                 <from>
                     <alias uid="106" />
                 </from>
@@ -1631,7 +1639,7 @@
                 <from>PV_incentive</from>
                 <to>PV_imitation_rate</to>
             </connector>
-            <connector x="1453" y="2451" uid="193" color="black">
+            <connector x="1453" y="2451" uid="194" color="black">
                 <from>Req&apos;d_Rate_of_Return_PV&amp;batt</from>
                 <to>discount_factor_loan_2</to>
             </connector>
@@ -1675,11 +1683,11 @@
                 <from>customers_with_PV</from>
                 <to>PV_imitation_factor_from_density_of_PV_households</to>
             </connector>
-            <connector x="468" y="360" uid="59" color="black">
+            <connector x="468" y="360" uid="58" color="black">
                 <from>Battery_incentive</from>
                 <to>battery_imitation_rate</to>
             </connector>
-            <connector x="412" y="729" uid="60" color="black">
+            <connector x="412" y="729" uid="59" color="black">
                 <from>
                     <alias uid="69" />
                 </from>
@@ -1689,7 +1697,7 @@
                 <from>total_growth_in_households</from>
                 <to>houses_being_built</to>
             </connector>
-            <connector x="1116" y="1893" uid="194" color="black">
+            <connector x="1116" y="1893" uid="195" color="black">
                 <from>
                     <alias uid="107" />
                 </from>
@@ -1705,15 +1713,15 @@
                 </from>
                 <to>PV&amp;batt_innovation_rate</to>
             </connector>
-            <connector x="1704" y="1996" uid="195" color="black">
+            <connector x="1704" y="1996" uid="196" color="black">
                 <from>NPV_Revs_Net_of_Op_Cost_add_batt</from>
                 <to>Net_Present_Value_Battery</to>
             </connector>
-            <connector x="1510" y="1115" uid="196" color="black">
+            <connector x="1510" y="1115" uid="197" color="black">
                 <from>Annual_Loan_Payment_PV_only</from>
                 <to>NPV_Loan_Payment_PV</to>
             </connector>
-            <connector x="1064" y="1272" uid="197" color="black">
+            <connector x="1064" y="1272" uid="198" color="black">
                 <from>Req&apos;d_Rate_of_Return_as_%</from>
                 <to>Req&apos;d_Rate_of_Return_PV</to>
             </connector>
@@ -1739,7 +1747,7 @@
                 <from>baseline_wholesale_elec_price</from>
                 <to>wholesale_price_of_elec</to>
             </connector>
-            <connector x="1226" y="2190" uid="198" color="black">
+            <connector x="1226" y="2190" uid="199" color="black">
                 <from>Initial_Equity_Investment_PV&amp;Batt</from>
                 <to>Net_Present_Value_PV&amp;Battery</to>
             </connector>
@@ -1757,7 +1765,7 @@
                 <from>annual_base_demand</from>
                 <to>annual_demand_with_PV</to>
             </connector>
-            <connector x="1150" y="1693" uid="199" color="black">
+            <connector x="1150" y="1693" uid="200" color="black">
                 <from>FCI_adding_batteries</from>
                 <to>Loan_Principal_add_batt</to>
             </connector>
@@ -1775,11 +1783,11 @@
                 <from>population_growth_rate</from>
                 <to>total_growth_in_households</to>
             </connector>
-            <connector x="1384" y="2338" uid="200" color="black">
+            <connector x="1384" y="2338" uid="201" color="black">
                 <from>Annual_Loan_Payment__PV_&amp;_batt</from>
                 <to>NPV_Loan_Payment_PV&amp;batt</to>
             </connector>
-            <connector x="1552" y="1266" uid="201" color="black">
+            <connector x="1552" y="1266" uid="202" color="black">
                 <from>Req&apos;d_Rate_of_Return_PV</from>
                 <to>discount_factor_loan</to>
             </connector>
@@ -1799,15 +1807,15 @@
                 <from>customers_with_PV</from>
                 <to>defection_thru_innovation</to>
             </connector>
-            <connector x="1614" y="1199" uid="202" color="black">
+            <connector x="1614" y="1199" uid="203" color="black">
                 <from>discount_factor_loan</from>
                 <to>NPV_Loan_Payment_PV</to>
             </connector>
-            <connector x="1104" y="1115" uid="203" color="black">
+            <connector x="1104" y="1115" uid="204" color="black">
                 <from>debt_interest_rate_as_%</from>
                 <to>debt_interest_rate_as_fraction</to>
             </connector>
-            <connector x="1553" y="1276" uid="204" color="black">
+            <connector x="1553" y="1276" uid="205" color="black">
                 <from>Req&apos;d_Rate_of_Return_PV</from>
                 <to>discount_factor</to>
             </connector>
@@ -1825,15 +1833,15 @@
                 <from>annual_base_demand</from>
                 <to>reduction_in_annual_base_demand</to>
             </connector>
-            <connector x="659" y="412" uid="61" color="black">
+            <connector x="659" y="412" uid="60" color="black">
                 <from>defectors</from>
                 <to>defection_thru_imitation</to>
             </connector>
-            <connector x="696" y="412" uid="62" color="black">
+            <connector x="697" y="412" uid="61" color="black">
                 <from>defectors</from>
                 <to>direct_defection_via_imitation</to>
             </connector>
-            <connector x="1166" y="1473" uid="205" color="black">
+            <connector x="1166" y="1473" uid="206" color="black">
                 <from>Expected_Annual_Cost_PV</from>
                 <to>Expected_Net_annual_rev_PV</to>
             </connector>
@@ -1857,11 +1865,11 @@
                 <from>util_fixed_cost_growth_rate_%_per_year</from>
                 <to>utility_fixed_cost</to>
             </connector>
-            <connector x="1145" y="1683" uid="206" color="black">
+            <connector x="1145" y="1683" uid="207" color="black">
                 <from>FCI_adding_batteries</from>
                 <to>Initial_Equity_Investment_add_batt</to>
             </connector>
-            <connector x="1235" y="1753" uid="207" color="black">
+            <connector x="1235" y="1753" uid="208" color="black">
                 <from>discount_factor_loan_payment_1</from>
                 <to>Annual_Loan_Payment_add_batt</to>
             </connector>
@@ -1869,7 +1877,7 @@
                 <from>PV&amp;batt_innovation_rate</from>
                 <to>direct_defection_via_innovation</to>
             </connector>
-            <connector x="1119" y="1829" uid="208" color="black">
+            <connector x="1119" y="1829" uid="209" color="black">
                 <from>
                     <alias uid="106" />
                 </from>
@@ -1885,13 +1893,13 @@
                 <from>annual_base_demand</from>
                 <to>utiliity_variable_cost</to>
             </connector>
-            <connector x="1171" y="1204" uid="209" color="black">
+            <connector x="1171" y="1204" uid="210" color="black">
                 <from>term_of_loan</from>
                 <to>discount_factor_loan_payment</to>
             </connector>
-            <connector x="714" y="499" uid="63" color="black">
+            <connector x="714" y="499" uid="62" color="black">
                 <from>
-                    <alias uid="56" />
+                    <alias uid="55" />
                 </from>
                 <to>PV_batt_houes_being_built</to>
             </connector>
@@ -1905,7 +1913,7 @@
                 </from>
                 <to>fraction_var_cost_over_retail_price</to>
             </connector>
-            <connector x="1077" y="1739" uid="210" color="black">
+            <connector x="1077" y="1739" uid="211" color="black">
                 <from>
                     <alias uid="96" />
                 </from>
@@ -1921,15 +1929,15 @@
                 </from>
                 <to>fraction_fixed_cost_over_retail_price</to>
             </connector>
-            <connector x="1689" y="2581" uid="211" color="black">
+            <connector x="1689" y="2581" uid="212" color="black">
                 <from>NPV_Revs_Net_of_Op_Cost_PV&amp;batt</from>
                 <to>Net_Present_Value_PV&amp;Battery</to>
             </connector>
-            <connector x="1653" y="1337" uid="212" color="black">
+            <connector x="1653" y="1337" uid="213" color="black">
                 <from>discount_factor</from>
                 <to>NPV_Revs_Net_of_Op_CostPV</to>
             </connector>
-            <connector x="1347" y="950" uid="213" color="black">
+            <connector x="1347" y="950" uid="214" color="black">
                 <from>Initial_Equity_Investment_PV</from>
                 <to>Loan_Principal_PV</to>
             </connector>
@@ -1937,11 +1945,11 @@
                 <from>total_attractiveness</from>
                 <to>relative_attractiveness</to>
             </connector>
-            <connector x="353" y="537" uid="49" color="black">
+            <connector x="354" y="537" uid="63" color="black">
                 <from>ImitationScaleFactor</from>
                 <to>defection_thru_imitation</to>
             </connector>
-            <connector x="1013" y="1360" uid="214" color="black">
+            <connector x="1013" y="1360" uid="215" color="black">
                 <from>
                     <alias uid="111" />
                 </from>
@@ -1951,13 +1959,13 @@
                 <from>regular_customers</from>
                 <to>PV_adoption_thru_innovation</to>
             </connector>
-            <connector x="1029" y="2536" uid="215" color="black">
+            <connector x="1029" y="2536" uid="216" color="black">
                 <from>
                     <alias uid="121" />
                 </from>
                 <to>Expected_annual_Rev_PV&amp;Batt</to>
             </connector>
-            <connector x="330" y="389" uid="50" color="black">
+            <connector x="330" y="389" uid="49" color="black">
                 <from>
                     <alias uid="42" />
                 </from>
@@ -1971,7 +1979,7 @@
                 <from>attractiveness</from>
                 <to>relative_attractiveness</to>
             </connector>
-            <connector x="337" y="630" uid="51" color="black">
+            <connector x="337" y="630" uid="50" color="black">
                 <from>
                     <alias uid="43" />
                 </from>
@@ -1981,19 +1989,19 @@
                 <from>customers_with_PV</from>
                 <to>PV_adoption_thru_imitation</to>
             </connector>
-            <connector x="1186" y="2059" uid="216" color="black">
+            <connector x="1186" y="2059" uid="217" color="black">
                 <from>Expected_Annual_Cost_Battery</from>
                 <to>Expected_Net_annual_rev_add_batt</to>
             </connector>
-            <connector x="1089" y="2005" uid="217" color="black">
+            <connector x="1089" y="2005" uid="218" color="black">
                 <from>Expected_annual_Rev_add_batt</from>
                 <to>Expected_Net_annual_rev_add_batt</to>
             </connector>
-            <connector x="1159" y="2645" uid="218" color="black">
+            <connector x="1159" y="2645" uid="219" color="black">
                 <from>Expected_Annual_Cost_PV_&amp;_Battery</from>
                 <to>Expected_Net_annual_rev_PV&amp;Batt</to>
             </connector>
-            <connector x="1735" y="1406" uid="219" color="black">
+            <connector x="1735" y="1406" uid="220" color="black">
                 <from>NPV_Revs_Net_of_Op_CostPV</from>
                 <to>Net_Present_Value_PV</to>
             </connector>
@@ -2001,11 +2009,11 @@
                 <from>total_households</from>
                 <to>total_growth_in_households</to>
             </connector>
-            <connector x="1130" y="2269" uid="220" color="black">
+            <connector x="1130" y="2268" uid="221" color="black">
                 <from>FCI_PV&amp;batt</from>
                 <to>Initial_Equity_Investment_PV&amp;Batt</to>
             </connector>
-            <connector x="1355" y="944" uid="221" color="black">
+            <connector x="1355" y="944" uid="222" color="black">
                 <from>Initial_Equity_Investment_PV</from>
                 <to>Net_Present_Value_PV</to>
             </connector>
@@ -2027,7 +2035,7 @@
                 <from>utiliity_variable_cost</from>
                 <to>RETAIL_PRICE</to>
             </connector>
-            <connector x="1467" y="1866" uid="222" color="black">
+            <connector x="1467" y="1866" uid="223" color="black">
                 <from>Req&apos;d_Rate_of_Return_add_batt</from>
                 <to>discount_factor_loan_1</to>
             </connector>
@@ -2037,7 +2045,7 @@
                 </from>
                 <to>total_households</to>
             </connector>
-            <connector x="1292" y="2005" uid="223" color="black">
+            <connector x="1292" y="2005" uid="224" color="black">
                 <from>Expected_Net_annual_rev_add_batt</from>
                 <to>NPV_Revs_Net_of_Op_Cost_add_batt</to>
             </connector>
@@ -2047,25 +2055,25 @@
                 </from>
                 <to>PV_adoption_thru_innovation</to>
             </connector>
-            <connector x="350" y="545" uid="52" color="black">
+            <connector x="350" y="545" uid="51" color="black">
                 <from>ImitationScaleFactor</from>
                 <to>direct_defection_via_imitation</to>
             </connector>
-            <connector x="1115" y="1027" uid="224" color="black">
+            <connector x="1115" y="1027" uid="225" color="black">
                 <from>FCI_PV</from>
                 <to>Initial_Equity_Investment_PV</to>
             </connector>
-            <connector x="1072" y="2326" uid="225" color="black">
+            <connector x="1072" y="2326" uid="226" color="black">
                 <from>
                     <alias uid="118" />
                 </from>
                 <to>debt_interest_rate_as_fraction_2</to>
             </connector>
-            <connector x="1137" y="2278" uid="226" color="black">
+            <connector x="1137" y="2278" uid="227" color="black">
                 <from>FCI_PV&amp;batt</from>
                 <to>Loan_Principal_PV&amp;batt</to>
             </connector>
-            <connector x="1316" y="1698" uid="227" color="black">
+            <connector x="1316" y="1698" uid="228" color="black">
                 <from>Loan_Principal_add_batt</from>
                 <to>Annual_Loan_Payment_add_batt</to>
             </connector>
@@ -2083,25 +2091,25 @@
                 </from>
                 <to>PV_adoption_thru_imitation</to>
             </connector>
-            <connector x="440" y="1526" uid="90" color="black">
+            <connector x="440" y="1527" uid="90" color="black">
                 <from>price_vector</from>
                 <to>attractiveness</to>
             </connector>
-            <connector x="214" y="481" uid="53" color="black">
+            <connector x="214" y="481" uid="52" color="black">
                 <from>
                     <alias uid="41" />
                 </from>
                 <to>limit_on_ratio_of_PV_to_total_households</to>
             </connector>
-            <connector x="1626" y="1928" uid="228" color="black">
+            <connector x="1626" y="1928" uid="229" color="black">
                 <from>discount_factor_1</from>
                 <to>NPV_Revs_Net_of_Op_Cost_add_batt</to>
             </connector>
-            <connector x="1234" y="1611" uid="229" color="black">
+            <connector x="1234" y="1610" uid="230" color="black">
                 <from>Initial_Equity_Investment_add_batt</from>
                 <to>Loan_Principal_add_batt</to>
             </connector>
-            <connector x="1464" y="1753" uid="230" color="black">
+            <connector x="1464" y="1753" uid="231" color="black">
                 <from>NPV_Loan_Payment_add_batt</from>
                 <to>Net_Present_Value_Battery</to>
             </connector>
@@ -2123,7 +2131,7 @@
                 <from>new_PV_homes</from>
                 <to>change_to_util_fixed_cost_from_new_homes</to>
             </connector>
-            <connector x="1220" y="2195" uid="231" color="black">
+            <connector x="1219" y="2196" uid="232" color="black">
                 <from>Initial_Equity_Investment_PV&amp;Batt</from>
                 <to>Loan_Principal_PV&amp;batt</to>
             </connector>
@@ -2131,7 +2139,7 @@
                 <from>annual_demand_with_PV</from>
                 <to>utiliity_variable_cost</to>
             </connector>
-            <connector x="1278" y="2590" uid="232" color="black">
+            <connector x="1278" y="2590" uid="233" color="black">
                 <from>Expected_Net_annual_rev_PV&amp;Batt</from>
                 <to>NPV_Revs_Net_of_Op_Cost_PV&amp;batt</to>
             </connector>
@@ -2151,17 +2159,17 @@
                 <from>battery_imitation_rate</from>
                 <to>defection_thru_imitation</to>
             </connector>
-            <connector x="1172" y="1208" uid="233" color="black">
+            <connector x="1172" y="1208" uid="234" color="black">
                 <from>term_of_loan</from>
                 <to>discount_factor_loan</to>
             </connector>
-            <connector x="107" y="673" uid="54" color="black">
+            <connector x="107" y="673" uid="53" color="black">
                 <from>use_limit_on_ratio_of_PV_to_total_hhold</from>
                 <to>switched_limit_on_ratio_of_PV_to_total_hhold</to>
             </connector>
             <connector x="510" y="375" uid="65" color="black">
                 <from>
-                    <alias uid="55" />
+                    <alias uid="54" />
                 </from>
                 <to>battery_imitation_rate</to>
             </connector>
@@ -2175,7 +2183,7 @@
                 </from>
                 <to>direct_defection_via_innovation</to>
             </connector>
-            <connector x="1175" y="1414" uid="234" color="black">
+            <connector x="1175" y="1414" uid="235" color="black">
                 <from>Expected_annual_Rev_PV</from>
                 <to>Expected_Net_annual_rev_PV</to>
             </connector>
@@ -2195,7 +2203,7 @@
                 <from>change_to_util_fixed_cost_from_new_homes</from>
                 <to>utility_fixed_cost</to>
             </connector>
-            <connector x="1452" y="2453" uid="235" color="black">
+            <connector x="1452" y="2453" uid="236" color="black">
                 <from>Req&apos;d_Rate_of_Return_PV&amp;batt</from>
                 <to>discount_factor_2</to>
             </connector>
@@ -2203,11 +2211,11 @@
                 <from>PV_innovation_rate</from>
                 <to>PV_adoption_thru_innovation</to>
             </connector>
-            <connector x="1450" y="2338" uid="236" color="black">
+            <connector x="1450" y="2338" uid="237" color="black">
                 <from>NPV_Loan_Payment_PV&amp;batt</from>
                 <to>Net_Present_Value_PV&amp;Battery</to>
             </connector>
-            <connector x="1230" y="1115" uid="237" color="black">
+            <connector x="1230" y="1115" uid="238" color="black">
                 <from>debt_interest_rate_as_fraction</from>
                 <to>discount_factor_loan_payment</to>
             </connector>
@@ -2215,11 +2223,11 @@
                 <from>efficiency_improvement_of_reg_customers_as_%_per_year</from>
                 <to>reduction_in_annual_base_demand</to>
             </connector>
-            <connector x="1579" y="1115" uid="238" color="black">
+            <connector x="1579" y="1115" uid="239" color="black">
                 <from>NPV_Loan_Payment_PV</from>
                 <to>Net_Present_Value_PV</to>
             </connector>
-            <connector x="1110" y="2466" uid="239" color="black">
+            <connector x="1110" y="2466" uid="240" color="black">
                 <from>
                     <alias uid="120" />
                 </from>
@@ -2235,11 +2243,11 @@
                 <from>battery_innovation_rate</from>
                 <to>defection_thru_innovation</to>
             </connector>
-            <connector x="1178" y="1753" uid="240" color="black">
+            <connector x="1178" y="1753" uid="241" color="black">
                 <from>debt_interest_rate_as_fraction_1</from>
                 <to>discount_factor_loan_payment_1</to>
             </connector>
-            <connector x="1114" y="1033" uid="241" color="black">
+            <connector x="1116" y="1035" uid="242" color="black">
                 <from>FCI_PV</from>
                 <to>Loan_Principal_PV</to>
             </connector>
@@ -2253,7 +2261,7 @@
                 <from>utility_fixed_cost</from>
                 <to>RETAIL_PRICE</to>
             </connector>
-            <connector x="1466" y="1868" uid="242" color="black">
+            <connector x="1466" y="1868" uid="243" color="black">
                 <from>Req&apos;d_Rate_of_Return_add_batt</from>
                 <to>discount_factor_1</to>
             </connector>
@@ -2263,7 +2271,7 @@
                 </from>
                 <to>fraction_of_PV_to_regular_customers</to>
             </connector>
-            <connector x="1075" y="2590" uid="243" color="black">
+            <connector x="1075" y="2590" uid="244" color="black">
                 <from>Expected_annual_Rev_PV&amp;Batt</from>
                 <to>Expected_Net_annual_rev_PV&amp;Batt</to>
             </connector>
@@ -2283,7 +2291,7 @@
                 </from>
                 <to>defection_thru_imitation</to>
             </connector>
-            <connector x="1347" y="1115" uid="244" color="black">
+            <connector x="1347" y="1115" uid="245" color="black">
                 <from>discount_factor_loan_payment</from>
                 <to>Annual_Loan_Payment_PV_only</to>
             </connector>
@@ -2305,11 +2313,11 @@
             </connector>
             <connector x="511" y="362" uid="39" color="black">
                 <from>
-                    <alias uid="55" />
+                    <alias uid="54" />
                 </from>
                 <to>battery_innovation_rate</to>
             </connector>
-            <connector x="1508" y="2407" uid="245" color="black">
+            <connector x="1508" y="2407" uid="246" color="black">
                 <from>discount_factor_loan_2</from>
                 <to>NPV_Loan_Payment_PV&amp;batt</to>
             </connector>
@@ -2317,31 +2325,31 @@
                 <from>utiltiy_incremental_fixed_cost_per_new_home_$</from>
                 <to>change_to_util_fixed_cost_from_new_homes</to>
             </connector>
-            <connector x="1110" y="941" uid="246" color="black">
+            <connector x="1110" y="941" uid="247" color="black">
                 <from>Equity_Fraction</from>
                 <to>Initial_Equity_Investment_PV</to>
             </connector>
-            <connector x="1114" y="1604" uid="247" color="black">
+            <connector x="1114" y="1604" uid="248" color="black">
                 <from>
                     <alias uid="97" />
                 </from>
                 <to>Initial_Equity_Investment_add_batt</to>
             </connector>
-            <connector x="1612" y="2513" uid="248" color="black">
+            <connector x="1612" y="2513" uid="249" color="black">
                 <from>discount_factor_2</from>
                 <to>NPV_Revs_Net_of_Op_Cost_PV&amp;batt</to>
             </connector>
-            <connector x="1329" y="1934" uid="249" color="black">
+            <connector x="1334" y="1936" uid="250" color="black">
                 <from>
                     <alias uid="108" />
                 </from>
                 <to>discount_factor_1</to>
             </connector>
-            <connector x="1398" y="1753" uid="250" color="black">
+            <connector x="1398" y="1753" uid="251" color="black">
                 <from>Annual_Loan_Payment_add_batt</from>
                 <to>NPV_Loan_Payment_add_batt</to>
             </connector>
-            <connector x="1328" y="2508" uid="251" color="black">
+            <connector x="1328" y="2508" uid="252" color="black">
                 <from>
                     <alias uid="123" />
                 </from>
@@ -2353,11 +2361,17 @@
                 </from>
                 <to>Expected_annual_Rev_PV&amp;Batt</to>
             </connector>
-            <connector x="1405" y="1331" uid="252" color="black">
+            <connector x="1405" y="1331" uid="253" color="black">
                 <from>project_lifetime_NPV</from>
                 <to>discount_factor</to>
             </connector>
-            <stacked_container x="1543" y="49" height="282" width="492" uid="253">
+            <connector x="1169" y="749" uid="254">
+                <from>
+                    <alias uid="180" />
+                </from>
+                <to>threshold_of_customers_to_slow_customer_draining</to>
+            </connector>
+            <stacked_container x="1543" y="49" height="282" width="492" uid="255">
                 <graph type="time_series" title="Untitled" background="#FFFFC9" show_grid="true" plot_numbers="false" isee:use_five_segments="false" date_time="2015-11-29T16:56:09Z" time_precision="2" from="2015" to="2050">
                     <plot index="0" pen_width="3" color="blue" precision="max" show_y_axis="true">
                         <scale min="0" max="1" />
@@ -2373,7 +2387,7 @@
                     </plot>
                 </graph>
             </stacked_container>
-            <pad_icon x="1540" y="189" width="26" height="22" color="#008F44" label_side="bottom" label="Graph 5" type="graph" icon_of="253" />
+            <pad_icon x="1540" y="189" width="26" height="22" color="#008F44" label_side="bottom" label="Graph 5" type="graph" icon_of="255" />
             <stacked_container x="1814" y="469" height="282" width="492" uid="136">
                 <graph type="time_series" title="Untitled" background="#FFFFC9" show_grid="true" plot_numbers="false" isee:use_five_segments="false" date_time="2015-11-29T16:56:09Z" time_precision="2" from="2015" to="2050">
                     <plot index="0" pen_width="1" color="red" precision="max" show_y_axis="true">
@@ -2382,31 +2396,31 @@
                 </graph>
             </stacked_container>
             <pad_icon x="1849" y="478" width="26" height="22" color="#008F44" label_side="bottom" label="fractions of retail price" type="graph" icon_of="136" />
-            <stacked_container x="1944" y="1094" height="282" width="492" uid="254">
+            <stacked_container x="1944" y="1094" height="282" width="492" uid="256">
                 <graph type="time_series" title="Untitled" background="#FFFFC9" show_grid="true" plot_numbers="false" isee:use_five_segments="false" date_time="2015-11-29T16:56:09Z" time_precision="2" from="2015" to="2050">
                     <plot index="0" pen_width="1" color="blue" precision="1" show_y_axis="true">
                         <entity name="Net_Present_Value_PV" />
                     </plot>
                 </graph>
             </stacked_container>
-            <pad_icon x="1958" y="1054" width="26" height="22" color="#008F44" label_side="bottom" label="Graph 2" type="graph" icon_of="254" />
-            <stacked_container x="1916" y="1708" height="282" width="492" uid="255">
+            <pad_icon x="1958" y="1054" width="26" height="22" color="#008F44" label_side="bottom" label="Graph 2" type="graph" icon_of="256" />
+            <stacked_container x="1916" y="1708" height="282" width="492" uid="257">
                 <graph type="time_series" title="Untitled" background="#FFFFC9" show_grid="true" plot_numbers="false" isee:use_five_segments="false" date_time="2015-11-29T16:56:09Z" time_precision="2" from="2015" to="2050">
                     <plot index="0" pen_width="1" color="blue" precision="1" show_y_axis="true">
                         <entity name="Net_Present_Value_Battery" />
                     </plot>
                 </graph>
             </stacked_container>
-            <pad_icon x="1935" y="1721" width="26" height="22" color="#008F44" label_side="bottom" label="Graph 3" type="graph" icon_of="255" />
-            <stacked_container x="1888" y="2308" height="282" width="492" uid="256">
+            <pad_icon x="1935" y="1721" width="26" height="22" color="#008F44" label_side="bottom" label="Graph 3" type="graph" icon_of="257" />
+            <stacked_container x="1888" y="2308" height="282" width="492" uid="258">
                 <graph type="time_series" title="Untitled" background="#FFFFC9" show_grid="true" plot_numbers="false" isee:use_five_segments="false" date_time="2015-11-29T16:56:09Z" time_precision="2" from="2015" to="2050">
                     <plot index="0" pen_width="1" color="blue" precision="1" show_y_axis="true">
                         <entity name="Net_Present_Value_PV&amp;Battery" />
                     </plot>
                 </graph>
             </stacked_container>
-            <pad_icon x="1908" y="2322" width="26" height="22" color="#008F44" label_side="bottom" label="Graph 4" type="graph" icon_of="256" />
-            <stacked_container x="64" y="818" height="423" width="734" uid="257">
+            <pad_icon x="1908" y="2322" width="26" height="22" color="#008F44" label_side="bottom" label="Graph 4" type="graph" icon_of="258" />
+            <stacked_container x="64" y="818" height="423" width="734" uid="259">
                 <graph type="time_series" title="Untitled" background="#FFFFC9" show_grid="true" plot_numbers="false" isee:use_five_segments="false" date_time="2015-11-29T16:56:09Z" time_precision="2" from="2015" to="2050">
                     <plot index="0" pen_width="3" color="blue" precision="1" show_y_axis="true">
                         <scale min="1" max="59890.7" />
@@ -2426,7 +2440,7 @@
                     </plot>
                 </graph>
             </stacked_container>
-            <pad_icon x="233" y="943" width="26" height="22" color="#008F44" label_side="bottom" label="Graph 6" type="graph" icon_of="257" />
+            <pad_icon x="233" y="943" width="26" height="22" color="#008F44" label_side="bottom" label="Graph 6" type="graph" icon_of="259" />
             <stacked_container height="282" width="492" uid="79">
                 <graph type="time_series" title="Untitled" background="#FFFFC9" show_grid="true" plot_numbers="false" isee:use_five_segments="false" date_time="2015-11-29T16:56:09Z" time_precision="2" from="2015" to="2050">
                     <plot index="0" pen_width="1" color="blue" precision="1" show_y_axis="true">
@@ -2444,7 +2458,7 @@
                 </graph>
             </stacked_container>
             <pad_icon x="589" y="1357" width="26" height="22" color="#008F44" label_side="bottom" label="houses being built" type="graph" icon_of="79" />
-            <stacked_container height="282" width="492" uid="258">
+            <stacked_container height="282" width="492" uid="260">
                 <graph type="time_series" title="Untitled" background="#FFFFC9" show_grid="true" plot_numbers="false" isee:use_five_segments="false" date_time="2015-11-29T16:56:09Z" time_precision="2" from="2015" to="2050">
                     <plot index="0" pen_width="1" color="blue" precision="1" show_y_axis="true">
                         <scale min="11120" max="198005" />
@@ -2460,8 +2474,8 @@
                     </plot>
                 </graph>
             </stacked_container>
-            <pad_icon x="1971" y="895" width="26" height="22" color="#008F44" label_side="bottom" label="Graph 10" type="graph" icon_of="258" />
-            <stacked_container x="2055" y="65" height="286" width="465" uid="259">
+            <pad_icon x="1971" y="895" width="26" height="22" color="#008F44" label_side="bottom" label="Graph 10" type="graph" icon_of="260" />
+            <stacked_container x="2055" y="65" height="286" width="465" uid="261">
                 <table font-size="9" background="#E0E0E0" column_width="59" orientation="vertical" interval="1" date_time="2015-10-06T15:31:59Z">
                     <title>Output Table</title>
                     <item type="time" color="black" precision="max" width="100" />
@@ -2479,7 +2493,7 @@
                     </item>
                 </table>
             </stacked_container>
-            <pad_icon x="2395" y="91" width="26" height="22" color="#008F44" label_side="bottom" label="Table 1" type="table" icon_of="259" />
+            <pad_icon x="2395" y="91" width="26" height="22" color="#008F44" label_side="bottom" label="Table 1" type="table" icon_of="261" />
             <stacked_container height="270" width="475" uid="40">
                 <table font-size="9" background="#E0E0E0" comparative="true" column_width="59" orientation="horizontal" interval="1" date_time="2015-11-28T13:30:29Z">
                     <title>Untitled Table</title>
@@ -2512,7 +2526,7 @@
             </stacked_container>
             <pad_icon x="802" y="94" width="26" height="22" color="#008F44" label_side="bottom" label="Comparative" type="table" icon_of="40" />
             <text_box x="1510" y="637" uid="125" color="black" font-family="Arial" font-size="12" padding="5" border-style="solid" border-width="thin" width="256" height="114">These fractions are calculated and plotted to calibrate the wholesale elec prices such that the utility&apos;s fraction of variable cost in 2015 is 56% (see reference in &quot;links&quot; document on project Drive).</text_box>
-            <text_box x="996" y="563" uid="260" color="black" font-family="Arial" font-size="12" padding="5" border-style="solid" border-width="thin" width="453" height="73">If baseline retail price is changed then the wholesale price of electricity must be adjusted to acheive correct &quot;fraction var cost over retail price&quot;</text_box>
+            <text_box x="996" y="563" uid="262" color="black" font-family="Arial" font-size="12" padding="5" border-style="solid" border-width="thin" width="453" height="73">If baseline retail price is changed then the wholesale price of electricity must be adjusted to acheive correct &quot;fraction var cost over retail price&quot;</text_box>
             <style font-family="Arial" font-size="9" />
         </display>
         <interface page_cols="4" page_rows="5" page_width="788" page_height="528">
@@ -2520,7 +2534,7 @@
             <style font-family="Arial" font-size="9" />
         </interface>
         <popup x="40" y="113" content="79" />
-        <popup x="40" y="113" content="258" />
+        <popup x="40" y="113" content="260" />
         <popup x="200" y="82" content="40" />
         <style font-family="Arial" font-size="9" />
     </model>
