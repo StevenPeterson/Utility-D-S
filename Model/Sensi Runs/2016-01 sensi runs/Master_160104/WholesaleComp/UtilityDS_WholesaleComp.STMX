@@ -45,19 +45,18 @@
         </units>
     </model_units>
     <data>
-        <export frequency="on_demand" interval="1" orientation="horizontal" url="C:\Users\Steve Peterson\GitHub\Utility-D-S\Model\Sensi Runs\Master\WholesaleComp\1_RetailPrice.csv">
+        <export frequency="on_demand" interval="1" orientation="horizontal" url="C:\Users\steve\GitHub\Utility-D-S\Model\Sensi Runs\2016-01 sensi runs\Master_160104\WholesaleComp\1_RetailPrice.csv">
             <table name="Comparative: p1" use_settings="true" />
         </export>
-        <export frequency="on_demand" interval="1" orientation="horizontal" url="C:\Users\Steve Peterson\GitHub\Utility-D-S\Model\Sensi Runs\Master\WholesaleComp\2_RegularCust.csv">
+        <export frequency="on_demand" interval="1" orientation="horizontal" url="C:\Users\steve\GitHub\Utility-D-S\Model\Sensi Runs\2016-01 sensi runs\Master_160104\WholesaleComp\2_RegularCust.csv">
             <table name="Comparative: p2" use_settings="true" />
         </export>
-        <export frequency="on_demand" interval="1" orientation="horizontal" url="C:\Users\Steve Peterson\GitHub\Utility-D-S\Model\Sensi Runs\Master\WholesaleComp\3_Cust_With_PV.csv">
+        <export frequency="on_demand" interval="1" orientation="horizontal" url="C:\Users\steve\GitHub\Utility-D-S\Model\Sensi Runs\2016-01 sensi runs\Master_160104\WholesaleComp\3_Cust_With_PV.csv">
             <table name="Comparative: p3" use_settings="true" />
         </export>
-        <export frequency="on_demand" interval="1" orientation="horizontal" url="C:\Users\Steve Peterson\GitHub\Utility-D-S\Model\Sensi Runs\Master\WholesaleComp\4_Defector.csv">
+        <export frequency="on_demand" interval="1" orientation="horizontal" url="C:\Users\steve\GitHub\Utility-D-S\Model\Sensi Runs\2016-01 sensi runs\Master_160104\WholesaleComp\4_Defector.csv">
             <table name="Comparative: p4" use_settings="true" />
         </export>
-        <import type="Excel" frequency="on_demand" url="/Volumes/Macintosh HD/Users/nicklaws/Kite Drive/2015 Utility Death Spiral/UDS Git repository/Utility-D-S/Model/Data/import.xlsx" worksheet="Boulder" />
     </data>
     <isee:sensi_specs run="true">
         <method>grid</method>
@@ -74,7 +73,7 @@
         <isee:variable type="adhoc" name="use_limit_on_ratio_of_PV_to_total_hhold">1,0</isee:variable>
     </isee:sensi_specs>
     <isee:prefs last_model="true" layer="model" grid_width="20" grid_height="50" divide_by_zero_alert="true" hide_taskbar="true" show_module_prefix="true">
-        <isee:window width="1898" height="934" />
+        <isee:window width="578" height="501" />
         <isee:security />
         <isee:print_setup width="612" height="792" />
     </isee:prefs>
@@ -1475,7 +1474,7 @@
                 <from>discount_factor_loan_payment_2</from>
                 <to>Annual_Loan_Payment__PV_&amp;_batt</to>
             </connector>
-            <connector x="1522" y="1822" uid="186" color="black">
+            <connector x="1522" y="1821" uid="186" color="black">
                 <from>discount_factor_loan_1</from>
                 <to>NPV_Loan_Payment_add_batt</to>
             </connector>
@@ -1529,7 +1528,7 @@
                 </from>
                 <to>discount_factor_loan_2</to>
             </connector>
-            <connector x="172" y="654" uid="8" color="black">
+            <connector x="172" y="652" uid="8" color="black">
                 <from>switched_limit_on_ratio_of_PV_to_total_hhold</from>
                 <to>PV_adoption_thru_imitation</to>
             </connector>
@@ -1643,7 +1642,7 @@
                 <from>Req&apos;d_Rate_of_Return_PV&amp;batt</from>
                 <to>discount_factor_loan_2</to>
             </connector>
-            <connector x="447" y="1371" uid="76" color="black">
+            <connector x="447" y="1372" uid="76" color="black">
                 <from>
                     <alias uid="80" />
                 </from>
@@ -1655,7 +1654,7 @@
                 </from>
                 <to>PV_innovation_rate</to>
             </connector>
-            <connector x="241" y="561" uid="45" color="black">
+            <connector x="241" y="560" uid="45" color="black">
                 <from>limit_on_ratio_of_PV_to_total_households</from>
                 <to>switched_limit_on_ratio_of_PV_to_total_hhold</to>
             </connector>
@@ -1791,7 +1790,7 @@
                 <from>Req&apos;d_Rate_of_Return_PV</from>
                 <to>discount_factor_loan</to>
             </connector>
-            <connector x="1245" y="98" uid="152" color="black">
+            <connector x="1244" y="99" uid="152" color="black">
                 <from>
                     <alias uid="143" />
                 </from>
@@ -1837,7 +1836,7 @@
                 <from>defectors</from>
                 <to>defection_thru_imitation</to>
             </connector>
-            <connector x="697" y="412" uid="61" color="black">
+            <connector x="697" y="413" uid="61" color="black">
                 <from>defectors</from>
                 <to>direct_defection_via_imitation</to>
             </connector>
@@ -1845,7 +1844,7 @@
                 <from>Expected_Annual_Cost_PV</from>
                 <to>Expected_Net_annual_rev_PV</to>
             </connector>
-            <connector x="1246" y="93" uid="154" color="black">
+            <connector x="1245" y="94" uid="154" color="black">
                 <from>
                     <alias uid="143" />
                 </from>
@@ -1865,7 +1864,7 @@
                 <from>util_fixed_cost_growth_rate_%_per_year</from>
                 <to>utility_fixed_cost</to>
             </connector>
-            <connector x="1145" y="1683" uid="207" color="black">
+            <connector x="1143" y="1684" uid="207" color="black">
                 <from>FCI_adding_batteries</from>
                 <to>Initial_Equity_Investment_add_batt</to>
             </connector>
@@ -1923,7 +1922,7 @@
                 <from>baseline_util_fixed_cost</from>
                 <to>utility_fixed_cost</to>
             </connector>
-            <connector x="1627" y="593" uid="134" color="black">
+            <connector x="1627" y="594" uid="134" color="black">
                 <from>
                     <alias uid="128" />
                 </from>
@@ -1945,11 +1944,11 @@
                 <from>total_attractiveness</from>
                 <to>relative_attractiveness</to>
             </connector>
-            <connector x="354" y="537" uid="63" color="black">
+            <connector x="355" y="537" uid="63" color="black">
                 <from>ImitationScaleFactor</from>
                 <to>defection_thru_imitation</to>
             </connector>
-            <connector x="1013" y="1360" uid="215" color="black">
+            <connector x="1015" y="1360" uid="215" color="black">
                 <from>
                     <alias uid="111" />
                 </from>
@@ -2009,7 +2008,7 @@
                 <from>total_households</from>
                 <to>total_growth_in_households</to>
             </connector>
-            <connector x="1130" y="2268" uid="221" color="black">
+            <connector x="1130" y="2270" uid="221" color="black">
                 <from>FCI_PV&amp;batt</from>
                 <to>Initial_Equity_Investment_PV&amp;Batt</to>
             </connector>
@@ -2055,7 +2054,7 @@
                 </from>
                 <to>PV_adoption_thru_innovation</to>
             </connector>
-            <connector x="350" y="545" uid="51" color="black">
+            <connector x="349" y="544" uid="51" color="black">
                 <from>ImitationScaleFactor</from>
                 <to>direct_defection_via_imitation</to>
             </connector>
@@ -2091,7 +2090,7 @@
                 </from>
                 <to>PV_adoption_thru_imitation</to>
             </connector>
-            <connector x="440" y="1527" uid="90" color="black">
+            <connector x="439" y="1529" uid="90" color="black">
                 <from>price_vector</from>
                 <to>attractiveness</to>
             </connector>
@@ -2105,7 +2104,7 @@
                 <from>discount_factor_1</from>
                 <to>NPV_Revs_Net_of_Op_Cost_add_batt</to>
             </connector>
-            <connector x="1234" y="1610" uid="230" color="black">
+            <connector x="1233" y="1611" uid="230" color="black">
                 <from>Initial_Equity_Investment_add_batt</from>
                 <to>Loan_Principal_add_batt</to>
             </connector>
@@ -2117,7 +2116,7 @@
                 <from>Battery_incentive</from>
                 <to>battery_innovation_rate</to>
             </connector>
-            <connector x="834" y="740" uid="73" color="black">
+            <connector x="835" y="740" uid="73" color="black">
                 <from>
                     <alias uid="71" />
                 </from>
@@ -2131,7 +2130,7 @@
                 <from>new_PV_homes</from>
                 <to>change_to_util_fixed_cost_from_new_homes</to>
             </connector>
-            <connector x="1219" y="2196" uid="232" color="black">
+            <connector x="1220" y="2196" uid="232" color="black">
                 <from>Initial_Equity_Investment_PV&amp;Batt</from>
                 <to>Loan_Principal_PV&amp;batt</to>
             </connector>
@@ -2247,7 +2246,7 @@
                 <from>debt_interest_rate_as_fraction_1</from>
                 <to>discount_factor_loan_payment_1</to>
             </connector>
-            <connector x="1116" y="1035" uid="242" color="black">
+            <connector x="1115" y="1034" uid="242" color="black">
                 <from>FCI_PV</from>
                 <to>Loan_Principal_PV</to>
             </connector>
@@ -2317,7 +2316,7 @@
                 </from>
                 <to>battery_innovation_rate</to>
             </connector>
-            <connector x="1508" y="2407" uid="246" color="black">
+            <connector x="1508" y="2406" uid="246" color="black">
                 <from>discount_factor_loan_2</from>
                 <to>NPV_Loan_Payment_PV&amp;batt</to>
             </connector>
@@ -2339,7 +2338,7 @@
                 <from>discount_factor_2</from>
                 <to>NPV_Revs_Net_of_Op_Cost_PV&amp;batt</to>
             </connector>
-            <connector x="1334" y="1936" uid="250" color="black">
+            <connector x="1328" y="1934" uid="250" color="black">
                 <from>
                     <alias uid="108" />
                 </from>
@@ -2365,7 +2364,7 @@
                 <from>project_lifetime_NPV</from>
                 <to>discount_factor</to>
             </connector>
-            <connector x="1169" y="749" uid="254">
+            <connector x="1170" y="750" uid="254">
                 <from>
                     <alias uid="180" />
                 </from>
