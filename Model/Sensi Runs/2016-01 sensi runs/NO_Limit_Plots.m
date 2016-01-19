@@ -128,43 +128,133 @@ if check_DS == 1
     
     %% cases with NO limit on PV households
             [r c] = find(LA_NM_de(1025:2048,:) > (LA_NM_rc(1025:2048,:) + LA_NM_pv(1025:2048,:)));
-            length(r); % 130  <-- number of cases
+            length(unique(r)) % 26  <-- number of cases
             [r c] = find(LA_DC_de(1025:2048,:) > (LA_DC_rc(1025:2048,:) + LA_DC_pv(1025:2048,:)));
-            length(r); % 9785
+            length(unique(r)) % 688
             [r c] = find(LA_WC_de(1025:2048,:) > (LA_WC_rc(1025:2048,:) + LA_WC_pv(1025:2048,:)));
-            length(r); % 5477
+            length(unique(r)) % 485
 
             [r c] = find(BO_NM_de(1025:2048,:) > (BO_NM_rc(1025:2048,:) + BO_NM_pv(1025:2048,:)));
-            length(r); % 0
+            length(unique(r)) % 0
             [r c] = find(BO_DC_de(1025:2048,:) > (BO_DC_rc(1025:2048,:) + BO_DC_pv(1025:2048,:)));
-            length(r); % 10160
+            length(unique(r)) % 644
             [r c] = find(BO_WC_de(1025:2048,:) > (BO_WC_rc(1025:2048,:) + BO_WC_pv(1025:2048,:)));
-            length(r); % 6217
+            length(unique(r)) % 381
 
             [r c] = find(SY_NM_de(1025:2048,:) > (SY_NM_rc(1025:2048,:) + SY_NM_pv(1025:2048,:)));
-            length(r); % 0
+            length(unique(r)) % 0
             [r c] = find(SY_DC_de(1025:2048,:) > (SY_DC_rc(1025:2048,:) + SY_DC_pv(1025:2048,:)));
-            length(r); % 6622
+            length(unique(r)) % 561
             [r c] = find(SY_WC_de(1025:2048,:) > (SY_WC_rc(1025:2048,:) + SY_WC_pv(1025:2048,:)));
-            length(r); % 3734
+            length(unique(r)) % 330
     % order of DS from least likely to most likely: NM, WC, DC; Sy, LA, Bo
     
     % randomly selected case 1135 for comparison in paper
     
         %% check of cases with limit of PV households
-            find(LA_NM_de(1:1024,:) > (LA_NM_rc(1:1024,:) + LA_NM_pv(1:1024,:)));
-            find(LA_DC_de(1:1024,:) > (LA_DC_rc(1:1024,:) + LA_DC_pv(1:1024,:)));
-            find(LA_WC_de(1:1024,:) > (LA_WC_rc(1:1024,:) + LA_WC_pv(1:1024,:)));
+        
+            % 80% defectors
+            [r c] = find(LA_NM_de(1:1024,:) > 0.8*(LA_NM_rc(1:1024,:) + LA_NM_pv(1:1024,:)));
+            length(unique(r))   % 0 
+            [r c] = find(LA_DC_de(1:1024,:) > 0.8*(LA_DC_rc(1:1024,:) + LA_DC_pv(1:1024,:)));
+            length(unique(r)); junk = unique(r)   % 16
+            [r c] = find(LA_WC_de(1:1024,:) > 0.8*(LA_WC_rc(1:1024,:) + LA_WC_pv(1:1024,:)));
+            length(unique(r)); junk = unique(r)   % 2
 
-            find(BO_NM_de(1:1024,:) > (BO_NM_rc(1:1024,:) + BO_NM_pv(1:1024,:)));
-            [r c] = find(BO_DC_de(1:1024,:) > (BO_DC_rc(1:1024,:) + BO_DC_pv(1:1024,:)));
-            find(BO_WC_de(1:1024,:) > (BO_WC_rc(1:1024,:) + BO_WC_pv(1:1024,:)));
+            [r c] = find(BO_NM_de(1:1024,:) > 0.8*(BO_NM_rc(1:1024,:) + BO_NM_pv(1:1024,:)));
+            length(unique(r))   % 0
+            [r c] = find(BO_DC_de(1:1024,:) > 0.8*(BO_DC_rc(1:1024,:) + BO_DC_pv(1:1024,:)));
+            length(unique(r))   % 0
+            [r c] = find(BO_WC_de(1:1024,:) > 0.8*(BO_WC_rc(1:1024,:) + BO_WC_pv(1:1024,:)));
+            length(unique(r))   % 0
 
-            find(SY_NM_de(1:1024,:) > (SY_NM_rc(1:1024,:) + SY_NM_pv(1:1024,:)));
-            find(SY_DC_de(1:1024,:) > (SY_DC_rc(1:1024,:) + SY_DC_pv(1:1024,:)));
-            find(SY_WC_de(1:1024,:) > (SY_WC_rc(1:1024,:) + SY_WC_pv(1:1024,:)));
+            [r c] = find(SY_NM_de(1:1024,:) > 0.8*(SY_NM_rc(1:1024,:) + SY_NM_pv(1:1024,:)));
+            length(unique(r))   % 0
+            [r c] = find(SY_DC_de(1:1024,:) > 0.8*(SY_DC_rc(1:1024,:) + SY_DC_pv(1:1024,:)));
+            length(unique(r))   % 0
+            [r c] = find(SY_WC_de(1:1024,:) > 0.8*(SY_WC_rc(1:1024,:) + SY_WC_pv(1:1024,:)));
+            length(unique(r))   % 0
+            
+            
+            % 70% defectors
+            [r c] = find(LA_NM_de(1:1024,:) > 0.7*(LA_NM_rc(1:1024,:) + LA_NM_pv(1:1024,:)));
+            length(unique(r))   % 0 
+            [r c] = find(LA_DC_de(1:1024,:) > 0.7*(LA_DC_rc(1:1024,:) + LA_DC_pv(1:1024,:)));
+            length(unique(r))   % 90 
+            [r c] = find(LA_WC_de(1:1024,:) > 0.7*(LA_WC_rc(1:1024,:) + LA_WC_pv(1:1024,:)));
+            length(unique(r))   % 26 
 
+            [r c] = find(BO_NM_de(1:1024,:) > 0.7*(BO_NM_rc(1:1024,:) + BO_NM_pv(1:1024,:)));
+            length(unique(r))   % 0 
+            [r c] = find(BO_DC_de(1:1024,:) > 0.7*(BO_DC_rc(1:1024,:) + BO_DC_pv(1:1024,:)));
+            length(unique(r))   % 18 
+            [r c] = find(BO_WC_de(1:1024,:) > 0.7*(BO_WC_rc(1:1024,:) + BO_WC_pv(1:1024,:)));
+            length(unique(r))   % 0 
+
+            [r c] = find(SY_NM_de(1:1024,:) > 0.7*(SY_NM_rc(1:1024,:) + SY_NM_pv(1:1024,:)));
+            length(unique(r))   % 0 
+            [r c] = find(SY_DC_de(1:1024,:) > 0.7*(SY_DC_rc(1:1024,:) + SY_DC_pv(1:1024,:)));
+            length(unique(r))   % 11 
+            [r c] = find(SY_WC_de(1:1024,:) > 0.7*(SY_WC_rc(1:1024,:) + SY_WC_pv(1:1024,:)));
+            length(unique(r))   % 0 
+
+            % 50% defectors
+            [r c] = find(LA_NM_de(1:1024,:) > 0.5*(LA_NM_rc(1:1024,:) + LA_NM_pv(1:1024,:)));
+            length(unique(r))   % 0 
+            [r c] = find(LA_DC_de(1:1024,:) > 0.5*(LA_DC_rc(1:1024,:) + LA_DC_pv(1:1024,:)));
+            length(unique(r))   % 289 
+            [r c] = find(LA_WC_de(1:1024,:) > 0.5*(LA_WC_rc(1:1024,:) + LA_WC_pv(1:1024,:)));
+            length(unique(r))   % 104 
+
+            [r c] = find(BO_NM_de(1:1024,:) > 0.5*(BO_NM_rc(1:1024,:) + BO_NM_pv(1:1024,:)));
+            length(unique(r))   % 0 
+            [r c] = find(BO_DC_de(1:1024,:) > 0.5*(BO_DC_rc(1:1024,:) + BO_DC_pv(1:1024,:)));
+            length(unique(r))   % 117 
+            [r c] = find(BO_WC_de(1:1024,:) > 0.5*(BO_WC_rc(1:1024,:) + BO_WC_pv(1:1024,:)));
+            length(unique(r))   % 6 
+
+            [r c] = find(SY_NM_de(1:1024,:) > 0.5*(SY_NM_rc(1:1024,:) + SY_NM_pv(1:1024,:)));
+            length(unique(r))   % 0 
+            [r c] = find(SY_DC_de(1:1024,:) > 0.5*(SY_DC_rc(1:1024,:) + SY_DC_pv(1:1024,:)));
+            length(unique(r))   % 90 
+            [r c] = find(SY_WC_de(1:1024,:) > 0.5*(SY_WC_rc(1:1024,:) + SY_WC_pv(1:1024,:)));
+            length(unique(r))   % 4 
+            
+            
+            
+         % Comparison of 16 LA demand charge cases with more than 80% defectors in 2050   
+        i = 1;
+        for i=1:length(junk)
+            [val(i,:),TXT(i,:),RAW(i,:)]=xlsread('sensi_runs_v2.xlsx', 'DemandCharge', ['A', num2str(junk(i)+1),':','L',num2str(junk(i)+1)]);
+        end
+        find(val(:,1) ~= 5000 & val(:,2) ~= 5000)  % 12/16 have both incentive
+        find(val(:,3) ~= 5 & val(:,4) ~= 5)        % All cases have 5x adoption rates (Imitation and Innovation)
+        find(val(:,5) ~= .5)                       % All cases have low efficiency improvement = 0.5
+        find(val(:,6) ~= .05 & val(:,7) ~= .05)    % All cases have higher utility costs
+        find(val(:,8) ~= 1)                        % 8/16  cases have 1% debt interest rate
+        find(val(:,9) ~= .1)                       % 8/16  cases have .8 equity fraction 
+        find(val(:,10) ~= 1)                       % All cases have RoR = 1%
+            
+        % Comparison of 2 LA wholesale comp cases with more than 80% defectors in 2050   
+        i = 1;
+        for i=1:length(junk)
+            [val(i,:),TXT(i,:),RAW(i,:)]=xlsread('sensi_runs_v2.xlsx', 'WholesaleComp', ['A', num2str(junk(i)+1),':','L',num2str(junk(i)+1)]);
+        end
+        find(val(:,1) ~= 5000 & val(:,2) ~= 5000)  % All have both incentive
+        find(val(:,3) ~= 5 & val(:,4) ~= 5)        % All cases have 5x adoption rates (Imitation and Innovation)
+        find(val(:,5) ~= .5)                       % All cases have low efficiency improvement = 0.5
+        find(val(:,6) ~= .05 & val(:,7) ~= .05)    % All cases have higher utility costs
+        find(val(:,8) ~= 1)                        % All cases have 1% debt interest rate
+        find(val(:,9) ~= .1)                       % All cases have .8 equity fraction 
+        find(val(:,10) ~= 1)                       % All cases have RoR = 1%
+            
+            
+            
+            
             % Boulder Demand Charge has 48 DS cases with limit on
+            % NO LONGER TRUE. THERE WAS A BAD FORMULA FOR RETAIL PRICE TO
+            % ACCOUNT FOR DEATH SPIRAL CASES AND IS NOW FIXED. THESE CASES
+            % ARE PROBABL STILL THE ONES WITH THE MOST DEFECTORS
         BDC_DS_cases = [
             45
             46

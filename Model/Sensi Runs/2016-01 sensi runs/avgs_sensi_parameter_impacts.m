@@ -5,7 +5,7 @@
 % Must create MEANS in Plot_SensiRuns_1601.m as an input
 clear
 
-load(MEANS.mat)
+% load(MEANS.mat)
 k = 1; n =0;
     for j = 1:4:40  % printing columns
         for i = 1:3
